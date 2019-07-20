@@ -1,0 +1,56 @@
+<%= form_with(model: plant, local: true) do |form| %>
+  <% if plant.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(plant.errors.count, "error") %> prohibited this plant from being saved:</h2>
+
+      <ul>
+      <% plant.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :kingdom_id %>
+    <%= form.collection_select :kingdom_id, Kingdom.all, :id, :name %>
+    
+  <div class="field">
+    <%= form.label :division_id %>
+    <%= form.text_field :division_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :plant_class_id %>
+    <%= form.text_field :plant_class_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :order_id %>
+    <%= form.collection_select :order_id, Order.all, :id, :name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :family_id %>
+    <%= form.collection_select :family_id, Family.all, :id, :name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :genus_id %>
+    <%= form.collection_select :genus_id, Genu.all, :id, :name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :species_id %>
+    <%= form.collection_select :species_id, Species.all, :id, :name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :variety_id %>
+    <%= form.text_field :variety_id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

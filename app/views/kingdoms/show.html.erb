@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @kingdom.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @kingdom.description %>
+</p>
+
+<%= link_to 'Edit', edit_kingdom_path(@kingdom) %> |
+<%= link_to 'Back', kingdoms_path %>

@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @common_name.name %>
+</p>
+
+<p>
+  <strong>Plant:</strong>
+  <%= link_to @common_name.plant.scientific_name, @common_name.plant %>
+</p>
+
+<%= link_to 'Edit', edit_common_name_path(@common_name) %> |
+<%= link_to 'Back', common_names_path %>

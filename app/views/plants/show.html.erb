@@ -1,0 +1,54 @@
+<p id="notice"><%= notice %></p>
+
+<h2><em><%= @plant.scientific_name %></em></h2>
+<% @common_names.each do |name| %>
+  <%= name.name %>,
+<% end %>
+<%= link_to 'Add Common Name', new_common_name_path(:plant_id => @plant) %>
+
+<p>
+  <strong>Kingdom:</strong>
+  <%= link_to @plant.kingdom.name, @plant.kingdom %>
+</p>
+
+<p>
+  <strong>Division:</strong>
+  <%= @plant.division %>
+</p>
+
+<p>
+  <strong>Class:</strong>
+  <%= @plant.plant_class %>
+</p>
+
+<% if @plant.order != nil %>
+  <p>
+    <strong>Order:</strong>
+    <%= link_to @plant.order.name, @plant.order %>
+  </p>
+<% end %>
+
+<% if @plant.family != nil %>
+  <p>
+    <strong>Family:</strong>
+    <%= link_to @plant.family.name, @plant.family %>
+  </p>
+<% end %>
+
+<p>
+  <strong>Genus:</strong>
+  <%= link_to @plant.genus.name, @plant.genus %>
+</p>
+
+<p>
+  <strong>Species:</strong>
+  <%= link_to @plant.species.name, @plant.species %>
+</p>
+
+<p>
+  <strong>Variety:</strong>
+  <%= @plant.variety %>
+</p>
+
+<%= link_to 'Edit', edit_plant_path(@plant) %> |
+<%= link_to 'Back', plants_path %>

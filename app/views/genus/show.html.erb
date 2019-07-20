@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @genu.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @genu.description %>
+</p>
+
+<%= link_to 'Edit', edit_genu_path(@genu) %> |
+<%= link_to 'Back', genus_path %>

@@ -1,0 +1,27 @@
+<%= form_with(model: common_name, local: true) do |form| %>
+  <% if common_name.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(common_name.errors.count, "error") %> prohibited this common_name from being saved:</h2>
+
+      <ul>
+      <% common_name.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name, 'Common Name' %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= form.label :plant_id, 'Scientific Name' %> <%= @plant.scientific_name %>
+    <%= form.hidden_field :plant_id, :value => @plant.id %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>
