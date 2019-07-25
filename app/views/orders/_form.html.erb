@@ -20,6 +20,11 @@
     <%= form.label :description %>
     <%= form.text_area :description %>
   </div>
+  
+  <div class="field">
+    <%= form.label :plant_class_id %>
+    <%= form.collection_select :plant_class_id, PlantClass.all, :id, :name, :include_blank => true %>
+  </div>
 
   <div class="actions">
     <%= form.submit %>

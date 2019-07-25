@@ -10,6 +10,7 @@ class GenusController < ApplicationController
   # GET /genus/1
   # GET /genus/1.json
   def show
+    @species = Species.where(:genus_id => @genu.id)
   end
 
   # GET /genus/new
@@ -69,6 +70,6 @@ class GenusController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def genu_params
-      params.require(:genu).permit(:name, :description)
+      params.require(:genu).permit(:name, :description, :family_id)
     end
 end

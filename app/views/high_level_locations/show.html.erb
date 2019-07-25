@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>High Level Location::</strong>
+  <%= @high_level_location.name %>
+</p>
+
+<p>
+  <strong>Zip:</strong>
+  <%= @high_level_location.zip %>
+</p>
+
+<strong>Locations</strong>
+
+<ul>
+  <% @locations.each do |l| %>
+    <li> <%= link_to l.name, l %> </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Edit', edit_high_level_location_path(@high_level_location) %> |
+<%= link_to 'Back', high_level_locations_path %>

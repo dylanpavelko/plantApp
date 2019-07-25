@@ -10,6 +10,7 @@ class KingdomsController < ApplicationController
   # GET /kingdoms/1
   # GET /kingdoms/1.json
   def show
+    @divisions = Division.where(:kingdom_id => @kingdom.id)
   end
 
   # GET /kingdoms/new
@@ -69,6 +70,6 @@ class KingdomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def kingdom_params
-      params.require(:kingdom).permit(:name, :description)
+      params.require(:kingdom).permit(:name, :description, :common_name)
     end
 end

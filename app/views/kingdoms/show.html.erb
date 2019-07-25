@@ -6,9 +6,21 @@
 </p>
 
 <p>
+  <strong>Common Name:</strong>
+  <%= @kingdom.common_name %>
+</p>
+
+<p>
   <strong>Description:</strong>
   <%= @kingdom.description %>
 </p>
+
+<strong>Divisions:</strong>
+<ul>
+  <% @divisions.each do |d| %>
+    <li><%= link_to d.name, d %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_kingdom_path(@kingdom) %> |
 <%= link_to 'Back', kingdoms_path %>

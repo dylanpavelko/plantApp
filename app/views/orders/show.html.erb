@@ -1,7 +1,22 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Kingdom:</strong>
+  <%= link_to @order.plant_class.division.kingdom.name, @order.plant_class.division.kingdom %>
+</p>
+
+<p>
+  <strong>Division:</strong>
+  <%= link_to @order.plant_class.division.name, @order.plant_class.division %>
+</p>
+
+<p>
+  <strong>Class:</strong>
+  <%= link_to @order.plant_class.name, @order.plant_class %>
+</p>
+
+<p>
+  <strong>Order:</strong>
   <%= @order.name %>
 </p>
 
@@ -9,6 +24,13 @@
   <strong>Description:</strong>
   <%= @order.description %>
 </p>
+
+<strong>Families:</strong>
+<ul>
+  <% @families.each do |f| %>
+    <li><%= link_to f.name, f %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_order_path(@order) %> |
 <%= link_to 'Back', orders_path %>

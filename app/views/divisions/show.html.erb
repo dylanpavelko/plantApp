@@ -1,14 +1,31 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Kingdom:</strong>
+  <%= link_to @division.kingdom.name, @division.kingdom %>
+</p>
+
+<p>
+  <strong>Division:</strong>
   <%= @division.name %>
+</p>
+
+<p>
+  <strong>Common Name:</strong>
+  <%= @division.common_name %>
 </p>
 
 <p>
   <strong>Description:</strong>
   <%= @division.description %>
 </p>
+
+<strong>Classes:</strong>
+<ul>
+  <% @classes.each do |c| %>
+    <li><%= link_to c.name, c %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_division_path(@division) %> |
 <%= link_to 'Back', divisions_path %>

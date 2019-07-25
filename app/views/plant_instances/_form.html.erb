@@ -1,0 +1,27 @@
+<%= form_with(model: plant_instance, local: true) do |form| %>
+  <% if plant_instance.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(plant_instance.errors.count, "error") %> prohibited this plant_instance from being saved:</h2>
+
+      <ul>
+      <% plant_instance.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :plant_id %>
+    <%= form.collection_select :plant_id, Plant.all, :id, :scientific_name_with_common_names, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :location_id %>
+    <%= form.collection_select :location_id, Location.all, :id, :name, :include_blank => true %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

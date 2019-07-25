@@ -1,0 +1,2 @@
+class HighLevelLocation < ApplicationRecord
+end

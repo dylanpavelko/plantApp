@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Cultivators</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th>Species</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @cultivators.each do |cultivator| %>
+      <tr>
+        <td><%= cultivator.name %></td>
+        <td><%= cultivator.description %></td>
+        <td><%= cultivator.species %></td>
+        <td><%= link_to 'Show', cultivator %></td>
+        <td><%= link_to 'Edit', edit_cultivator_path(cultivator) %></td>
+        <td><%= link_to 'Destroy', cultivator, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Cultivator', new_cultivator_path %>

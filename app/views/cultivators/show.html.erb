@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @cultivator.name %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @cultivator.description %>
+</p>
+
+<p>
+  <strong>Species:</strong>
+  <%= link_to @cultivator.species.name, @cultivator.species %>
+</p>
+
+<%= link_to 'Edit', edit_cultivator_path(@cultivator) %> |
+<%= link_to 'Back', cultivators_path %>

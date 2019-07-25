@@ -10,6 +10,7 @@ class PlantClassesController < ApplicationController
   # GET /plant_classes/1
   # GET /plant_classes/1.json
   def show
+    @orders = Order.where(:plant_class_id => @plant_class.id)
   end
 
   # GET /plant_classes/new
@@ -69,6 +70,6 @@ class PlantClassesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plant_class_params
-      params.require(:plant_class).permit(:name, :description)
+      params.require(:plant_class).permit(:name, :description, :division_id)
     end
 end

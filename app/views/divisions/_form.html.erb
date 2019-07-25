@@ -15,10 +15,20 @@
     <%= form.label :name %>
     <%= form.text_field :name %>
   </div>
+  
+  <div class="field">
+    <%= form.label :common_name %>
+    <%= form.text_field :common_name %>
+  </div>
 
   <div class="field">
     <%= form.label :description %>
     <%= form.text_area :description %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :kingdom_id %>
+    <%= form.collection_select :kingdom_id, Kingdom.all, :id, :name %>
   </div>
 
   <div class="actions">

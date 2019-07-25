@@ -1,6 +1,6 @@
 <p id="notice"><%= notice %></p>
 
-<h2><em><%= @plant.scientific_name %></em></h2>
+<h2> <%= @plant.scientific_name.html_safe %> </h2>
 <% @common_names.each do |name| %>
   <%= name.name %>,
 <% end %>
@@ -10,15 +10,16 @@
   <strong>Kingdom:</strong>
   <%= link_to @plant.kingdom.name, @plant.kingdom %>
 </p>
-
-<p>
-  <strong>Division:</strong>
-  <%= @plant.division %>
-</p>
+<% if @plant.division != nil %>
+  <p>
+    <strong>Division:</strong>
+    <%= link_to @plant.division.name, @plant.division %>
+  </p>
+<% end %>
 
 <p>
   <strong>Class:</strong>
-  <%= @plant.plant_class %>
+  <%= link_to @plant.plant_class.name, @plant.plant_class %>
 </p>
 
 <% if @plant.order != nil %>
@@ -31,13 +32,13 @@
 <% if @plant.family != nil %>
   <p>
     <strong>Family:</strong>
-    <%= link_to @plant.family.name, @plant.family %>
+    <%= link_to @plant.species.genus.family.name, @plant.species.genus.family %>
   </p>
 <% end %>
 
 <p>
   <strong>Genus:</strong>
-  <%= link_to @plant.genus.name, @plant.genus %>
+  <%= link_to @plant.species.genus.name, @plant.species.genus %>
 </p>
 
 <p>
@@ -49,6 +50,13 @@
   <strong>Variety:</strong>
   <%= @plant.variety %>
 </p>
+
+<% if @plant.cultivator != nil %>
+  <p>
+    <strong>Cultivator:</strong>
+    <%= link_to @plant.cultivator.name, @plant.cultivator %>
+  </p>
+<% end %>
 
 <%= link_to 'Edit', edit_plant_path(@plant) %> |
 <%= link_to 'Back', plants_path %>

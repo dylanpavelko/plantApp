@@ -1,7 +1,37 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Kingdom:</strong>
+  <%= link_to @species.genus.family.order.plant_class.division.kingdom.name, @species.genus.family.order.plant_class.division.kingdom %>
+</p>
+
+<p>
+  <strong>Division:</strong>
+  <%= link_to @species.genus.family.order.plant_class.division.name, @species.genus.family.order.plant_class.division %>
+</p>
+
+<p>
+  <strong>Class:</strong>
+  <%= link_to @species.genus.family.order.plant_class.name, @species.genus.family.order.plant_class %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= link_to @species.genus.family.order.name, @species.genus.family.order %>
+</p>
+
+<p>
+  <strong>Family:</strong>
+  <%= link_to @species.genus.family.name, @species.genus.family %>
+</p>
+
+<p>
+  <strong>Genus:</strong>
+  <%= link_to @species.genus.name, @species.genus %>
+</p>
+
+<p>
+  <strong>Species Name:</strong>
   <%= @species.name %>
 </p>
 
@@ -9,6 +39,13 @@
   <strong>Description:</strong>
   <%= @species.description %>
 </p>
+
+<strong>Species:</strong>
+<ul>
+  <% @plants.each do |p| %>
+    <li><%= link_to p.scientific_name_with_common_names.html_safe, p %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_species_path(@species) %> |
 <%= link_to 'Back', species_index_path %>

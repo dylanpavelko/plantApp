@@ -1,7 +1,32 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Kingdom:</strong>
+  <%= link_to @genu.family.order.plant_class.division.kingdom.name, @genu.family.order.plant_class.division.kingdom %>
+</p>
+
+<p>
+  <strong>Division:</strong>
+  <%= link_to @genu.family.order.plant_class.division.name, @genu.family.order.plant_class.division %>
+</p>
+
+<p>
+  <strong>Class:</strong>
+  <%= link_to @genu.family.order.plant_class.name, @genu.family.order.plant_class %>
+</p>
+
+<p>
+  <strong>Order:</strong>
+  <%= link_to @genu.family.order.name, @genu.family.order %>
+</p>
+
+<p>
+  <strong>Family:</strong>
+  <%= link_to @genu.family.name, @genu.family %>
+</p>
+
+<p>
+  <strong>Genus:</strong>
   <%= @genu.name %>
 </p>
 
@@ -9,6 +34,13 @@
   <strong>Description:</strong>
   <%= @genu.description %>
 </p>
+
+<strong>Species:</strong>
+<ul>
+  <% @species.each do |s| %>
+    <li><%= link_to s.name, s %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_genu_path(@genu) %> |
 <%= link_to 'Back', genus_path %>

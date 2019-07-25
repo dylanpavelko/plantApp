@@ -10,6 +10,7 @@ class SpeciesController < ApplicationController
   # GET /species/1
   # GET /species/1.json
   def show
+    @plants = Plant.where(:species_id => @species.id)
   end
 
   # GET /species/new
@@ -69,6 +70,6 @@ class SpeciesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def species_params
-      params.require(:species).permit(:name, :description)
+      params.require(:species).permit(:name, :description, :genus_id)
     end
 end

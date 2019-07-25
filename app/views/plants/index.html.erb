@@ -5,6 +5,7 @@
 <table>
   <thead>
     <tr>
+      <th><%= link_to 'Plant', kingdoms_path %></th>
       <th><%= link_to 'Kingdom', kingdoms_path %></th>
       <th><%= link_to 'Division', divisions_path %></th>
       <th><%= link_to 'Class', plant_classes_path %></th>
@@ -13,31 +14,24 @@
       <th><%= link_to 'Genus', genus_path %></th>
       <th><%= link_to 'Species', species_index_path %></th>
       <th><%= link_to 'Variety', varieties_path %></th>
-      <th colspan="3"></th>
+      <th><%= link_to 'Cultivator', cultivators_path %></th>
+      <th></th>
     </tr>
   </thead>
 
   <tbody>
     <% @plants.each do |plant| %>
       <tr>
-        <td><%= plant.kingdom.name %></td>
-        <td><%= plant.division %></td>
-        <td><%= plant.plant_class %></td>
-        <td>
-          <% if plant.order != nil %>
-            <%= plant.order.name %>
-          <% end %>
-        </td>
-        <td>
-          <% if plant.family != nil %>
-            <%= plant.family.name %>
-          <% end %>
-        </td>
-        <td><%= plant.genus.name.titlecase %></td>
-        <td><%= plant.species.name.downcase %></td>
+        <td><%= link_to plant.scientific_name_with_common_names.html_safe, plant %></td>
+        <td><%= link_to plant.kingdom.names, plant.kingdom %></td>
+        <td><%= link_to plant.division.names, plant.division %></td>
+        <td><%= link_to plant.plant_class.name, plant.plant_class %></td>
+        <td><%= link_to plant.order.name, plant.order %></td>
+        <td><%= link_to plant.family.name, plant.family %></td>
+        <td><%= link_to plant.genus.name.titlecase, plant.genus %></td>
+        <td><%= link_to plant.species.name.downcase, plant.species %></td>
         <td><%= plant.variety %></td>
-        <td><%= link_to 'Show', plant %></td>
-        <td><%= link_to 'Edit', edit_plant_path(plant) %></td>
+        <td><%= plant.variety %></td>
         <td><%= link_to 'Destroy', plant, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

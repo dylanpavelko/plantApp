@@ -10,6 +10,7 @@ class DivisionsController < ApplicationController
   # GET /divisions/1
   # GET /divisions/1.json
   def show
+    @classes = PlantClass.where(:division_id => @division.id)
   end
 
   # GET /divisions/new
@@ -69,6 +70,6 @@ class DivisionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def division_params
-      params.require(:division).permit(:name, :description)
+      params.require(:division).permit(:name, :description, :common_name, :kingdom_id)
     end
 end

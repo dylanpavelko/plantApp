@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>High Level Locations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Zip</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @high_level_locations.each do |high_level_location| %>
+      <tr>
+        <td><%= high_level_location.name %></td>
+        <td><%= high_level_location.zip %></td>
+        <td><%= link_to 'Show', high_level_location %></td>
+        <td><%= link_to 'Edit', edit_high_level_location_path(high_level_location) %></td>
+        <td><%= link_to 'Destroy', high_level_location, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New High Level Location', new_high_level_location_path %>

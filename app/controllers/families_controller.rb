@@ -10,6 +10,7 @@ class FamiliesController < ApplicationController
   # GET /families/1
   # GET /families/1.json
   def show
+    @genus = Genu.where(:family_id => @family.id)
   end
 
   # GET /families/new
@@ -69,6 +70,6 @@ class FamiliesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def family_params
-      params.require(:family).permit(:name, :description)
+      params.require(:family).permit(:name, :description, :order_id)
     end
 end

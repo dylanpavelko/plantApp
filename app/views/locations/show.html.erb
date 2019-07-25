@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>High Level Location:</strong>
+  <%= link_to @location.high_level_location.name, @location.high_level_location %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @location.name %>
+</p>
+
+<p>
+  <strong>Indoors:</strong>
+  <%= @location.indoors %>
+</p>
+
+<strong>Plants</strong>
+
+<ul>
+  <% @plant_instances.each do |p| %>
+    <li> <%= link_to p.plant.scientific_name_with_common_names, p %> </li>
+  <% end %>
+</ul>
+
+<%= link_to 'Edit', edit_location_path(@location) %> |
+<%= link_to 'Back', locations_path %>

@@ -1,7 +1,16 @@
 <p id="notice"><%= notice %></p>
+<p>
+  <strong>Kingdom:</strong>
+  <%= link_to @plant_class.division.kingdom.name, @plant_class.division.kingdom %>
+</p>
 
 <p>
-  <strong>Name:</strong>
+  <strong>Division:</strong>
+  <%= link_to @plant_class.division.name, @plant_class.division %>
+</p>
+
+<p>
+  <strong>Class:</strong>
   <%= @plant_class.name %>
 </p>
 
@@ -9,6 +18,13 @@
   <strong>Description:</strong>
   <%= @plant_class.description %>
 </p>
+
+<strong>Orders:</strong>
+<ul>
+  <% @orders.each do |o| %>
+    <li><%= link_to o.name, o %></li>
+  <% end %>
+</ul>
 
 <%= link_to 'Edit', edit_plant_class_path(@plant_class) %> |
 <%= link_to 'Back', plant_classes_path %>
