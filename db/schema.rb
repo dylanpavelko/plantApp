@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_20_060405) do
+ActiveRecord::Schema.define(version: 2019_07_25_044920) do
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -20,11 +20,25 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.index ["plant_id"], name: "index_common_names_on_plant_id"
   end
 
+  create_table "cultivators", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.integer "species_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["species_id"], name: "index_cultivators_on_species_id"
+  end
+
   create_table "divisions", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "common_name"
+    t.integer "genus_id"
+    t.integer "kingdom_id"
+    t.index ["genus_id"], name: "index_divisions_on_genus_id"
+    t.index ["kingdom_id"], name: "index_divisions_on_kingdom_id"
   end
 
   create_table "families", force: :cascade do |t|
@@ -32,11 +46,22 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "order_id"
+    t.index ["order_id"], name: "index_families_on_order_id"
   end
 
   create_table "genus", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "family_id"
+    t.index ["family_id"], name: "index_genus_on_family_id"
+  end
+
+  create_table "high_level_locations", force: :cascade do |t|
+    t.string "name"
+    t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -46,6 +71,16 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "common_name"
+  end
+
+  create_table "locations", force: :cascade do |t|
+    t.string "name"
+    t.boolean "indoors"
+    t.integer "high_level_location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["high_level_location_id"], name: "index_locations_on_high_level_location_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -53,6 +88,10 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "class_id"
+    t.integer "plant_class_id"
+    t.index ["class_id"], name: "index_orders_on_class_id"
+    t.index ["plant_class_id"], name: "index_orders_on_plant_class_id"
   end
 
   create_table "plant_classes", force: :cascade do |t|
@@ -60,6 +99,17 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "division_id"
+    t.index ["division_id"], name: "index_plant_classes_on_division_id"
+  end
+
+  create_table "plant_instances", force: :cascade do |t|
+    t.integer "plant_id"
+    t.integer "location_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["location_id"], name: "index_plant_instances_on_location_id"
+    t.index ["plant_id"], name: "index_plant_instances_on_plant_id"
   end
 
   create_table "plants", force: :cascade do |t|
@@ -73,6 +123,8 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.integer "variety_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "cultivator_id"
+    t.index ["cultivator_id"], name: "index_plants_on_cultivator_id"
     t.index ["division_id"], name: "index_plants_on_division_id"
     t.index ["family_id"], name: "index_plants_on_family_id"
     t.index ["genus_id"], name: "index_plants_on_genus_id"
@@ -88,6 +140,8 @@ ActiveRecord::Schema.define(version: 2019_07_20_060405) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "genus_id"
+    t.index ["genus_id"], name: "index_species_on_genus_id"
   end
 
   create_table "varieties", force: :cascade do |t|
