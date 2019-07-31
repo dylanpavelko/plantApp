@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :water_records
   resources :plant_instances
   resources :locations
   resources :high_level_locations

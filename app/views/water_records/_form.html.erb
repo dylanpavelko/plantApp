@@ -1,0 +1,32 @@
+<%= form_with(model: water_record, local: true) do |form| %>
+  <% if water_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(water_record.errors.count, "error") %> prohibited this water_record from being saved:</h2>
+
+      <ul>
+      <% water_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :plant_instance_id %> <%= @plant_instance.plant.scientific_name_with_common_names %>
+    <%= form.hidden_field :plant_instance_id,  :value => @plant_instance.id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :moment %>
+    <%= form.datetime_select :moment %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ounces %>
+    <%= form.text_field :ounces %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

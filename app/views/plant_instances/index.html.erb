@@ -7,7 +7,8 @@
     <tr>
       <th>Location</th>
       <th>Plant</th>
-      <th colspan="2"></th>
+      <th>Last Watered</th>
+      <th></th>
     </tr>
   </thead>
 
@@ -15,8 +16,12 @@
     <% @plant_instances.each do |plant_instance| %>
       <tr>
         <td><%= link_to plant_instance.location.name, plant_instance.location %></td>
-        <td><%= link_to plant_instance.plant.scientific_name_with_common_names, plant_instance.plant %></td>
-        <td><%= link_to 'Edit', edit_plant_instance_path(plant_instance) %></td>
+        <td><%= link_to plant_instance.plant.scientific_name_with_common_names, plant_instance %></td>
+        <td>
+          <% if plant_instance.descending_water_records.count > 0 %>
+            <%= plant_instance.descending_water_records.first.clean_date%>
+          <% end %>
+        </td>
         <td><%= link_to 'Remove', plant_instance, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

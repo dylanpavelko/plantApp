@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Plant:</strong>
+  <%= link_to @water_record.plant_instance.plant.scientific_name_with_common_names, @water_record.plant_instance %>
+</p>
+
+<p>
+  <strong>Moment:</strong>
+  <%= @water_record.moment %>
+</p>
+
+<p>
+  <strong>Ounces:</strong>
+  <%= @water_record.ounces %>
+</p>
+
+<%= link_to 'Edit', edit_water_record_path(@water_record) %> |
+<%= link_to 'Back', water_records_path %>

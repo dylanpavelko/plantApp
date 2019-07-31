@@ -10,6 +10,7 @@ class PlantInstancesController < ApplicationController
   # GET /plant_instances/1
   # GET /plant_instances/1.json
   def show
+    @water_records = WaterRecord.where(:plant_instance_id => @plant_instance.id)
   end
 
   # GET /plant_instances/new

@@ -10,5 +10,18 @@
   <%= link_to @plant_instance.location.name, @plant_instance.location %>
 </p>
 
+<ul>
+  <uh><strong>Water Diary</strong></uh>
+  <li><%= link_to 'Add Water Record', new_water_record_path(:plant_instance_id => @plant_instance) %></li>
+  <% @plant_instance.descending_water_records.each do |wr| %>
+    <li>
+      <%= link_to wr.clean_date, wr %>
+      <% if wr.ounces != nil %>
+        <%= wr.ounces %> oz
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
 <%= link_to 'Edit', edit_plant_instance_path(@plant_instance) %> |
 <%= link_to 'Back', plant_instances_path %>

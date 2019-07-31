@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Water Records</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Plant instance</th>
+      <th>Moment</th>
+      <th>Ounces</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @water_records.each do |water_record| %>
+      <tr>
+        <td><%= water_record.plant_instance %></td>
+        <td><%= water_record.moment %></td>
+        <td><%= water_record.ounces %></td>
+        <td><%= link_to 'Show', water_record %></td>
+        <td><%= link_to 'Edit', edit_water_record_path(water_record) %></td>
+        <td><%= link_to 'Destroy', water_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Water Record', new_water_record_path %>
