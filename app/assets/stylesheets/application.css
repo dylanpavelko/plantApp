@@ -15,4 +15,14 @@
  */
 body {
     background-color: #e9ffde;
+    
+}
+
+a{
+    color: #333333;
+}
+
+a:hover {
+    color: #000000;
+    background-color: transparent;
 }

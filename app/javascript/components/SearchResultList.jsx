@@ -6,9 +6,6 @@ export default ({ results, loading }) => (
     className="ui raised segment no padding"
     style={{
       position: 'absolute',
-      width: '100%',
-      left: '0px',
-      top: '75%',
       visibility: results.length === 0 ? 'hidden' : 'visible',
       zIndex: '99',
       height: '256px',
@@ -20,7 +17,12 @@ export default ({ results, loading }) => (
         <div className="ui text loader">Loading...</div>
       </div>
     ) : (
-      <div className="ui relaxed divided link items">
+      <div 
+        className="ui relaxed divided link items"
+        style={{
+         backgroundColor: 'white'
+        }}
+      >
         {results.map(result => <SearchResult key={result.id} result={result} />)}
       </div>
     )}

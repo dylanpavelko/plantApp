@@ -17,16 +17,20 @@ export default class Search extends React.Component {
     }
   }
 
+  submitHandler(e) {
+    e.preventDefault();
+  }
+
   render() {
     const { loading, results } = this.state;
     return (
       <div className="ui raised segment no padding">
-        <form method="GET" action="search">
+      { console.log("results" ) }
+      { console.log(results.length) }
+      { console.log(results) }
+        <form method="GET" action="search" onSubmit={this.submitHandler} >
           <div className="ui fluid icon transparent large input">
-            <input name="query" type="text" placeholder="Search apps..." onChange={this.onChange} autoComplete="off" />
-            <button type="submit">
-              <i className="search icon"></i>
-            </button>
+            <input name="query" type="text" placeholder="Search plants..." onChange={this.onChange} autoComplete="off" />
           </div>
           {results.length > 0 || loading ? <SearchResultList results={results} loading={loading} /> : null}
         </form>
