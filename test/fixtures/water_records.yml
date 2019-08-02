@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  plant_instance: one
+  moment: 2019-07-28 00:14:22
+  ounces: 9.99
+
+two:
+  plant_instance: two
+  moment: 2019-07-28 00:14:22
+  ounces: 9.99
