@@ -6,12 +6,15 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
     <%= link_to 'Plant Library', plants_path %> <%= link_to 'My Plants', plant_instances_path %>
     <br>
+
+    <%= react_component "Search" %>
     <%= yield %>
   </body>
 </html>
