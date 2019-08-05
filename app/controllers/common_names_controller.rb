@@ -1,6 +1,7 @@
 class CommonNamesController < ApplicationController
   before_action :set_common_name, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user_admin, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /common_names
   # GET /common_names.json
   def index

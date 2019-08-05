@@ -1,6 +1,7 @@
 class PlantClassesController < ApplicationController
   before_action :set_plant_class, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user_admin, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /plant_classes
   # GET /plant_classes.json
   def index

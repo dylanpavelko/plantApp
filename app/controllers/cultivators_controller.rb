@@ -1,6 +1,7 @@
 class CultivatorsController < ApplicationController
   before_action :set_cultivator, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /cultivators
   # GET /cultivators.json
   def index

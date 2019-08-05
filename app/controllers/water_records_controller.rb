@@ -1,5 +1,6 @@
 class WaterRecordsController < ApplicationController
   before_action :set_water_record, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_admin
 
   # GET /water_records
   # GET /water_records.json

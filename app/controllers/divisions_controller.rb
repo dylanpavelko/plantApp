@@ -1,6 +1,7 @@
 class DivisionsController < ApplicationController
   before_action :set_division, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /divisions
   # GET /divisions.json
   def index

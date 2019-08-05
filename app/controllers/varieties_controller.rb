@@ -1,6 +1,7 @@
 class VarietiesController < ApplicationController
   before_action :set_variety, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user_admin, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /varieties
   # GET /varieties.json
   def index

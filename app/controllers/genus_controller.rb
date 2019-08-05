@@ -1,6 +1,7 @@
 class GenusController < ApplicationController
   before_action :set_genu, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /genus
   # GET /genus.json
   def index

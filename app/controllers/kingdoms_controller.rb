@@ -1,6 +1,7 @@
 class KingdomsController < ApplicationController
   before_action :set_kingdom, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy]
+  
   # GET /kingdoms
   # GET /kingdoms.json
   def index

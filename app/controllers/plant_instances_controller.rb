@@ -1,4 +1,5 @@
 class PlantInstancesController < ApplicationController
+  before_action :authenticate_user_admin  #make this not be admin only
   before_action :set_plant_instance, only: [:show, :edit, :update, :destroy]
 
   # GET /plant_instances
