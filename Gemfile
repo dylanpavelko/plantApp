@@ -75,3 +75,4 @@ gem 'mini_racer', platforms: :ruby
 gem 'knock'
 
 gem 'webpack'
+
