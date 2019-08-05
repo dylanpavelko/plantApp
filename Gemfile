@@ -73,3 +73,5 @@ gem "react_on_rails", "11.0.0"
 gem 'mini_racer', platforms: :ruby
 
 gem 'knock'
+
+gem 'webpack'
