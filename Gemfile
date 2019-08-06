@@ -66,13 +66,7 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 
-gem 'webpacker', git: 'https://github.com/rails/webpacker.git'
-gem 'responders'
-
-gem "react_on_rails", "11.0.0"
-gem 'mini_racer', platforms: :ruby
-
 gem 'knock'
 
-gem 'webpack'
+#gem 'webpack'
 
