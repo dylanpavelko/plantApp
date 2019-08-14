@@ -11,7 +11,32 @@ class PlantClassesController < ApplicationController
   # GET /plant_classes/1
   # GET /plant_classes/1.json
   def show
+    @order_categories = Array.new
+    @plants = Array.new
+    @species = Array.new
+    @genuses = Array.new
+    @families = Array.new
+    
     @orders = Order.where(:plant_class_id => @plant_class.id)
+    @orders.each do |o|
+      @families = Array.new
+      @o_families = Family.where(:order_id => o.id)
+      @o_families.each do |of|
+        @genuses = Array.new
+        @of_genuses = Genu.where(:family_id => of.id)
+        @of_genuses.each do |ofg|
+          @species = Array.new
+          @ofg_species = Species.where(:genus_id => ofg.id)
+          @ofg_species.each do |ofgs|
+            @plants = Plant.where(:species_id => ofgs.id)
+            @species << [ofgs, @plants]
+          end
+          @genuses << [ofg, @species]
+        end
+        @families << [of, @genuses]
+      end
+      @order_categories << [o, @families]
+    end
   end
 
   # GET /plant_classes/new

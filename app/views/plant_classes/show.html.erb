@@ -21,10 +21,29 @@
 
 <strong>Orders:</strong>
 <ul>
-  <% @orders.each do |o| %>
-    <li><%= link_to o.name, o %></li>
-  <% end %>
+<% @order_categories.each do |o| %>
+  <li><%= link_to o.first.name, o.first %></li>
+  <ul>
+    <% o[1].each do |f| %>
+      <li><%= link_to f.first.name, f.first %></li>
+      <ul>
+        <% f[1].each do |g| %>
+          <li><%= link_to g.first.name, g.first %></li>
+          <ul>
+            <% g[1].each do |s| %>
+              <li><%= link_to s.first.name, s.first %></li>
+              <ul>
+                <% s[1].each do |p| %>
+                  <li><%= link_to p.scientific_name_with_common_names, p %></li>
+                <% end %>
+              </ul>
+            <% end %>
+          </ul>
+        <% end %>
+      </ul>
+    <% end %>
+  </ul>
+<% end %>
 </ul>
-
 <%= link_to 'Edit', edit_plant_class_path(@plant_class) %> |
 <%= link_to 'Back', plant_classes_path %>
