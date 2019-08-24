@@ -1,5 +1,9 @@
 <p id="notice"><%= notice %></p>
 
+<% if @plant.image_url != '' and @plant.image_url != nil %>
+  <img src=<%= @plant.image_url %> width='250'/>
+<% end %>
+
 <h2> <%= @plant.scientific_name.html_safe %> </h2>
 <% @common_names.each do |name| %>
   <%= name.name %>,

@@ -55,6 +55,11 @@
     <%= form.collection_select :cultivator_id, Cultivator.all, :id, :name, :include_blank => true %>
   </div>
 
+  <div class="field">
+    <%= form.label :image_url %>
+    <%= form.text_field :image_url %>
+  </div>
+
   <div class="actions">
     <%= form.submit %>
   </div>

@@ -6,6 +6,33 @@ class PlantsController < ApplicationController
   # GET /plants.json
   def index
     @plants = Plant.all
+    
+    @order_categories = Array.new
+    @plants = Array.new
+    @species = Array.new
+    @genuses = Array.new
+    @families = Array.new
+    
+    @orders = Order.all
+    @orders.each do |o|
+      @families = Array.new
+      @o_families = Family.where(:order_id => o.id)
+      @o_families.each do |of|
+        @genuses = Array.new
+        @of_genuses = Genu.where(:family_id => of.id)
+        @of_genuses.each do |ofg|
+          @species = Array.new
+          @ofg_species = Species.where(:genus_id => ofg.id)
+          @ofg_species.each do |ofgs|
+            @plants = Plant.where(:species_id => ofgs.id)
+            @species << [ofgs, @plants]
+          end
+          @genuses << [ofg, @species]
+        end
+        @families << [of, @genuses]
+      end
+      @order_categories << [o, @families]
+    end
   end
 
   # GET /plants/1
@@ -71,6 +98,6 @@ class PlantsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plant_params
-      params.require(:plant).permit(:kingdom_id, :division_id, :plant_class_id, :order_id, :family_id, :genus_id, :species_id, :variety_id, :cultivator_id)
+      params.require(:plant).permit(:kingdom_id, :division_id, :plant_class_id, :order_id, :family_id, :genus_id, :species_id, :variety_id, :cultivator_id, :image_url)
     end
 end

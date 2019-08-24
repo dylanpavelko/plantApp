@@ -40,4 +40,36 @@
 
 <br>
 
+<strong>Orders:</strong>
+<ul>
+<% @order_categories.each do |o| %>
+  <li><%= link_to o.first.name, o.first %></li>
+  <ul>
+    <% o[1].each do |f| %>
+      <li><%= link_to f.first.name, f.first %></li>
+      <ul>
+        <% f[1].each do |g| %>
+          <li><%= link_to g.first.name, g.first %></li>
+          <ul>
+            <% g[1].each do |s| %>
+              <li><%= link_to s.first.name, s.first %></li>
+              <ul>
+                <% s[1].each do |p| %>
+                  <li>
+                    <% if p.image_url != nil and p.image_url != '' %>
+                      <image src=<%= p.image_url %> width='100' />
+                    <% end %>
+                    <%= link_to p.scientific_name_with_common_names, p %>
+                  </li>
+                <% end %>
+              </ul>
+            <% end %>
+          </ul>
+        <% end %>
+      </ul>
+    <% end %>
+  </ul>
+<% end %>
+</ul>
+
 <%= link_to 'New Plant', new_plant_path %>

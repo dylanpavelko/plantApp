@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_05_023911) do
+ActiveRecord::Schema.define(version: 2019_08_24_220109) do
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 2019_08_05_023911) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "cultivator_id"
+    t.string "image_url"
     t.index ["cultivator_id"], name: "index_plants_on_cultivator_id"
     t.index ["division_id"], name: "index_plants_on_division_id"
     t.index ["family_id"], name: "index_plants_on_family_id"
