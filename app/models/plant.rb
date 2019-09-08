@@ -12,6 +12,9 @@ class Plant < ApplicationRecord
   
   def scientific_name
     sci_name = "<em>" + self.genus.name.titleize + " " + self.species.name.downcase + "</em>"
+    if self.variety != nil 
+      sci_name = sci_name + " var. " + "<em>" + self.variety.name.downcase + "</em>"
+    end
     if self.cultivator != nil
       sci_name = sci_name + " '" + self.cultivator.name + "'"
     end

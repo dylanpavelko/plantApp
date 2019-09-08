@@ -10,5 +10,10 @@
   <%= @variety.description %>
 </p>
 
+<ul>
+  <% @plants.each do |plant| %>
+    <li><%= link_to plant.scientific_name_with_common_names, plant %></li>
+  <% end %>
+</ul>
 <%= link_to 'Edit', edit_variety_path(@variety) %> |
 <%= link_to 'Back', varieties_path %>

@@ -11,6 +11,7 @@ class VarietiesController < ApplicationController
   # GET /varieties/1
   # GET /varieties/1.json
   def show
+    @plants = Plant.where(:variety_id => @variety.id)
   end
 
   # GET /varieties/new

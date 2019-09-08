@@ -3,7 +3,7 @@
 <% if @plant.image_url != '' and @plant.image_url != nil %>
   <img src=<%= @plant.image_url %> width='250'/>
 <% end %>
-<%= @plant.image_url %>
+
 <h2> <%= @plant.scientific_name.html_safe %> </h2>
 <% @common_names.each do |name| %>
   <%= name.name %>,
@@ -50,10 +50,12 @@
   <%= link_to @plant.species.name, @plant.species %>
 </p>
 
-<p>
-  <strong>Variety:</strong>
-  <%= @plant.variety %>
-</p>
+<% if @plant.variety != nil %>
+  <p>
+    <strong>Variety:</strong>
+    <%= link_to @plant.variety.name, @plant.variety %>
+  </p>
+<% end %>
 
 <% if @plant.cultivator != nil %>
   <p>
