@@ -1,9 +1,12 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Plant:</strong>
+<% if @plant_instance.plant.image_url != '' and @plant_instance.plant.image_url != nil %>
+  <img src=<%= @plant_instance.plant.image_url %> width='250'/>
+<% end %>
+
+<h3>
   <%= link_to @plant_instance.plant.scientific_name_with_common_names, @plant_instance.plant %>
-</p>
+</h3>
 
 <p>
   <strong>Location:</strong>
@@ -11,7 +14,7 @@
 </p>
 
 <ul>
-  <uh><strong>Water Diary</strong></uh>
+  <uh><strong>Growing Notes</strong></uh>
   <li><%= link_to 'Add Water Record', new_water_record_path(:plant_instance_id => @plant_instance) %></li>
   <% @plant_instance.descending_water_records.each do |wr| %>
     <li>
@@ -19,6 +22,21 @@
       <% if wr.ounces != nil %>
         <%= wr.ounces %> oz
       <% end %>
+    </li>
+  <% end %>
+  <% if @plant_instance.planted_date != nil %>
+    <li>Planted 
+      <% if @plant_instance.propagation_type == 1 %>
+       seed 
+      <% elsif @plant_instance.propagation_type == 2 %>
+       cutting
+      <% end %>
+      at <%=  @plant_instance.planted_date.strftime('%l:%M %p %Z on %m/%d/%y') %>
+    </li>
+  <% end %>
+  
+  <% if @plant_instance.acquired_date != nil %>
+    <li>Acquired on <%= @plant_instance.acquired_date.strftime('%m/%d/%y') %>
     </li>
   <% end %>
 </ul>

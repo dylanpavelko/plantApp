@@ -20,7 +20,27 @@
     <%= form.label :location_id %>
     <%= form.collection_select :location_id, Location.all, :id, :name, :include_blank => true %>
   </div>
+  
+  Time Zone <%= Time.zone %>
+  <div class="field">
+    <%= form.label :planted_date %>
+    <%= form.datetime_local_field :planted_date %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :propagation_type %>
+    <select name="plant_instance[propagation_type]" id="plant_instance_propagation_type">
+      <option value></option>
+      <option value='1' <% if @plant_instance.propagation_type == 1 %> selected="selected"<% end %> >Seed Propagation</option>
+      <option value='2' <% if @plant_instance.propagation_type == 2 %> selected="selected"<% end %> >Cutting Propagation</option>
+    </select>
+  </div>
 
+  <div class="field">
+    <%= form.label :acquired_date %>
+    <%= form.date_field :acquired_date %>
+  </div>
+  
   <div class="actions">
     <%= form.submit %>
   </div>

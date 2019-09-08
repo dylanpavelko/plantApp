@@ -71,6 +71,6 @@ class PlantInstancesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plant_instance_params
-      params.require(:plant_instance).permit(:plant_id, :location_id)
+      params.require(:plant_instance).permit(:plant_id, :location_id, :planted_date, :acquired_date, :propagation_type)
     end
 end
