@@ -18,7 +18,7 @@
 
   <div class="field">
     <%= form.label :moment %>
-    <%= form.datetime_field :moment %>
+    <%= form.datetime_field :moment, :value => @local_moment.strftime("%Y-%m-%dT%H:%M") %>
   </div>
 
   <div class="field">

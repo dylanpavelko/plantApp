@@ -15,7 +15,8 @@ class WaterRecordsController < ApplicationController
 
   # GET /water_records/new
   def new
-    @water_record = WaterRecord.new
+    @local_moment = DateTime.now.in_time_zone('Pacific Time (US & Canada)')
+    @water_record = WaterRecord.new()
     @plant_instance = PlantInstance.find(params[:plant_instance_id])
   end
 

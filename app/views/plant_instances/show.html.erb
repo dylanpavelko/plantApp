@@ -18,10 +18,11 @@
   <li><%= link_to 'Add Water Record', new_water_record_path(:plant_instance_id => @plant_instance) %></li>
   <% @plant_instance.descending_water_records.each do |wr| %>
     <li>
-      <%= link_to wr.clean_date, wr %>
+      Watered 
       <% if wr.ounces != nil %>
         <%= wr.ounces %> oz
       <% end %>
+      <%= link_to wr.clean_date, wr %>
     </li>
   <% end %>
   <% if @plant_instance.planted_date != nil %>
