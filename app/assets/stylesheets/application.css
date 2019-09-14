@@ -33,3 +33,30 @@ a:hover {
     box-shadow: 0 6px 20px 0 rgba(0,0,0, 0.19);
     padding: 1.5em;
 }
+
+#search {
+    padding: 5px;
+}
+
+#id {
+    position: relative;
+}
+#searchResults {
+    background-color: #f0ecda;
+    position: absolute;
+    display: none;
+    margin-left: 12em;
+    margin-top: 0.5em;
+}
+
+#searchRequestList {
+    list-style-type: none;
+}
+
+.searchResult {
+    margin-right: .5em;
+    margin-left: -2.5em;
+    margin-top: 0.5em;
+    padding: 0.25em;
+    background-color: #fffdf2;
+}

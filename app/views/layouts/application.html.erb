@@ -12,18 +12,77 @@
 
   <body>
     <%= link_to 'Plant Library', plants_path %> <%= link_to 'My Plants', plant_instances_path %>
-    <% if current_user %>
-      Logged in as <%= current_user.email %>.
-      <%= link_to 'Log Out', logout_path %>
-    <% else %>
-      <%= link_to 'Sign Up', signup_path %> or 
-      <%= link_to 'Log In', login_path %>
-    <% end %>
+    
+    <span id="menu_search">
+      <%= text_field_tag :search, params[:search], placeholder: "Search plants...", :autocomplete => :off %>
+      <div id="searchResults">
+        <ul id="searchRequestList">
+          <li></li>
+        </ul>
+      </div>
+    </span>
+   
+    <span style="float:right">
+      <% if current_user %>
+        Logged in as <%= current_user.email %>.
+        <%= link_to 'Log Out', logout_path %>
+      <% else %>
+        <%= link_to 'Sign Up', signup_path %> or 
+        <%= link_to 'Log In', login_path %>
+      <% end %>
+    </span>
+    
+    <br><br>
 
-    <br>
-    <%#= react_component "Search" %>
     <div id="main_content">
       <%= yield %>
     </div>
+    
+    
+    <script type="text/javascript">
+      var searchRequest = null;
+
+      $(function () {
+          var minlength = 3;
+      
+          $("#search").keyup(function () {
+              var that = this,
+              value = $(this).val();
+      
+              if (value.length >= minlength ) {
+                  if (searchRequest != null) 
+                      searchRequest.abort();
+                  searchRequest = $.ajax({
+                      type: "GET",
+                      url: "/search",
+                      data: {
+                          'query' : value
+                      },
+                      dataType: "text",
+                      success: function(msg){
+                          //we need to check if the value is the same
+                          if (value==$(that).val()) {
+                          //Receiving the result of search here
+                            var html_list = "";
+                            var plant_results = JSON.parse(msg);
+                            for (var plant in plant_results){
+                              console.log(plant_results[plant].id);
+                              html_list += "<li class='searchResult'><a href=/plants/" + plant_results[plant].id + ">" 
+                                + plant_results[plant].scientific_name_with_common_names + "</li>"
+                            }
+                            $('#searchRequestList').html(html_list);
+                            $('#searchResults').show();
+                            console.log("results " + msg);
+                          }
+                      }
+                  });
+                  console.log(value);
+              }
+              else {
+                $('#searchResults').hide();
+              }
+          });
+      });
+    </script>
   </body>
 </html>
