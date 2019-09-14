@@ -1,9 +1,9 @@
 class SearchController < ApplicationController
 
   def index
-    @common_names = CommonName.where("name LIKE ?", "%#{params[:query]}%")
-    @genus = Genu.where("name LIKE ?", "%#{params[:query]}%")
-    @species = Species.where("name LIKE ?", "%#{params[:query]}%")
+    @common_names = CommonName.where("lower(name) LIKE ?", "%#{params[:query].downcase}%")
+    @genus = Genu.where("lower(name) LIKE ?", "%#{params[:query].downcase}%")
+    @species = Species.where("lower(name) LIKE ?", "%#{params[:query].downcase}%")
     
     @plants = Array.new
     
