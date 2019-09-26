@@ -74,6 +74,10 @@
                             $('#searchResults').show();
                             console.log("results " + msg);
                           }
+                      },
+                      error: function(XMLHttpRequest, textStatus, errorThrown) {
+                        $('#searchRequestList').html("<li class='searchResult'>Searching...</li>");
+                        $('#searchResults').show();
                       }
                   });
                   console.log(value);

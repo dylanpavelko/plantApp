@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_08_020137) do
+ActiveRecord::Schema.define(version: 2019_09_25_045003) do
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -64,6 +64,8 @@ ActiveRecord::Schema.define(version: 2019_09_08_020137) do
     t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "long"
+    t.decimal "lat"
   end
 
   create_table "kingdoms", force: :cascade do |t|
