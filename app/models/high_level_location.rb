@@ -4,7 +4,9 @@ class HighLevelLocation < ApplicationRecord
     @forecast = ""
     
     def set_forecast
-        @forecast = URI.parse("https://api.darksky.net/forecast/" + Figaro.env.dark_sky_key() +"/" + self.lat.to_s + "," +self.long.to_s).read
+        @url = "https://api.darksky.net/forecast/" + Figaro.env.dark_sky_key + "/" + self.lat.to_s + "," + self.long.to_s
+        puts @url
+        @forecast = URI.parse(@url).read
         @forecast = ActiveSupport::JSON.decode(@forecast)
     end
     

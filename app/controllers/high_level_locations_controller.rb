@@ -12,17 +12,6 @@ class HighLevelLocationsController < ApplicationController
   # GET /high_level_locations/1.json
   def show
     @locations = Location.where(:high_level_location_id => @high_level_location.id)
-    darksky = Darksky::API.new(ENV["dark_sky_key"])
-   # @forecast = darksky.forecast(@high_level_location.lat, @high_level_location.long)
-    require 'net/http'
-
-    url = URI.parse('http://www.example.com/index.html')
-    req = Net::HTTP::Get.new(url.to_s)
-    res = Net::HTTP.start(url.host, url.port) {|http|
-      http.request(req)
-    }
-    puts res.body
-    puts @forecast
   end
 
   # GET /high_level_locations/new
