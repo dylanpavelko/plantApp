@@ -110,10 +110,27 @@ $(document).ready(function() {
       $('#water_records_popup').show();
     });
     
+    $(document).on('keyup', ".water_plant", function(){
+      if($(this).val() == $(this).parent().next().find('input').attr('value')){
+         $(this).parent().next().find('input').prop( "checked", true );
+      }else{
+         $(this).parent().next().find('input').prop( "checked", false );
+      }
+    })
+    
+    $('.water_plant').keyup(function(){
+      alert('test');
+      // if($(this).val() == $(this).parent().next().find('input').attr('value')){
+      //   $(this).parent().next().find('input').prop( "checked", true );
+      // }else{
+      //   $(this).parent().next().find('input').prop( "checked", false );
+      // }
+    });
+    
     $('.close').click(function(){
       $('#water_records_popup').hide();
       $("#water_records").find("tr:gt(0)").remove();
-    })
+    });
 });
 
 function add_watering_row(plant_id, plant_name, water_amount){
