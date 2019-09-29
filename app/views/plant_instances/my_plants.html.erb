@@ -1,0 +1,51 @@
+<p id="notice"><%= notice %></p>
+
+<h1>My Plants</h1>
+
+<ul>
+<% @hlf.each do |hlf| %>
+  <lh><strong><%= link_to hlf.name, hlf %></strong></lh>
+  <% hlf.locations.each do |location| %>
+    <li><input type="checkbox" id="location<%= location.id %>" name="location" class="location" value=<%= location.id %>><%= link_to location.name, location %></li>
+    <ul>
+      <% location.plants.each do |plant_i| %>
+        <li>
+        <input type="checkbox" name="plant_instance" value="<%= plant_i.id %>" location="<%=location.id%>" class="plant location<%=location.id%>">
+        <%= link_to plant_i.plant.scientific_name_with_common_names, plant_i %>
+        <% if plant_i.descending_water_records.count > 0 %>
+          - Last Watered <%= plant_i.descending_water_records.first.clean_date%>
+        <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+<% end %>
+</ul>
+<input type="button" value="Add Water Record(s)">
+<br/>
+<%= link_to 'New Plant', new_plant_instance_path %>
+
+
+<script>
+
+$(document).ready(function() {
+    $('.location').change(function() {
+        var $location_val = $(this).attr('value');
+        if(this.checked) {
+            $('.location'+$location_val).prop( "checked", true );
+        }
+        else{
+            $('.location'+$location_val).prop( "checked", false );  
+        }
+    });
+    
+    $('.plant').click(function(){
+      var $location_val = $(this).attr('location');
+      if(!this.checked && $('#location'+$location_val).is(':checked')){
+        $('#location'+$location_val).prop( "checked", false );  
+      }
+    });
+});
+
+
+</script>

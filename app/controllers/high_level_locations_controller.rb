@@ -71,6 +71,6 @@ class HighLevelLocationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def high_level_location_params
-      params.require(:high_level_location).permit(:name, :zip, :long, :lat)
+      params.require(:high_level_location).permit(:name, :zip, :long, :lat, :user_id)
     end
 end

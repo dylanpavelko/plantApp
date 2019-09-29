@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_25_045003) do
+ActiveRecord::Schema.define(version: 2019_09_28_234503) do
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 2019_09_25_045003) do
     t.datetime "updated_at", null: false
     t.decimal "long"
     t.decimal "lat"
+    t.integer "user_id"
+    t.index ["user_id"], name: "index_high_level_locations_on_user_id"
   end
 
   create_table "kingdoms", force: :cascade do |t|

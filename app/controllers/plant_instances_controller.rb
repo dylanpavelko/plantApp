@@ -7,6 +7,11 @@ class PlantInstancesController < ApplicationController
   def index
     @plant_instances = PlantInstance.all
   end
+  
+  def my_plants
+    @hlf = HighLevelLocation.where(:user_id => @current_user.id)
+    @plant_instances = PlantInstance.all
+  end
 
   # GET /plant_instances/1
   # GET /plant_instances/1.json

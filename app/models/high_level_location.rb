@@ -1,11 +1,12 @@
 class HighLevelLocation < ApplicationRecord
     require "open-uri"
+    belongs_to :user, :class_name => "User", :foreign_key => "user_id"
+    has_many :locations, :class_name => "Location", :foreign_key => "high_level_location_id"
 
     @forecast = ""
     
     def set_forecast
         @url = "https://api.darksky.net/forecast/" + Figaro.env.dark_sky_key + "/" + self.lat.to_s + "," + self.long.to_s
-        puts @url
         @forecast = URI.parse(@url).read
         @forecast = ActiveSupport::JSON.decode(@forecast)
     end
