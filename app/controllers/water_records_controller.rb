@@ -65,6 +65,20 @@ class WaterRecordsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def add_water_records
+    @date = Time.at(params[:water_moment].to_i)
+    @water_records = params[:water_array]
+    @water_records.each do |wr|
+      # puts "water plant"
+      # puts "moment " + @date.to_s
+      # puts "plant id " + wr[1][0].to_s
+      # puts "amount " + wr[1][1].to_s
+      @water_record = WaterRecord.new(:plant_instance_id => wr[1][0], :moment => @date, :ounces => wr[1][1])
+      @water_record.save
+    end
+    redirect_to my_plants_path
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -74,6 +88,6 @@ class WaterRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def water_record_params
-      params.require(:water_record).permit(:plant_instance_id, :moment, :ounces)
+      params.require(:water_record).permit(:plant_instance_id, :moment, :ounces, :water_moment, :water_array)
     end
 end

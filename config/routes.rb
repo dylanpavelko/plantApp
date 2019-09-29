@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     resources :kingdoms
     get '/search', to: 'search#index'
     get '/my_plants', to: 'plant_instances#my_plants'
+    post '/add_water_records', to: 'water_records#add_water_records'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
   

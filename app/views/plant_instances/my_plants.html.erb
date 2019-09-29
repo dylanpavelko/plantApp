@@ -33,7 +33,7 @@
   <div id="modal_content">
   <span class="close">&times;</span>
   <h3>Add Water Records to Plants</h3>
-  Watered at <input type="datetime-local" name='' id='' value="<%= @local_moment.strftime("%Y-%m-%dT%H:%M") %>">
+  Watered at <input type="datetime-local" id='watering_moment' value="<%= @local_moment.strftime("%Y-%m-%dT%H:%M") %>">
   <table border='1' id="water_records">
       <th>Plant</th>
       <th>Water Amount</th>
@@ -41,7 +41,7 @@
       <th>Remove</th>
 
   </table>
-  <button>Submit</button>
+  <button id="submit_water_records">Submit</button>
   </div>
 </div>
 
@@ -118,18 +118,31 @@ $(document).ready(function() {
       }
     })
     
-    $('.water_plant').keyup(function(){
-      alert('test');
-      // if($(this).val() == $(this).parent().next().find('input').attr('value')){
-      //   $(this).parent().next().find('input').prop( "checked", true );
-      // }else{
-      //   $(this).parent().next().find('input').prop( "checked", false );
-      // }
-    });
-    
     $('.close').click(function(){
       $('#water_records_popup').hide();
       $("#water_records").find("tr:gt(0)").remove();
+    });
+    
+    $('#submit_water_records').click(function(){
+      var $water_date = Date.parse($('#watering_moment').val())/1000;
+      var $water_array = new Array();
+      $(document).find('.water_plant').each(function(index){
+        $plant_id = $(this).attr('id');
+        $water_amount = $(this).val();
+        $water_details = [$plant_id, $water_amount];
+        $water_array.push($water_details);
+      });
+      $.ajax({
+        type: "POST",
+        url: "/add_water_records",
+        data: {water_moment: $water_date, water_array: $water_array},
+        success:function(data){
+          return false;
+        },
+        error: function(data){
+          return false
+        }
+      });
     });
 });
 
