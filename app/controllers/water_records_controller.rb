@@ -22,6 +22,7 @@ class WaterRecordsController < ApplicationController
 
   # GET /water_records/1/edit
   def edit
+    @local_moment = DateTime.now.in_time_zone('Pacific Time (US & Canada)')
     @plant_instance = @water_record.plant_instance
   end
 

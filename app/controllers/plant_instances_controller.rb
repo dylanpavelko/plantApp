@@ -10,7 +10,7 @@ class PlantInstancesController < ApplicationController
   
   def my_plants
     @hlf = HighLevelLocation.where(:user_id => @current_user.id)
-    @plant_instances = PlantInstance.all
+    @local_moment = DateTime.now.in_time_zone('Pacific Time (US & Canada)')
   end
 
   # GET /plant_instances/1

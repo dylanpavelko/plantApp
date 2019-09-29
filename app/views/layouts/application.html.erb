@@ -11,7 +11,7 @@
   </head>
 
   <body>
-    <%= link_to 'Plant Library', plants_path %> <%= link_to 'My Plants', plant_instances_path %>
+    <%= link_to 'Plant Library', plants_path %> <%= link_to 'My Plants', my_plants_path %>
     
     <span id="menu_search">
       <%= text_field_tag :search, params[:search], placeholder: "Search plants...", :autocomplete => :off %>

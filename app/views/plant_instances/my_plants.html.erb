@@ -6,29 +6,50 @@
 <% @hlf.each do |hlf| %>
   <lh><strong><%= link_to hlf.name, hlf %></strong></lh>
   <% hlf.locations.each do |location| %>
-    <li><input type="checkbox" id="location<%= location.id %>" name="location" class="location" value=<%= location.id %>><%= link_to location.name, location %></li>
-    <ul>
-      <% location.plants.each do |plant_i| %>
-        <li>
-        <input type="checkbox" name="plant_instance" value="<%= plant_i.id %>" location="<%=location.id%>" class="plant location<%=location.id%>">
-        <%= link_to plant_i.plant.scientific_name_with_common_names, plant_i %>
-        <% if plant_i.descending_water_records.count > 0 %>
-          - Last Watered <%= plant_i.descending_water_records.first.clean_date%>
+    <li class="location_row">
+      <input type="checkbox" id="location<%= location.id %>" name="location" class="location" value=<%= location.id %>><%= link_to location.name, location %>
+      <ul>
+        <% location.plants.each do |plant_i| %>
+          <li class="plant_row">
+          <input type="checkbox" name="plant_instance" value="<%= plant_i.id %>" location="<%=location.id%>" class="plant location<%=location.id%>">
+          <%= link_to plant_i.plant.scientific_name_with_common_names, plant_i %>
+          <% if plant_i.descending_water_records.count > 0 %>
+            <% @lastest_watering = plant_i.descending_water_records.first %>
+            <span class='last_watered' value='<%= @lastest_watering.ounces %>'>- Last Watered <%= @lastest_watering.clean_date%></span>
+          <% end %>
+          </li>
         <% end %>
-        </li>
-      <% end %>
-    </ul>
+      </ul>
+    </li>
   <% end %>
 <% end %>
 </ul>
-<input type="button" value="Add Water Record(s)">
+<input type="button" id="add_water_records_btn" value="Add Water Record(s) to Selected Plants" disabled>
 <br/>
 <%= link_to 'New Plant', new_plant_instance_path %>
+<br/>
+
+<div id="water_records_popup" style="display:none">
+  <div id="modal_content">
+  <span class="close">&times;</span>
+  <h3>Add Water Records to Plants</h3>
+  Watered at <input type="datetime-local" name='' id='' value="<%= @local_moment.strftime("%Y-%m-%dT%H:%M") %>">
+  <table border='1' id="water_records">
+      <th>Plant</th>
+      <th>Water Amount</th>
+      <th>Use Previous Amount</th>
+      <th>Remove</th>
+
+  </table>
+  <button>Submit</button>
+  </div>
+</div>
 
 
 <script>
 
 $(document).ready(function() {
+    //if location checkbox is clicked, set corresponding plant instances to match
     $('.location').change(function() {
         var $location_val = $(this).attr('value');
         if(this.checked) {
@@ -37,8 +58,15 @@ $(document).ready(function() {
         else{
             $('.location'+$location_val).prop( "checked", false );  
         }
+        if($('input.plant:checked').length > 0){
+          $('#add_water_records_btn').removeAttr('disabled');
+        }else{
+          $('#add_water_records_btn').attr('disabled','disabled');
+        }
     });
     
+    //if plant instnace checkbox is clicked, uncheck location instance if selected
+    //or select location instance if all plants are selected
     $('.plant').click(function(){
       var $location_val = $(this).attr('location');
       if(!this.checked && $('#location'+$location_val).is(':checked')){
@@ -57,8 +85,47 @@ $(document).ready(function() {
           $('#location'+$location_val).prop( "checked", true );
         }
       }
+      if($('input.plant:checked').length > 0){
+        $('#add_water_records_btn').removeAttr('disabled');
+      }else{
+        $('#add_water_records_btn').attr('disabled','disabled');
+      }
     });
+    
+    $('#add_water_records_btn').click(function(){
+      //go through list, for each location, see if any plants are selected
+      $('.location_row').each(function( index) {
+        if($(this).find('input:checked').length > 0){
+          //alert($(this).find('a').first().text()); 
+          var $location_name = $(this).find('a').first().text();
+          $('#water_records tr:last').after("<tr><td colspan='4'><em>"+$location_name+"</em></td></tr>");
+          $(this).find('input.plant:checked').each(function( index ){
+            var $plant_id = $(this).val();
+            var $plant_name = $(this).next().text();
+            var $water_amount = $(this).next().next().attr('value');
+            add_watering_row($plant_id, $plant_name, $water_amount);
+          });
+        }
+      });
+      $('#water_records_popup').show();
+    });
+    
+    $('.close').click(function(){
+      $('#water_records_popup').hide();
+      $("#water_records").find("tr:gt(0)").remove();
+    })
 });
 
+function add_watering_row(plant_id, plant_name, water_amount){
+  $prior_value = "checked"
+  if(water_amount == undefined){
+    water_amount = "";
+    $prior_value = "";
+  }
+  $('#water_records tr:last').after('<tr><td>'+ plant_name +'</td><td>' + 
+    "<input class='water_plant' id=" + plant_id + " type='text' value='"+water_amount+"' >" + 
+    "</td><td><input type='checkbox' " + $prior_value + " value='"+water_amount+"'/></td>" + 
+    "<td>X</td></tr>");
+}
 
 </script>
