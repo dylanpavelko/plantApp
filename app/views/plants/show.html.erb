@@ -9,6 +9,7 @@
   <%= name.name %>,
 <% end %>
 <%= link_to 'Add Common Name', new_common_name_path(:plant_id => @plant) %>
+
 <p>
   <% if @plant.species.genus.description != '' %>
     <em><%= @plant.species.genus.description %></em>

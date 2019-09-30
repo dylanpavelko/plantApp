@@ -17,7 +17,7 @@
             <% @lastest_watering = plant_i.descending_water_records.first %>
             <span class='last_watered' value='<%= @lastest_watering.ounces %>' style='float:right;'>
               <% @days = (DateTime.now().to_date - @lastest_watering.moment.to_date).to_i - 1 %>
-              <% if @days == 0 %>
+              <% if @days <= 0 %>
                 Today
               <% else %>
                 <%= @days %> Days Ago
