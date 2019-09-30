@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <% if @plant.image_url != '' and @plant.image_url != nil %>
-  <img src=<%= @plant.image_url %> width='250'/>
+  <img src=<%= @plant.image_url %> width='250' style="float:left;margin-right:3em;"/>
 <% end %>
 
 <h2> <%= @plant.scientific_name.html_safe %> </h2>
@@ -9,46 +9,45 @@
   <%= name.name %>,
 <% end %>
 <%= link_to 'Add Common Name', new_common_name_path(:plant_id => @plant) %>
-
+<p>
+  <% if @plant.species.genus.description != '' %>
+    <em><%= @plant.species.genus.description %></em>
+  <% end %>
+  <% if @plant.species.description != '' %>
+    <em><%= @plant.species.description %></em>
+  <% end %>
+</p>
 <p>
   <strong>Kingdom:</strong>
   <%= link_to @plant.kingdom.name, @plant.kingdom %>
-</p>
+<br/>
 <% if @plant.division != nil %>
-  <p>
     <strong>Division:</strong>
     <%= link_to @plant.division.name, @plant.division %>
-  </p>
+  <br/>
 <% end %>
-
-<p>
   <strong>Class:</strong>
   <%= link_to @plant.plant_class.name, @plant.plant_class %>
-</p>
+<br/>
 
 <% if @plant.order != nil %>
-  <p>
     <strong>Order:</strong>
     <%= link_to @plant.order.name, @plant.order %>
-  </p>
+  <br/>
 <% end %>
 
 <% if @plant.family != nil %>
-  <p>
     <strong>Family:</strong>
     <%= link_to @plant.species.genus.family.name, @plant.species.genus.family %>
-  </p>
 <% end %>
+<br/>
 
-<p>
   <strong>Genus:</strong>
   <%= link_to @plant.species.genus.name, @plant.species.genus %>
-</p>
-
-<p>
+<br/>
   <strong>Species:</strong>
   <%= link_to @plant.species.name, @plant.species %>
-</p>
+
 
 <% if @plant.variety != nil %>
   <p>
@@ -58,11 +57,11 @@
 <% end %>
 
 <% if @plant.cultivator != nil %>
-  <p>
+  <br/>
     <strong>Cultivator:</strong>
     <%= link_to @plant.cultivator.name, @plant.cultivator %>
-  </p>
 <% end %>
+</p>
 
 <%= link_to 'Edit', edit_plant_path(@plant) %> |
 <%= link_to 'Back', plants_path %>

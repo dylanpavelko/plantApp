@@ -1,13 +1,21 @@
 <p id="notice"><%= notice %></p>
-
+<div id='plant_top'>
 <% if @plant_instance.plant.image_url != '' and @plant_instance.plant.image_url != nil %>
-  <img src=<%= @plant_instance.plant.image_url %> width='250'/>
+  <img src='<%= @plant_instance.plant.image_url%>' style="float:left;margin-right:3em;" width='250'/>
 <% end %>
-
-<h3>
-  <%= link_to @plant_instance.plant.scientific_name_with_common_names, @plant_instance.plant %>
-</h3>
-
+  <h3>
+    <%= link_to @plant_instance.plant.scientific_name_with_common_names, @plant_instance.plant %>
+  </h3>
+  <p>
+  <% if @plant_instance.plant.species.genus.description != '' %>
+    <em><%= @plant_instance.plant.species.genus.description %></em>
+  <% end %>
+  <% if @plant_instance.plant.species.description != '' %>
+    <em><%= @plant_instance.plant.species.description %></em>
+  <% end %>
+</p>
+</div>
+<div>
 <p>
   <strong>Location:</strong>
   <%= link_to @plant_instance.location.name, @plant_instance.location %>
@@ -43,4 +51,5 @@
 </ul>
 
 <%= link_to 'Edit', edit_plant_instance_path(@plant_instance) %> |
-<%= link_to 'Back', plant_instances_path %>
+<%= link_to 'Back', my_plants_path %>
+</div>
