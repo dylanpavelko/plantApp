@@ -1,7 +1,7 @@
 <p id="notice"><%= notice %></p>
 
 <h1>My Plants</h1>
-
+<span style='float:right'><strong>Last Watered</strong></span>
 <ul>
 <% @hlf.each do |hlf| %>
   <lh><strong><%= link_to hlf.name, hlf %></strong></lh>
@@ -15,7 +15,14 @@
           <%= link_to plant_i.plant.scientific_name_with_common_names, plant_i %>
           <% if plant_i.descending_water_records.count > 0 %>
             <% @lastest_watering = plant_i.descending_water_records.first %>
-            <span class='last_watered' value='<%= @lastest_watering.ounces %>'>- Last Watered <%= @lastest_watering.clean_date%></span>
+            <span class='last_watered' value='<%= @lastest_watering.ounces %>' style='float:right;'>
+              <% @days = (DateTime.now().to_date - @lastest_watering.moment.to_date).to_i - 1 %>
+              <% if @days == 0 %>
+                Today
+              <% else %>
+                <%= @days %> Ago
+              <% end %>
+            </span>
           <% end %>
           </li>
         <% end %>
