@@ -7,7 +7,9 @@
   <lh><strong><%= link_to hlf.name, hlf %></strong></lh>
   <% hlf.locations.each do |location| %>
     <li class="location_row">
-      <input type="checkbox" id="location<%= location.id %>" name="location" class="location" value=<%= location.id %>><%= link_to location.name, location %>
+      <input type="checkbox" id="location<%= location.id %>" name="location" class="location" value=<%= location.id %>>
+      <%= link_to location.name, location %>
+      <span style="float:right;">-</span>
       <ul>
         <% location.plants.each do |plant_i| %>
           <li class="plant_row">
@@ -151,6 +153,13 @@ $(document).ready(function() {
         }
       });
     });
+    
+    $( ".plant_row" ).hover(
+      function() {
+        $( this ).attr('style', 'background-color:#faf5dc;');
+      }, function() {
+        $( this ).attr('style', '');
+      });
 });
 
 function add_watering_row(plant_id, plant_name, water_amount){
