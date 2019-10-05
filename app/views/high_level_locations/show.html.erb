@@ -63,26 +63,30 @@
   <strong>Historical Weather Information</strong>
   <table>
     <th>Date</th>
-    <th>Average</th>
     <th><%= (@today - (365 * 1)).strftime("%Y") %></th>
     <th><%= (@today - (365 * 2)).strftime("%Y") %></th>
     <th><%= (@today - (365 * 3)).strftime("%Y") %></th>
     <th><%= (@today - (365 * 4)).strftime("%Y") %></th>
     <th><%= (@today - (365 * 5)).strftime("%Y") %></th>
-    <th>Record</th>
+    <th>Average</th>
     <% @yrs = [0,0,0,0,0] %>
-    <% (0..89).each_with_index do |index| %>
+    <% (7..89).each_with_index do |index| %>
       <tr>
         <td><strong><%= (@today+index).strftime("%m/%d") %></strong></td>
-        <td></td>
+
+        <% @day = Array.new %>
         <% (0..4).each_with_index do |yindex| %>
           <td>
             <% @date = (@today+index - 365 * (yindex + 1)) %>
             <% if @yrs[yindex] < @years[yindex].size and @date.to_date == @years[yindex][@yrs[yindex]].date %>
-              <%= @years[yindex][@yrs[yindex]].temperatureMax %>
-              <% if yindex = 0 %>
-                <% @yrs[yindex] += 1 %>
-              <% end %>
+              <span style="color:red;">
+                <%= @years[yindex][@yrs[yindex]].temperatureMax %><%= link_to "°", @years[yindex][@yrs[yindex]] %>
+              </span> | 
+              <span style="color:blue;">
+                  <%= @years[yindex][@yrs[yindex]].temperatureLow %>°
+              </span>
+              <% @day.push(@years[yindex][@yrs[yindex]]) %>
+              <% @yrs[yindex] += 1 %>
             <% else %>
               <%= link_to ("Get Data for " + @date.strftime("%m/%d/%Y")), new_weather_record_path(:date => @date.to_i, 
                                                                                                   :high_level_location_id => @high_level_location.id, 
@@ -91,6 +95,17 @@
             <% end %>
           </td>
         <% end %>
+        <td>
+          <% if @day.length > 0 %>
+            <% @max_avg = 0 %>
+            <% @low_avg = 0 %>
+            <% @day.each do |d| %>
+              <% @max_avg += d.temperatureMax %>
+              <% @low_avg += d.temperatureLow %>
+            <% end %>
+            <span style="color:red;"><%= (@max_avg/@day.length).round(2) %>°</span> | <span style="color:blue;"><%= (@low_avg/@day.length).round(2) %>°</span>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </table>

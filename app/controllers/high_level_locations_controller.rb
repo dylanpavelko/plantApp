@@ -16,8 +16,8 @@ class HighLevelLocationsController < ApplicationController
     @next_90_days = Array.new
     @years = Array.new
     (1..5).each do |index|
-      @start_date = @today - (365 * index)
-      @end_date = @today + 90 - (365 * index)
+      @start_date = @today + 7 - (365 * index)
+      @end_date = @today + 7 + 90 - (365 * index)
       @years.push(WeatherRecord.where(:date => @start_date..@end_date).sort_by &:date)
     end
     # (0..90).each_with_index do |index|
