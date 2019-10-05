@@ -12,6 +12,26 @@ class HighLevelLocationsController < ApplicationController
   # GET /high_level_locations/1.json
   def show
     @locations = Location.where(:high_level_location_id => @high_level_location.id)
+    @today = DateTime.now
+    @next_90_days = Array.new
+    @years = Array.new
+    (1..5).each do |index|
+      @start_date = @today - (365 * index)
+      @end_date = @today + 90 - (365 * index)
+      @years.push(WeatherRecord.where(:date => @start_date..@end_date).sort_by &:date)
+    end
+    # (0..90).each_with_index do |index|
+      # @dates = Array.new
+      # @years.each_with_index do |year_records, yindex|
+      #   if year_records != nil and year_records.first != nil
+      #     @dates.push(year_records.first)
+      #     puts "it's true"
+      #   else
+      #     @dates.push("no data")
+      #   end
+      # end
+      # @next_90_days.push(@dates)
+    # end
   end
 
   # GET /high_level_locations/new

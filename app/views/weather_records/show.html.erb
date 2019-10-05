@@ -1,0 +1,21 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @weather_record.date %>
+</p>
+
+<p>
+  <strong>High level location:</strong>
+  <%= link_to @weather_record.high_level_location.name, @weather_record.high_level_location %>
+</p>
+
+<p>
+  <% @weather_record.get_attributes.each do |attr| %>
+    <%= attr %><br/>
+  <% end %>
+</p>
+Note hourly data is stored just not shown right now.<br/>
+
+<%= link_to 'Edit', edit_weather_record_path(@weather_record) %> |
+<%= link_to 'Back', weather_records_path %>

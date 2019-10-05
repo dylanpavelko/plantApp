@@ -31,13 +31,14 @@
     <strong>Weather:</strong>
     <% @high_level_location.set_forecast %>
     Currently 
-    <%= @high_level_location.get_current_temp %>° as of <%= @high_level_location.get_current_time_formatted %>
+    <%= @high_level_location.get_current_temp %>° as of <%= @high_level_location.get_current_time_formatted %><br/>
+    <strong> 7 Day Weather Forecast</strong>
     <table>
       <tr>
         <% @high_level_location.get_forecast_days.each do |day| %>
           <td>
             <strong><%= @high_level_location.get_simple_date(day["time"]) %></strong><br/>
-            <img src=<%= @high_level_location.get_weather_icon(day["icon"]) %> width='75'/><br/>
+            <img src='<%= @high_level_location.get_weather_icon(day["icon"]) %>' width='75'/><br/>
             <span style="color:red;">
               <%= day["temperatureMax"] %>°
             </span>
@@ -59,6 +60,40 @@
     </table>
     <%#= @high_level_location.get_full_forecast %>
   </p>
+  <strong>Historical Weather Information</strong>
+  <table>
+    <th>Date</th>
+    <th>Average</th>
+    <th><%= (@today - (365 * 1)).strftime("%Y") %></th>
+    <th><%= (@today - (365 * 2)).strftime("%Y") %></th>
+    <th><%= (@today - (365 * 3)).strftime("%Y") %></th>
+    <th><%= (@today - (365 * 4)).strftime("%Y") %></th>
+    <th><%= (@today - (365 * 5)).strftime("%Y") %></th>
+    <th>Record</th>
+    <% @yrs = [0,0,0,0,0] %>
+    <% (0..89).each_with_index do |index| %>
+      <tr>
+        <td><strong><%= (@today+index).strftime("%m/%d") %></strong></td>
+        <td></td>
+        <% (0..4).each_with_index do |yindex| %>
+          <td>
+            <% @date = (@today+index - 365 * (yindex + 1)) %>
+            <% if @yrs[yindex] < @years[yindex].size and @date.to_date == @years[yindex][@yrs[yindex]].date %>
+              <%= @years[yindex][@yrs[yindex]].temperatureMax %>
+              <% if yindex = 0 %>
+                <% @yrs[yindex] += 1 %>
+              <% end %>
+            <% else %>
+              <%= link_to ("Get Data for " + @date.strftime("%m/%d/%Y")), new_weather_record_path(:date => @date.to_i, 
+                                                                                                  :high_level_location_id => @high_level_location.id, 
+                                                                                                  :lat => @high_level_location.lat, 
+                                                                                                  :long => @high_level_location.long) %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>
 <% end %>
 
 

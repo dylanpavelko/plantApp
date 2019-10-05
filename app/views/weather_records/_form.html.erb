@@ -1,0 +1,33 @@
+<%= form_with(model: weather_record, local: true) do |form| %>
+  <% if weather_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(weather_record.errors.count, "error") %> prohibited this weather_record from being saved:</h2>
+
+      <ul>
+      <% weather_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :date %>
+    <%= form.date_select :date, :selected => @date %>
+    <%= @date.strftime("%m/%d/%Y") %>
+  </div>
+
+  <div class="field">
+    <%= form.label :high_level_location_id %>
+    <%= form.text_field :high_level_location_id %>
+  </div>
+  
+  <div class="field">
+    <%= form.label :report %>
+    <%= form.text_area :report %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

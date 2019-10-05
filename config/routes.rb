@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :weather_records
   get 'sessions/new'
   get 'sessions/create'
   get 'sessions/destroy'
