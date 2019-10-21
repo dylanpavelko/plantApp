@@ -1,6 +1,6 @@
 class PlantsController < ApplicationController
   before_action :set_plant, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user_admin, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user_admin, only: [:show, :new, :create, :edit, :update, :destroy]
 
   # GET /plants
   # GET /plants.json
@@ -39,6 +39,12 @@ class PlantsController < ApplicationController
   # GET /plants/1.json
   def show
     @common_names = CommonName.where(:plant_id => @plant.id)
+    @wishlist = Wishlist.where(:plant_id => @plant.id, :user_id => @current_user.id)
+    if @wishlist.count > 0
+      @on_wishlist = true
+    else
+      @on_wishlist = false
+    end
   end
 
   # GET /plants/new

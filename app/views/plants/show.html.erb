@@ -64,5 +64,35 @@
 <% end %>
 </p>
 
+<div>
+  <% if !@on_wishlist %>
+    <a href id="wishlist_link">Add to Wishlist</a>
+  <% else %>
+    Already on Wishlist
+  <% end %>
+</div>
 <%= link_to 'Edit', edit_plant_path(@plant) %> |
 <%= link_to 'Back', plants_path %>
+
+
+<script>
+  
+$(document).ready(function() {  
+      $('#wishlist_link').click(function(){
+      var $plant_id = <%= @plant.id %>;
+      var $user_id = <%= @current_user.id %>;
+      $.ajax({
+        type: "POST",
+        url: "/add_to_wishlist",
+        data: {plant: $plant_id, user: $user_id},
+        success:function(data){
+          return false;
+        },
+        error: function(data){
+          return false
+        }
+      });
+    });
+});    
+    
+</script>

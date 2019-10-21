@@ -1,5 +1,6 @@
 class WeatherRecordsController < ApplicationController
   before_action :set_weather_record, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_admin
 
   # GET /weather_records
   # GET /weather_records.json

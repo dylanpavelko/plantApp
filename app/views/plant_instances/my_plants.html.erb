@@ -38,6 +38,15 @@
 <%= link_to 'New Plant', new_plant_instance_path %>
 <br/>
 
+<div>
+  <h3>Wishlist Plants</h3>
+  <ul>
+    <% @wishlist_plants.each do |w_plant| %>
+      <li><%= link_to w_plant.plant.scientific_name_with_common_names, w_plant.plant %></li>
+    <% end %>
+  </ul>
+</div>
+
 <div id="water_records_popup" style="display:none">
   <div id="modal_content">
   <span class="close">&times;</span>

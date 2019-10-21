@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_04_233721) do
+ActiveRecord::Schema.define(version: 2019_10_20_232233) do
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -183,6 +183,15 @@ ActiveRecord::Schema.define(version: 2019_10_04_233721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["high_level_location_id"], name: "index_weather_records_on_high_level_location_id"
+  end
+
+  create_table "wishlists", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "plant_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["plant_id"], name: "index_wishlists_on_plant_id"
+    t.index ["user_id"], name: "index_wishlists_on_user_id"
   end
 
 end

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :wishlists
   resources :weather_records
   get 'sessions/new'
   get 'sessions/create'
@@ -25,6 +26,7 @@ Rails.application.routes.draw do
     get '/search', to: 'search#index'
     get '/my_plants', to: 'plant_instances#my_plants'
     post '/add_water_records', to: 'water_records#add_water_records'
+    post '/add_to_wishlist', to: 'wishlists#add_to_wishlist'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
   
