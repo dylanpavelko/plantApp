@@ -49,6 +49,9 @@
     </li>
   <% end %>
 </ul>
+<% if @plant_instance.sprout_date != nil %>
+  <div>Sprouted on <%= @plant_instance.sprout_date.strftime('%m/%d/%y') %></div>
+<% end %>
 
 <%= link_to 'Edit', edit_plant_instance_path(@plant_instance) %> |
 <%= link_to 'Back', my_plants_path %>

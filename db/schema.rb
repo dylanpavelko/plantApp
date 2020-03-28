@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_20_232233) do
+ActiveRecord::Schema.define(version: 2020_03_28_221716) do
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -115,6 +115,7 @@ ActiveRecord::Schema.define(version: 2019_10_20_232233) do
     t.datetime "planted_date"
     t.date "acquired_date"
     t.integer "propagation_type"
+    t.date "sprout_date"
     t.index ["location_id"], name: "index_plant_instances_on_location_id"
     t.index ["plant_id"], name: "index_plant_instances_on_plant_id"
   end
