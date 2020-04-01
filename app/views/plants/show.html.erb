@@ -64,6 +64,7 @@
 <% end %>
 </p>
 
+<% if @current_user != nil %>
 <div>
   <% if !@on_wishlist %>
     <a href id="wishlist_link">Add to Wishlist</a>
@@ -71,12 +72,14 @@
     Already on Wishlist
   <% end %>
 </div>
+<% end %>
+
 <%= link_to 'Edit', edit_plant_path(@plant) %> |
 <%= link_to 'Back', plants_path %>
 
 
 <script>
-  
+<% if @current_user != nil %>  
 $(document).ready(function() {  
       $('#wishlist_link').click(function(){
       var $plant_id = <%= @plant.id %>;
@@ -94,5 +97,5 @@ $(document).ready(function() {
       });
     });
 });    
-    
+<% end %>    
 </script>
