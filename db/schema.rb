@@ -35,9 +35,7 @@ ActiveRecord::Schema.define(version: 2020_03_28_221716) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "common_name"
-    t.integer "genus_id"
     t.integer "kingdom_id"
-    t.index ["genus_id"], name: "index_divisions_on_genus_id"
     t.index ["kingdom_id"], name: "index_divisions_on_kingdom_id"
   end
 
@@ -92,9 +90,7 @@ ActiveRecord::Schema.define(version: 2020_03_28_221716) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "class_id"
     t.integer "plant_class_id"
-    t.index ["class_id"], name: "index_orders_on_class_id"
     t.index ["plant_class_id"], name: "index_orders_on_plant_class_id"
   end
 
@@ -121,12 +117,6 @@ ActiveRecord::Schema.define(version: 2020_03_28_221716) do
   end
 
   create_table "plants", force: :cascade do |t|
-    t.integer "kingdom_id"
-    t.integer "division_id"
-    t.integer "plant_class_id"
-    t.integer "order_id"
-    t.integer "family_id"
-    t.integer "genus_id"
     t.integer "species_id"
     t.integer "variety_id"
     t.datetime "created_at", null: false
@@ -134,12 +124,6 @@ ActiveRecord::Schema.define(version: 2020_03_28_221716) do
     t.integer "cultivator_id"
     t.string "image_url"
     t.index ["cultivator_id"], name: "index_plants_on_cultivator_id"
-    t.index ["division_id"], name: "index_plants_on_division_id"
-    t.index ["family_id"], name: "index_plants_on_family_id"
-    t.index ["genus_id"], name: "index_plants_on_genus_id"
-    t.index ["kingdom_id"], name: "index_plants_on_kingdom_id"
-    t.index ["order_id"], name: "index_plants_on_order_id"
-    t.index ["plant_class_id"], name: "index_plants_on_plant_class_id"
     t.index ["species_id"], name: "index_plants_on_species_id"
     t.index ["variety_id"], name: "index_plants_on_variety_id"
   end
