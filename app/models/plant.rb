@@ -60,4 +60,10 @@ class Plant < ApplicationRecord
   def kingdom
     return self.division.kingdom
   end
+
+  def to_builder
+    Jbuilder.new do |plant|
+      plant.(self, :scientific_name_with_common_names, :image_urgl)
+    end
+  end
 end
