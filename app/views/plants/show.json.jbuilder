@@ -1,1 +1,14 @@
-json.partial! "plants/plant", plant: @plant
+json.(@plant, 
+	:id, 
+	:scientific_name_with_common_names, 
+	:common_names,
+	:image_url,
+	:variety,
+	:cultivator, 
+	:species, 
+	:genus, 
+	:family, 
+	:order,
+	:plant_class,
+	:division,
+	:kingdom)
