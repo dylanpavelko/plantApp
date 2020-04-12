@@ -76,6 +76,7 @@ GEM
     concurrent-ruby (1.1.5)
     crass (1.0.4)
     erubi (1.8.0)
+    excon (0.73.0)
     execjs (2.7.0)
     ffi (1.11.1)
     figaro (1.1.1)
@@ -212,6 +213,7 @@ DEPENDENCIES
   capybara (>= 2.15)
   chromedriver-helper
   coffee-rails (~> 4.2)
+  excon
   figaro
   jbuilder (~> 2.5)
   jquery-rails

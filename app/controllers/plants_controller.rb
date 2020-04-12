@@ -47,6 +47,12 @@ class PlantsController < ApplicationController
         @on_wishlist = false
       end
     end
+
+    @has_open_farm_data = false
+    if @plant.OpenFarmID != nil and @plant.OpenFarmID != ""
+      @open_farm_data = get_open_farm_data(@plant.OpenFarmID)
+      @has_open_farm_data = true
+    end
   end
 
   # GET /plants/new
@@ -98,6 +104,13 @@ class PlantsController < ApplicationController
     end
   end
 
+  def get_open_farm_data(id)
+    response = Excon.get('https://openfarm.cc/api/v1/crops/'+id)
+    return nil if response.status != 200
+
+    JSON.parse(response.body)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_plant
@@ -106,6 +119,6 @@ class PlantsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plant_params
-      params.require(:plant).permit(:kingdom_id, :division_id, :plant_class_id, :order_id, :family_id, :genus_id, :species_id, :variety_id, :cultivator_id, :image_url)
+      params.require(:plant).permit(:kingdom_id, :division_id, :plant_class_id, :order_id, :family_id, :genus_id, :species_id, :variety_id, :cultivator_id, :image_url, :OpenFarmID)
     end
 end

@@ -2,6 +2,8 @@
 
 <% if @plant.image_url != '' and @plant.image_url != nil %>
   <img src=<%= @plant.image_url %> width='250' style="float:left;margin-right:3em;"/>
+<% elsif @has_open_farm_data %>
+  <img src=<%= @open_farm_data['data']['attributes']['main_image_path'] %> width='250' style="float:left;margin-right:3em;"/>
 <% end %>
 
 <h2> <%= @plant.scientific_name.html_safe %> </h2>
@@ -63,6 +65,15 @@
     <%= link_to @plant.cultivator.name, @plant.cultivator %>
 <% end %>
 </p>
+
+<% if @plant.OpenFarmID != nil and @plant.OpenFarmID != "" %>
+  <p>
+    <strong>OpenFarm ID</strong>
+    <%= @plant.OpenFarmID %>
+    <%= @open_farm_data['data']['attributes']['svg_icon'].html_safe %>
+    <%= @open_farm_data.inspect %>
+  </p>
+<% end %>
 
 <% if @current_user != nil %>
 <div>
