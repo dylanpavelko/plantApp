@@ -66,12 +66,24 @@
 <% end %>
 </p>
 
+<% if @has_open_farm_data %>
+  <p>
+    <strong>Description:</strong><br/>
+    <%= @open_farm_data['data']['attributes']['description'] %>
+  </p>
+<% end %>
+
 <% if @plant.OpenFarmID != nil and @plant.OpenFarmID != "" %>
   <p>
-    <strong>OpenFarm ID</strong>
-    <%= @plant.OpenFarmID %>
-    <%= @open_farm_data['data']['attributes']['svg_icon'].html_safe %>
-    <%= @open_farm_data.inspect %>
+    <% if @current_user != nil && @current_user.admin %>
+      <strong>OpenFarm ID</strong>
+      <%= @plant.OpenFarmID %>
+    <% end %>
+    <%= link_to 'Data from Open Farm' , ('https://openfarm.cc' + @open_farm_data['data']['links']['self']['website']), target: :_blank  %>
+    <% if @current_user != nil && @current_user.admin %>
+      <%= @open_farm_data['data']['attributes']['svg_icon'].html_safe %>
+      <%= @open_farm_data.inspect %>
+    <% end %>
   </p>
 <% end %>
 

@@ -1,6 +1,7 @@
 class PlantsController < ApplicationController
   before_action :set_plant, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user_admin, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_user, only: [:show]
 
   # GET /plants
   # GET /plants.json
