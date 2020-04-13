@@ -81,7 +81,9 @@
     <% end %>
     <%= link_to 'Data from Open Farm' , ('https://openfarm.cc' + @open_farm_data['data']['links']['self']['website']), target: :_blank  %>
     <% if @current_user != nil && @current_user.admin %>
-      <%= @open_farm_data['data']['attributes']['svg_icon'].html_safe %>
+      <% if @open_farm_data['data']['attributes']['svg_icon'] != nil %>
+        <%= @open_farm_data['data']['attributes']['svg_icon'].html_safe %>
+      <% end %>
       <%= @open_farm_data.inspect %>
     <% end %>
   </p>
