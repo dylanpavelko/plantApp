@@ -26,38 +26,188 @@
     <li> <%= link_to l.name, l %> </li>
   <% end %>
 </ul>
+
 <% if @high_level_location.lat != nil and @high_level_location.long != nil %>
-  <p>
-    <strong>Weather:</strong>
-    <% @high_level_location.set_forecast %>
-    Currently 
-    <%= @high_level_location.get_current_temp %>° as of <%= @high_level_location.get_current_time_formatted %><br/>
-    <strong> 7 Day Weather Forecast</strong>
-    <table>
-      <tr>
-        <% @high_level_location.get_forecast_days.each do |day| %>
-          <td>
-            <strong><%= @high_level_location.get_simple_date(day["time"]) %></strong><br/>
-            <img src='<%= @high_level_location.get_weather_icon(day["icon"]) %>' width='75'/><br/>
-            <span style="color:red;">
-              <%= day["temperatureMax"] %>°
-            </span>
-            | 
-            <span style="color:blue;">
-              <%= day["temperatureLow"] %>° <!--overnight--><br/>
-            </span>
-            Chance of Rain: <%= day["precipProbability"] %><br/>
-            Dew Point: <%= day["dewPoint"] %><br/>
-            Humidity: <%= day["humidity"] %><br/>
-            Pressure: <%= day["pressure"] %><br/>
-            Cloud Cover: <%= day["cloudCover"] %><br/>
-            Wind: <%= day["windSpeed"] %><br/>
-            Moon Phase: <%= day["moonPhase"] %> <br/>
-            Ozone: <%= day["ozone"] %><br/>
-          </td>
+  <strong> Nearby Weather Stations </strong> 
+  <% @yearAgo = (Date.today() - 365) %>
+  <% @operating_stations = Array.new %>
+
+  <ul>
+  <% @stations = @high_level_location.get_noaa_ncdc_data['results'] %>
+  <% @stations.each do |r| %>
+    <% if DateTime.parse(r['maxdate']) > @yearAgo %>
+      <li>
+        <%= r['id'] %> - <%= r['name'] %> (Data From: <%= r['mindate'] %> to <%= r['maxdate'] %>) [long: <%= r['longitude']%>, lat:<%= r['latitude'] %>]
+        <%= distance = ((r['longitude'] - @high_level_location.long)**2 + (r['latitude'] - @high_level_location.lat)**2) %>
+        <%#= r.inspect %>
+        <% @operating_stations << [r, distance] %>
+      </li>
+    <% end %>
+  <% end %>
+  <% @operating_stations = @operating_stations.sort {|a,b| a[1] <=> b[1]} %>
+  </ul>
+      <h2>My Map</h2>
+  <div>
+  <div id="mapdiv" class="map"></div>
+</div>
+  <script src="http://www.openlayers.org/api/OpenLayers.js"></script>
+  <script>
+    map = new OpenLayers.Map("mapdiv", { });
+    map.addLayer(new OpenLayers.Layer.OSM());
+
+    var lonLat = new OpenLayers.LonLat( <%= @high_level_location.long %> , <%= @high_level_location.lat %>)
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            map.getProjectionObject() // to Spherical Mercator Projection
+          );
+
+
+    var markers = new OpenLayers.Layer.Markers( "Markers" );
+    <% @operating_stations.each do |station| %>
+      var newLonLat = new OpenLayers.LonLat( <%= station[0]['longitude'] %>, <%= station[0]['latitude'] %>)
+            .transform(
+              new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+              map.getProjectionObject() // to Spherical Mercator Projection
+            );
+      markers.addMarker(new OpenLayers.Marker(newLonLat));
+
+
+    <% end %>
+          
+    var zoom=12;
+
+    
+    markers.addMarker(new OpenLayers.Marker(newLonLat));
+    map.addLayer(markers);
+    
+    markers.addMarker(new OpenLayers.Marker(lonLat), "Weather Station");
+    
+    map.setCenter (lonLat, zoom);
+
+  </script>
+  <br/>
+
+  <strong>Historical Weather</strong><br/>
+  <%# sort in order of distance %>
+  <% weather_records = Hash.new %>
+  <% max_temp_data = Array.new %>
+  <% min_temp_data = Array.new %>
+  <% date_labels = Array.new %>
+  <% station_number = 0 %>
+  <% while (max_temp_data.size < 365 || min_temp_data.size < 365) && station_number < @operating_stations.size %>
+    <% puts "station number: " + station_number.to_s %>
+    <% puts "max_temp_size: " + max_temp_data.size.to_s %>
+    <% puts "min_temp_size: " + min_temp_data.size.to_s %>
+    <%= station = @operating_stations[station_number][0]['id'] %>
+    <% @weather_results = @high_level_location.get_weather_for_noaa_station_for_dates(station.to_s, "2010-01-01", "2010-06-30")['results'] %>
+    <% if @weather_results != nil %>
+      <% @weather_results.each_with_index do |r, i| %>
+      <%#= r.inspect %>
+        <% if weather_records.key?(r['date']) %>
+          <% weather_records[r['date']][r['datatype']] = r['value'] %>
+        <% else %>
+          <% weather_records[r['date']] = Hash.new %>
+          <% weather_records[r['date']][r['datatype']] = r['value'] %>
+          <% date_labels << DateTime.parse(r['date']).strftime("%m/%d") %>
         <% end %>
-      </tr>
-    </table>
+        <% if r['datatype'] == "TMAX" %>
+          <% max_temp_data << r['value'] %>
+        <% elsif r['datatype'] == "TMIN" %>
+          <% min_temp_data << r['value'] %>
+        <% end %>
+      <% end %>
+    <% @high_level_location.get_weather_for_noaa_station_for_dates(station, "2010-07-01", "2010-12-31")['results'].each_with_index do |r, i| %>
+      <% if weather_records.key?(r['date']) %>
+        <% weather_records[r['date']][r['datatype']] = r['value'] %>
+      <% else %>
+        <% weather_records[r['date']] = Hash.new %>
+        <% weather_records[r['date']][r['datatype']] = r['value'] %>
+        <% date_labels << DateTime.parse(r['date']).strftime("%m/%d") %>
+      <% end %>
+      <% if r['datatype'] == "TMAX" %>
+        <% max_temp_data << r['value'] %>
+      <% elsif r['datatype'] == "TMIN" %>
+        <% min_temp_data << r['value'] %>
+      <% end %>
+    <% end %>
+    
+  <% end %>
+  <% station_number = station_number + 1 %>
+
+    
+        <canvas id="myChart"></canvas>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script>
+          var ctx = document.getElementById('myChart').getContext('2d');
+          var chart = new Chart(ctx, {
+              // The type of chart we want to create
+              type: 'line',
+
+              // The data for our dataset
+              data: {
+                  labels: <%= raw date_labels.to_s %>,
+                  datasets: [{
+                      label: 'Max Temperature',
+                      borderColor: 'rgba(255, 0, 0, .7)',
+                      fill: false,
+                      data: <%= max_temp_data.inspect %>
+                  },
+                  {
+                      label: 'Min Temperature',
+                      borderColor: 'rgba(0, 0, 255, .7)',
+                      fill: false,
+                      data: <%= min_temp_data.inspect %>
+                  }]
+              },
+
+              // Configuration options go here
+              options: {}
+          });
+        </script>
+
+    <ul>
+    <% weather_records.each do |wr| %>
+      <li><%= DateTime.parse(wr[0]).strftime("%m/%d/%Y") %> -  <span style="color:blue;"><%= wr[1]['TMIN'] %>° F</span> | 
+                          <span style="color:red;"><%= wr[1]['TMAX'] %>° F</span> |
+                          <span style="color:cyan;"><%= wr[1]['PRCP'] %>"</span>  
+      </li>
+    <% end %>
+    </ul>
+  <% end %>
+  <p>
+    <% @use_dark_sky = false %>
+    <% if @use_dark_sky %>
+        <strong>Weather:</strong>
+        <% @high_level_location.set_forecast %>
+        Currently 
+        <%= @high_level_location.get_current_temp %>° as of <%= @high_level_location.get_current_time_formatted %><br/>
+        <strong> 7 Day Weather Forecast</strong>
+        <table>
+          <tr>
+            <% @high_level_location.get_forecast_days.each do |day| %>
+              <td>
+                <strong><%= @high_level_location.get_simple_date(day["time"]) %></strong><br/>
+                <img src='<%= @high_level_location.get_weather_icon(day["icon"]) %>' width='75'/><br/>
+                <span style="color:red;">
+                  <%= day["temperatureMax"] %>°
+                </span>
+                | 
+                <span style="color:blue;">
+                  <%= day["temperatureLow"] %>° <!--overnight--><br/>
+                </span>
+                Chance of Rain: <%= day["precipProbability"] %><br/>
+                Dew Point: <%= day["dewPoint"] %><br/>
+                Humidity: <%= day["humidity"] %><br/>
+                Pressure: <%= day["pressure"] %><br/>
+                Cloud Cover: <%= day["cloudCover"] %><br/>
+                Wind: <%= day["windSpeed"] %><br/>
+                Moon Phase: <%= day["moonPhase"] %> <br/>
+                Ozone: <%= day["ozone"] %><br/>
+              </td>
+            <% end %>
+          </tr>
+        </table>
+      <% end %>
     <%#= @high_level_location.get_full_forecast %>
   </p>
   <strong>Historical Weather Information</strong>

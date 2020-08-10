@@ -54,6 +54,8 @@ class PlantsController < ApplicationController
       @open_farm_data = get_open_farm_data(@plant.OpenFarmID)
       @has_open_farm_data = true
     end
+
+    @potential_matches = get_potential_open_farm_matches(@plant.scientific_name_)
   end
 
   # GET /plants/new
@@ -106,6 +108,13 @@ class PlantsController < ApplicationController
   end
 
   def get_open_farm_data(id)
+    response = Excon.get('https://openfarm.cc/api/v1/crops/'+id)
+    return nil if response.status != 200
+
+    JSON.parse(response.body)
+  end
+
+  def get_potential_open_farm_matches(name)
     response = Excon.get('https://openfarm.cc/api/v1/crops/'+id)
     return nil if response.status != 200
 

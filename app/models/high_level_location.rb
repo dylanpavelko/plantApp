@@ -47,4 +47,33 @@ class HighLevelLocation < ApplicationRecord
         return image_path
             
     end
+
+    def get_noaa_ncdc_data
+        base_url = "https://www.ncdc.noaa.gov/cdo-web/api/v2/"
+        top = self.long - 0.1
+        bottom = self.long + 0.1
+        right = self.lat - 0.1
+        left = self.lat + 0.1
+        @extent = "extent="+right.to_s+","+top.to_s+","+left.to_s+","+bottom.to_s
+        @data = URI.open(base_url + "stations?"+@extent + "&limit=100&datatypeid=TMAX&datatypeid=TMIN","token"=>Figaro.env.noaa_ncdc_token).read
+        return ActiveSupport::JSON.decode(@data)
+    end
+
+    def get_datasets_for_noaa_station(station_id)
+        base_url = "https://www.ncdc.noaa.gov/cdo-web/api/v2/"
+        @station = "stationid="+station_id
+        @data = URI.open(base_url + "datasets?"+@station,"token"=>Figaro.env.noaa_ncdc_token).read
+        return ActiveSupport::JSON.decode(@data)
+    end
+
+    def get_weather_for_noaa_station_for_dates(station_id, start_date, end_date)
+        base_url = "https://www.ncdc.noaa.gov/cdo-web/api/v2/"
+        @station = "&stationid="+station_id
+        @start_date = start_date
+        @end_date = end_date
+        @date_range = "&startdate=" + @start_date + "&enddate=" + @end_date
+        @data_types = "&datatypeid=PRCP,TMAX,TMIN"
+        @data = URI.open(base_url + "data?datasetid=GHCND" + @station + @date_range + @data_types + "&units=standard&limit=1000" ,"token"=>Figaro.env.noaa_ncdc_token).read
+        return ActiveSupport::JSON.decode(@data)
+    end
 end
