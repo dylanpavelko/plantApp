@@ -78,6 +78,7 @@
     <% if @current_user != nil && @current_user.admin %>
       <strong>OpenFarm ID</strong>
       <%= @plant.OpenFarmID %>
+      https://openfarm.cc/api/v1/crops/?filter=<%= @plant.scientific_name %>
     <% end %>
     <%= link_to 'Data from Open Farm' , ('https://openfarm.cc' + @open_farm_data['data']['links']['self']['website']), target: :_blank  %>
     <% if @current_user != nil && @current_user.admin %>
