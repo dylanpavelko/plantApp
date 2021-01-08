@@ -53,49 +53,101 @@ class PlantInstancesController < ApplicationController
               @early_data.pop()
               @early_data << 0
             end
-            @early_data << 100
+            if observation.percent_at_stage != nil
+              @early_data << observation.percent_at_stage
+            else
+              @early_data << 100
+            end
             earlo = true  
           elsif observation.bbch_stage.code < 50
-            maino = true 
-            @main_data << 100  
-          elsif observation.bbch_stage.code < 70  
+            if @main_data.last == nil
+              @main_data.pop()
+              @main_data << 0
+            end
+            if observation.percent_at_stage != nil
+              @main_data << observation.percent_at_stage
+            else
+              @main_data << 100
+            end
+            maino = true  
+          elsif observation.bbch_stage.code < 70
+            if @flower_data.last == nil
+              @flower_data.pop()
+              @flower_data << 0
+            end  
             flowo = true
             @flower_data << 100 
           elsif observation.bbch_stage.code < 80  
+            if @fdev_data.last == nil
+              @fdev_data.pop()
+              @fdev_data << 0
+            end
             frdeo = true
             @fdev_data << 100
           elsif observation.bbch_stage.code < 90  
+            if @fmat_data.last == nil
+              @fmat_data.pop()
+              @fmat_data << 0
+            end
             frmao = true
             @fmat_data << 100  
           elsif observation.bbch_stage.code < 100  
+            if @senes_data.last == nil
+              @senes_data.pop()
+              @senes_data << 0
+            end
             seneo = true
             @senes_data << 100    
           end
         end
         if germo == false
-            if @germaination_data.last != nil && @germaination_data.last != 0
+            if @germaination_data.last != nil && @germaination_data.last != 0 && @early_data.last != nil
               @germaination_data << 100 - @early_data.last
             else
               @germaination_data << nil
             end
         end
         if earlo == false
+          if @early_data.last != nil && @early_data.last != 0 && @main_data.last != nil
+            @early_data << 100 - @main_data.last
+          else
             @early_data << nil
+          end
         end
         if maino == false
-          @main_data << nil
+          if @main_data.last != nil && @main_data.last != 0
+            @main_data << 100 - @flower_data.last
+          else
+            @main_data << nil
+          end
         end
         if flowo == false
-          @flower_data << nil
+          if @flower_data.last != nil && @flower_data.last != 0
+            @flower_data << 100 - @fdev_data.last
+          else
+            @flower_data << nil
+          end
         end
         if frdeo == false
-          @fdev_data << nil
+          if @fdev_data.last != nil && @fdev_data.last != 0
+            @fdev_data << 100 - @fmat_data.last
+          else
+            @fdev_data << nil
+          end
         end
         if frmao == false
-          @fmat_data << nil
+          if @fmat_data.last != nil && @fmat_data.last != 0
+            @fmat_data << 100 - @senes_data.last
+          else
+            @fmat_data << nil
+          end
         end
         if seneo == false
-          @senes_data << nil
+          if @senes_data.last != nil && @senes_data.last != 0
+            @senes_data << 100
+          else
+            @senes_data << nil
+          end
         end
       else
         @germaination_data << @germaination_data.last
