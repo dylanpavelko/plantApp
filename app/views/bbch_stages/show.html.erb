@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Code:</strong>
+  <%= @bbch_stage.code %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @bbch_stage.description %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @bbch_stage.note %>
+</p>
+
+<p>
+  <strong>BBCH profile:</strong>
+  <%= link_to @bbch_stage.bbch_profile.name, @bbch_stage.bbch_profile %>
+</p>
+
+<%= link_to 'Edit', edit_bbch_stage_path(@bbch_stage) %> |
+<%= link_to 'Back', bbch_stages_path %>

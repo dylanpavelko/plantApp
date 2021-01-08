@@ -1,0 +1,37 @@
+<%= form_with(model: growth_observation, local: true) do |form| %>
+  <% if growth_observation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(growth_observation.errors.count, "error") %> prohibited this growth_observation from being saved:</h2>
+
+      <ul>
+      <% growth_observation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :plant_instance_id %>
+    <%= form.text_field :plant_instance_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :observation_date %>
+    <%= form.date_field :observation_date %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bbch_stage_id %>
+    <%= form.collection_select :bbch_stage_id, @growth_stages, :id, :stage_name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :percent_at_stage %>
+    <%= form.number_field :percent_at_stage %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

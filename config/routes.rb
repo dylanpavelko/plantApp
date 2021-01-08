@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :growth_observations
+  resources :bbch_stages
+  resources :bbch_profiles
   resources :wishlists
   resources :weather_records
   get 'sessions/new'

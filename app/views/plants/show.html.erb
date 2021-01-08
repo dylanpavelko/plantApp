@@ -97,6 +97,14 @@
   <% else %>
     Already on Wishlist
   <% end %>
+  <p>
+  <% if @plant_instances.size > 0 %>
+    You have this plant:
+    <% @plant_instances.each do |p| %>
+      <%= link_to ("Acquired on " + p.acquired_date.strftime("%a, %d %b %Y") + " in " + p.location.high_level_location.name + " - " + p.location.name) , p %><br/>
+    <% end %>
+  <% end %>
+</p>
 </div>
 <% end %>
 

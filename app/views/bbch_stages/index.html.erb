@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Bbch Stages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th>
+      <th>Description</th>
+      <th>Note</th>
+      <th>Bbch profile</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bbch_stages.each do |bbch_stage| %>
+      <tr>
+        <td><%= bbch_stage.code %></td>
+        <td><%= bbch_stage.description %></td>
+        <td><%= bbch_stage.note %></td>
+        <td><%= bbch_stage.bbch_profile %></td>
+        <td><%= link_to 'Show', bbch_stage %></td>
+        <td><%= link_to 'Edit', edit_bbch_stage_path(bbch_stage) %></td>
+        <td><%= link_to 'Destroy', bbch_stage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bbch Stage', new_bbch_stage_path %>

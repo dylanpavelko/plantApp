@@ -10,7 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_12_075335) do
+ActiveRecord::Schema.define(version: 2021_01_07_190906) do
+
+  create_table "bbch_profiles", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "bbch_stages", force: :cascade do |t|
+    t.integer "code"
+    t.string "description"
+    t.string "note"
+    t.integer "bbch_profile_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bbch_profile_id"], name: "index_bbch_stages_on_bbch_profile_id"
+  end
 
   create_table "common_names", force: :cascade do |t|
     t.string "name"
@@ -55,6 +71,17 @@ ActiveRecord::Schema.define(version: 2020_04_12_075335) do
     t.datetime "updated_at", null: false
     t.integer "family_id"
     t.index ["family_id"], name: "index_genus_on_family_id"
+  end
+
+  create_table "growth_observations", force: :cascade do |t|
+    t.integer "plant_instance_id"
+    t.date "observation_date"
+    t.integer "bbch_stage_id"
+    t.integer "percent_at_stage"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bbch_stage_id"], name: "index_growth_observations_on_bbch_stage_id"
+    t.index ["plant_instance_id"], name: "index_growth_observations_on_plant_instance_id"
   end
 
   create_table "high_level_locations", force: :cascade do |t|
@@ -135,6 +162,8 @@ ActiveRecord::Schema.define(version: 2020_04_12_075335) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "genus_id"
+    t.integer "bbch_profile_id"
+    t.index ["bbch_profile_id"], name: "index_species_on_bbch_profile_id"
     t.index ["genus_id"], name: "index_species_on_genus_id"
   end
 

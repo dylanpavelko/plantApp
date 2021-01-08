@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Bbch Profiles</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @bbch_profiles.each do |bbch_profile| %>
+      <tr>
+        <td><%= bbch_profile.name %></td>
+        <td><%= link_to 'Show', bbch_profile %></td>
+        <td><%= link_to 'Edit', edit_bbch_profile_path(bbch_profile) %></td>
+        <td><%= link_to 'Destroy', bbch_profile, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Bbch Profile', new_bbch_profile_path %>

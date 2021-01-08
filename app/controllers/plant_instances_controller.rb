@@ -18,6 +18,96 @@ class PlantInstancesController < ApplicationController
   # GET /plant_instances/1.json
   def show
     @water_records = WaterRecord.where(:plant_instance_id => @plant_instance.id)
+    @growth_observations = GrowthObservation.where(:plant_instance_id => @plant_instance)
+
+
+    days = Date.today.mjd - @plant_instance.acquired_date.mjd + 1
+
+    @growth_chart_data = Array.new()
+    @dates = Array.new
+    @germaination_data = Array.new()
+    @early_data = Array.new()
+    @main_data = Array.new()
+    @flower_data = Array.new()
+    @fdev_data = Array.new()
+    @fmat_data = Array.new()
+    @senes_data = Array.new()
+    days.times do |i| 
+      date = @plant_instance.acquired_date + i
+      @dates << date.strftime('%m/%d/%Y')
+      @observations = @growth_observations.select { |go| go.observation_date == date}
+      if @observations.size > 0
+        germo = false
+        earlo = false
+        maino = false
+        flowo = false
+        frdeo = false
+        frmao = false
+        seneo = false
+        @observations.each do |observation|
+          if observation.bbch_stage.code < 10
+            @germaination_data << 100
+            germo = true
+          elsif observation.bbch_stage.code < 20
+            if @early_data.last == nil
+              @early_data.pop()
+              @early_data << 0
+            end
+            @early_data << 100
+            earlo = true  
+          elsif observation.bbch_stage.code < 50
+            maino = true 
+            @main_data << 100  
+          elsif observation.bbch_stage.code < 70  
+            flowo = true
+            @flower_data << 100 
+          elsif observation.bbch_stage.code < 80  
+            frdeo = true
+            @fdev_data << 100
+          elsif observation.bbch_stage.code < 90  
+            frmao = true
+            @fmat_data << 100  
+          elsif observation.bbch_stage.code < 100  
+            seneo = true
+            @senes_data << 100    
+          end
+        end
+        if germo == false
+            if @germaination_data.last != nil && @germaination_data.last != 0
+              @germaination_data << 100 - @early_data.last
+            else
+              @germaination_data << nil
+            end
+        end
+        if earlo == false
+            @early_data << nil
+        end
+        if maino == false
+          @main_data << nil
+        end
+        if flowo == false
+          @flower_data << nil
+        end
+        if frdeo == false
+          @fdev_data << nil
+        end
+        if frmao == false
+          @fmat_data << nil
+        end
+        if seneo == false
+          @senes_data << nil
+        end
+      else
+        @germaination_data << @germaination_data.last
+        @early_data << @early_data.last
+        @main_data << @main_data.last
+        @flower_data << @flower_data.last
+        @fdev_data << @fdev_data.last
+        @fmat_data << @fmat_data.last
+        @senes_data << @senes_data.last
+      end
+    end
+    @growth_chart_data = @dates
   end
 
   # GET /plant_instances/new

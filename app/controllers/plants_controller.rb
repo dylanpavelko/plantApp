@@ -49,6 +49,24 @@ class PlantsController < ApplicationController
       end
     end
 
+    @locations = Array.new
+    @plant_instances = Array.new
+    @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user)
+    @user_high_level_locations.each do |hlf|
+      @user_locations = Location.where(:high_level_location_id => hlf.id)
+      @user_locations.each do |l|
+        @locations << l
+      end
+    end
+    @locations.each do |l|
+      @user_plants = PlantInstance.where(:plant_id => @plant, :location_id => l.id)
+      @user_plants.each do |p|
+        @plant_instances << p
+      end
+    end
+    
+    
+
     @has_open_farm_data = false
     if @plant.OpenFarmID != nil and @plant.OpenFarmID != ""
       @open_farm_data = get_open_farm_data(@plant.OpenFarmID)

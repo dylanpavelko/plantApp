@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @bbch_profile.name %>
+</p>
+
+<ul>
+	<% @current_principal_stage = "" %>
+	<% @stages.each do |stage| %>
+		<% if @current_principal_stage != stage.principal_stage %>
+			<li><strong><%= stage.principal_stage %></strong></li>
+			<% @current_principal_stage = stage.principal_stage %>
+		<% end %>
+		<li><%= stage.code %> - <%=stage.description %></li>
+	<% end %>
+</ul>
+
+<p>
+	<%= link_to 'Add Stage', new_bbch_stage_path(:bbch_profile => @bbch_profile) %>
+</p>
+
+<%= link_to 'Edit', edit_bbch_profile_path(@bbch_profile) %> |
+<%= link_to 'Back', bbch_profiles_path %>

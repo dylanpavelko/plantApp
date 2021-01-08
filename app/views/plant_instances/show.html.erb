@@ -23,7 +23,10 @@
 
 <ul>
   <uh><strong>Growing Notes</strong></uh>
-  <li><%= link_to 'Add Water Record', new_water_record_path(:plant_instance_id => @plant_instance) %></li>
+  <li><%= link_to 'Add Water Record', new_water_record_path(:plant_instance_id => @plant_instance) %> | <%= link_to 'Add Growth Observation', new_growth_observation_path(:plant_instance_id => @plant_instance) %></li>
+  <% @growth_observations.each do |go| %>
+    <li><%= link_to (go.bbch_stage.stage_name + " on " + go.observation_date.strftime('%m/%d/%y')), go  %></li>
+  <% end %>
   <% @plant_instance.descending_water_records.each do |wr| %>
     <li>
       Watered 
@@ -53,6 +56,151 @@
   <div>Sprouted on <%= @plant_instance.sprout_date.strftime('%m/%d/%y') %></div>
 <% end %>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+
+<div style="width:75%;">
+  <div class="chartjs-size-monitor">
+    <div class="chartjs-size-monitor-expand"><div class="">
+      
+    </div>
+  </div>
+  <div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+    <canvas id="canvas" style="display: block; width: 1097px; height: 548px;" width="1097" height="548" class="chartjs-render-monitor"></canvas>
+  </div>
+
+<script>
+    var lineChartData = {
+      labels: <%= raw @dates %>,
+      datasets: [{
+        label: 'Germination',
+        borderColor: 'rgba(186, 93, 7, .7)',
+        backgroundColor: 'rgba(186, 93, 7, .7)',
+        fill: false,
+        data: <%= @germaination_data.to_json %>,
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'Early Plant Development',
+        borderColor: 'rgba(119, 255, 56, .7)',
+        backgroundColor: 'rgba(119, 255, 56, .7)',
+        fill: false,
+        data: <%= @early_data.to_json %>,
+        yAxisID: 'y-axis-1'
+      },{
+        label: 'Main Plant Development',
+        borderColor: 'rgba(81, 150, 58, .7)',
+        backgroundColor: 'rgba(81, 150, 58, .7)',
+        fill: false,
+        data: <%= @main_data.to_json %>,
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'Flowering',
+        borderColor: 'rgba(238, 200, 236, .7)',
+        backgroundColor: 'rgba(238, 200, 236, .7)',
+        fill: false,
+        data: <%= @flower_data.to_json %>,
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'Fruit/Seed Development',
+        borderColor: 'rgba(237, 209, 27, .7)',
+        backgroundColor: 'rgba(237, 209, 27, .7)',
+        fill: false,
+        data: <%= @fdev_data.to_json %>,
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'Fruit/Seed Maturity',
+        borderColor: 'rgba(246, 144, 49, .7)',
+        backgroundColor: 'rgba(246, 144, 49, .7)',
+        fill: false,
+        data: <%= @fmat_data.to_json %>,
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'Senescence/Dormancy',
+        borderColor: 'rgba(142, 124, 112, .7)',
+        backgroundColor: 'rgba(142, 124, 112, .7)',
+        fill: false,
+        data: <%= @senes_data.to_json %>,
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'High Temp',
+        borderColor: 'rgba(255, 0, 0, .7)',
+        backgroundColor: 'rgba(255, 0, 0, .7)',
+        fill: false,
+        data: [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        yAxisID: 'y-axis-1',
+      },{
+        label: 'Low Temp',
+        borderColor: 'rgba(0, 0, 255, .7)',
+        backgroundColor: 'rgba(0, 0, 255, .7)',
+        fill: false,
+        data: [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        yAxisID: 'y-axis-1',
+      },
+      ]
+    };
+
+    window.onload = function() {
+      var ctx = document.getElementById('canvas').getContext('2d');
+      window.myLine = Chart.Line(ctx, {
+        data: lineChartData,
+        options: {
+          responsive: true,
+          hoverMode: 'index',
+          stacked: false,
+          title: {
+            display: true,
+            text: 'Growth Stages and Temperature Over Time'
+          },
+          scales: {
+            yAxes: [{
+              type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+              display: true,
+              position: 'left',
+              id: 'y-axis-1',
+            }, {
+              type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+              display: true,
+              position: 'right',
+              id: 'y-axis-2',
+
+              // grid line settings
+              gridLines: {
+                drawOnChartArea: false, // only want the grid lines for one axis to show up
+              },
+            }],
+          }
+        }
+      });
+    };
+
+  </script>
+<%= @growth_chart_data %>
 <%= link_to 'Edit', edit_plant_instance_path(@plant_instance) %> |
 <%= link_to 'Back', my_plants_path %>
 </div>

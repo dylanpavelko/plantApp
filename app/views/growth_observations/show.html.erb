@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Plant instance:</strong>
+  <%= @growth_observation.plant_instance %>
+</p>
+
+<p>
+  <strong>Observation date:</strong>
+  <%= @growth_observation.observation_date %>
+</p>
+
+<p>
+  <strong>Bbch stage:</strong>
+  <%= @growth_observation.bbch_stage %>
+</p>
+
+<p>
+  <strong>Percent at stage:</strong>
+  <%= @growth_observation.percent_at_stage %>
+</p>
+
+<%= link_to 'Edit', edit_growth_observation_path(@growth_observation) %> |
+<%= link_to 'Back', growth_observations_path %>

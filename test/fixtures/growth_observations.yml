@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  plant_instance: one
+  observation_date: 2021-01-07
+  bbch_stage: one
+  percent_at_stage: 1
+
+two:
+  plant_instance: two
+  observation_date: 2021-01-07
+  bbch_stage: two
+  percent_at_stage: 1
