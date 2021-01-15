@@ -21,7 +21,11 @@ class PlantInstancesController < ApplicationController
     @growth_observations = GrowthObservation.where(:plant_instance_id => @plant_instance)
 
 
-    days = Date.today.mjd - @plant_instance.acquired_date.mjd + 1
+    if @plant_instance.acquired_date != nil
+      days = Date.today.mjd - @plant_instance.acquired_date.mjd + 1
+    else 
+      days = 0
+    end
 
     @growth_chart_data = Array.new()
     @dates = Array.new
@@ -164,7 +168,7 @@ class PlantInstancesController < ApplicationController
 
   # GET /plant_instances/new
   def new
-    @plant_instance = PlantInstance.new
+    @plant_instance = PlantInstance.new(:plant_id => params[:plant_id])
   end
 
   # GET /plant_instances/1/edit
@@ -219,6 +223,6 @@ class PlantInstancesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plant_instance_params
-      params.require(:plant_instance).permit(:plant_id, :location_id, :planted_date, :acquired_date, :propagation_type, :sprout_date)
+      params.require(:plant_instance).permit(:plant_id, :location_id, :planted_date, :acquired_date, :propagation_type, :sprout_date, :reference_name)
     end
 end

@@ -17,6 +17,7 @@
       <tr>
         <td><%= link_to plant_instance.location.name, plant_instance.location %></td>
         <td><%= link_to plant_instance.plant.scientific_name_with_common_names, plant_instance %></td>
+        <td><%= plant_instance.planted_date %></td>
         <td>
           <% if plant_instance.descending_water_records.count > 0 %>
             <%= plant_instance.descending_water_records.first.clean_date%>

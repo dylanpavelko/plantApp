@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_07_190906) do
+ActiveRecord::Schema.define(version: 2021_01_09_005233) do
 
   create_table "bbch_profiles", force: :cascade do |t|
     t.string "name"
@@ -139,6 +139,7 @@ ActiveRecord::Schema.define(version: 2021_01_07_190906) do
     t.date "acquired_date"
     t.integer "propagation_type"
     t.date "sprout_date"
+    t.string "reference_name"
     t.index ["location_id"], name: "index_plant_instances_on_location_id"
     t.index ["plant_id"], name: "index_plant_instances_on_plant_id"
   end

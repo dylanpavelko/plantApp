@@ -17,6 +17,10 @@
 </div>
 <div>
 <p>
+  <% if @plant_instance.reference_name != nil %>
+    <em><%= @plant_instance.reference_name %></em>
+    <br/>
+  <% end %>
   <strong>Location:</strong>
   <%= link_to @plant_instance.location.name, @plant_instance.location %>
 </p>

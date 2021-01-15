@@ -101,9 +101,22 @@
   <% if @plant_instances.size > 0 %>
     You have this plant:
     <% @plant_instances.each do |p| %>
-      <%= link_to ("Acquired on " + p.acquired_date.strftime("%a, %d %b %Y") + " in " + p.location.high_level_location.name + " - " + p.location.name) , p %><br/>
+    <% @plant_link = "" %>
+      <% if p.planted_date != nil %>
+        <% @plant_link += "Planted on " + p.acquired_date.strftime("%a, %d %b %Y") + " in "  %>
+      <% elsif p.acquired_date != nil %>
+        <% @plant_link += "Acquired on " + p.acquired_date.strftime("%a, %d %b %Y") + " in "  %>
+      <% end %>
+      <% @plant_link += p.location.high_level_location.name + " - " + p.location.name %>
+      <% if p.reference_name != nil %>
+        <% @plant_link += " (" + p.reference_name + ")" %>
+      <% end %>
+      <%= link_to @plant_link, p %>
+      <br/>
     <% end %>
   <% end %>
+  <br/>
+  <%= link_to 'Add this Plant to Your Plants List', new_plant_instance_path(:plant_id => @plant.id) %>
 </p>
 </div>
 <% end %>
