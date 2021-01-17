@@ -23,11 +23,12 @@ class PlantInstancesController < ApplicationController
 
     if @plant_instance.acquired_date != nil
       days = Date.today.mjd - @plant_instance.acquired_date.mjd + 1
+      @weather_records = WeatherRecord.where(:high_level_location_id => @plant_instance.location.high_level_location.id, :date => @plant_instance.acquired_date + 1..Date.today)
     else 
       days = 0
     end
 
-    @weather_records = WeatherRecord.where(:high_level_location_id => @plant_instance.location.high_level_location.id, :date => @plant_instance.acquired_date + 1..Date.today)
+
 
     @growth_chart_data = Array.new()
     @dates = Array.new
