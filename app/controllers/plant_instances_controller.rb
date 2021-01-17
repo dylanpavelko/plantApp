@@ -27,6 +27,8 @@ class PlantInstancesController < ApplicationController
       days = 0
     end
 
+    @weather_records = WeatherRecord.where(:high_level_location_id => @plant_instance.location.high_level_location.id, :date => @plant_instance.acquired_date + 1..Date.today)
+
     @growth_chart_data = Array.new()
     @dates = Array.new
     @germaination_data = Array.new()
@@ -36,9 +38,21 @@ class PlantInstancesController < ApplicationController
     @fdev_data = Array.new()
     @fmat_data = Array.new()
     @senes_data = Array.new()
+    @min_temp_data = Array.new()
+    @max_temp_data = Array.new()
     days.times do |i| 
       date = @plant_instance.acquired_date + i
       @dates << date.strftime('%m/%d/%Y')
+
+      @weather = @weather_records.select { |wr| wr.date == date}
+      if @weather.size > 0
+        @min_temp_data << @weather.first.min_temp_f.to_f
+        @max_temp_data << @weather.first.max_temp_f.to_f
+      else
+        @min_temp_data << nil
+        @max_temp_data << nil
+      end
+
       @observations = @growth_observations.select { |go| go.observation_date == date}
       if @observations.size > 0
         germo = false

@@ -13,25 +13,125 @@ class HighLevelLocationsController < ApplicationController
   def show
     @locations = Location.where(:high_level_location_id => @high_level_location.id)
     @today = DateTime.now
+    @yesterday = @today - 1
+    @yearAgo = @today - 365
     @next_90_days = Array.new
+
+    #get weather records for location sorted by date
+    @wrs = WeatherRecord.where(:high_level_location_id => @high_level_location.id).sort_by &:date
+    #get yesterdays date
+
+    #get weather stations
+    @operating_stations = Array.new
+    @stations = @high_level_location.get_noaa_ncdc_data['results']
+    @stations.each do |r| 
+      if DateTime.parse(r['maxdate']) > @yearAgo
+        distance = ((r['longitude'] - @high_level_location.long)**2 + (r['latitude'] - @high_level_location.lat)**2)
+        @operating_stations << [r, distance]
+      end
+    end
+    @operating_stations = @operating_stations.sort {|a,b| a[1] <=> b[1]} 
+
+
+
+
+
+    @weather_records = Hash.new
+    @max_temp_data = Array.new
+    @min_temp_data = Array.new
+    @date_labels = Array.new
+
+    station_number = 0
+    while (@max_temp_data.size < 365 || @min_temp_data.size < 365) && station_number < @operating_stations.size
+      #puts "station number: " + station_number.to_s
+      #puts "max_temp_size: " + max_temp_data.size.to_s
+      #puts "min_temp_size: " + min_temp_data.size.to_s
+      station = @operating_stations[station_number][0]['id']
+      @weather_results = @high_level_location.get_weather_for_noaa_station_for_dates(station.to_s, "2020-01-01", "2020-06-30")['results']
+      if @weather_results != nil
+      @weather_results.each_with_index do |r, i|
+      #puts r.inspect
+        if @weather_records.key?(r['date'])
+          @weather_records[r['date']][r['datatype']] = r['value']
+        else
+          @weather_records[r['date']] = Hash.new
+          @weather_records[r['date']][r['datatype']] = r['value']
+          @date_labels << DateTime.parse(r['date']).strftime("%m/%d")
+        end
+        if r['datatype'] == "TMAX"
+          @max_temp_data << r['value']
+        elsif r['datatype'] == "TMIN"
+          @min_temp_data << r['value']
+        end
+      end
+      
+      @high_level_location.get_weather_for_noaa_station_for_dates(station, "2020-07-01", "2020-12-31")['results'].each_with_index do |r, i|
+        if @weather_records.key?(r['date'])
+          @weather_records[r['date']][r['datatype']] = r['value']
+        else
+          @weather_records[r['date']] = Hash.new
+          @weather_records[r['date']][r['datatype']] = r['value']
+          @date_labels << DateTime.parse(r['date']).strftime("%m/%d")
+        end
+        if r['datatype'] == "TMAX"
+          @max_temp_data << r['value']
+        elsif r['datatype'] == "TMIN"
+          @min_temp_data << r['value']
+        end
+      end
+      
+    end
+    station_number = station_number + 1
+  end
+
+
+
+
+
+
+
+  if @wrs.size > 0
+    #get the latest date recorded
+    @latest = @wrs.last
+    #while latest date is not yesterday
+      #if latest date is > yesterday - 6months
+        #get noaa weather for latest + 1 day to yesterday
+      #else
+        #get noaa weather for latest + 1 day to latest + 6 months
+      #end
+      #update latest date
+    #end
+
+    #get the earliest date recorded
+    #while earliest > yesterday - 5 years
+      #get noaa weather for earliest - 6 months to earliest
+      #update earliest date
+  else
+    @new_records = Hash.new
+    @high_level_location.get_weather_for_noaa_station_for_dates(station, (@yesterday-182).strftime("%Y-%m-%d"), @yesterday.strftime("%Y-%m-%d"))['results'].each_with_index do |r, i|
+      if @new_records.key?(r['date'])
+        @new_records[r['date']][r['datatype']] = r['value']
+      else
+        @new_records[r['date']] = Hash.new
+        @new_records[r['date']][r['datatype']] = r['value']
+      end
+    end
+    @new_records.each do |r|
+      puts r
+      @nwr = WeatherRecord.new(:high_level_location_id => @high_level_location.id, :date => r[0], :min_temp_f => r[1]['TMIN'], :max_temp_f => r[1]['TMAX'], :precip_in => r[1]['PRCP'])
+      @nwr.save
+
+    end
+
+  end
+
     @years = Array.new
     (1..5).each do |index|
       @start_date = @today + 7 - (365 * index)
       @end_date = @today + 7 + 90 - (365 * index)
-      @years.push(WeatherRecord.where(:date => @start_date..@end_date).sort_by &:date)
+      @years.push(WeatherRecord.where(:date => @start_date..@end_date, :high_level_location_id => @high_level_location.id).sort_by &:date)
     end
-    # (0..90).each_with_index do |index|
-      # @dates = Array.new
-      # @years.each_with_index do |year_records, yindex|
-      #   if year_records != nil and year_records.first != nil
-      #     @dates.push(year_records.first)
-      #     puts "it's true"
-      #   else
-      #     @dates.push("no data")
-      #   end
-      # end
-      # @next_90_days.push(@dates)
-    # end
+
   end
 
   # GET /high_level_locations/new

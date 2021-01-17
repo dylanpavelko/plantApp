@@ -29,22 +29,18 @@
 
 <% if @high_level_location.lat != nil and @high_level_location.long != nil %>
   <strong> Nearby Weather Stations </strong> 
-  <% @yearAgo = (Date.today() - 365) %>
-  <% @operating_stations = Array.new %>
+
 
   <ul>
-  <% @stations = @high_level_location.get_noaa_ncdc_data['results'] %>
-  <% @stations.each do |r| %>
-    <% if DateTime.parse(r['maxdate']) > @yearAgo %>
+  <% @operating_stations.each do |r| %>
+    <% if DateTime.parse(r[0]['maxdate']) > @yearAgo %>
       <li>
-        <%= r['id'] %> - <%= r['name'] %> (Data From: <%= r['mindate'] %> to <%= r['maxdate'] %>) [long: <%= r['longitude']%>, lat:<%= r['latitude'] %>]
-        <%= distance = ((r['longitude'] - @high_level_location.long)**2 + (r['latitude'] - @high_level_location.lat)**2) %>
-        <%#= r.inspect %>
-        <% @operating_stations << [r, distance] %>
+        <%= r[0]['id'] %> - <%= r[0]['name'] %> (Data From: <%= r[0]['mindate'] %> to <%= r[0]['maxdate'] %>) [long: <%= r[0]['longitude']%>, lat:<%= r[0]['latitude'] %>]
+        <%= r[1]%>
       </li>
     <% end %>
   <% end %>
-  <% @operating_stations = @operating_stations.sort {|a,b| a[1] <=> b[1]} %>
+
   </ul>
       <h2>My Map</h2>
   <div>
@@ -70,12 +66,9 @@
               map.getProjectionObject() // to Spherical Mercator Projection
             );
       markers.addMarker(new OpenLayers.Marker(newLonLat));
-
-
     <% end %>
           
     var zoom=12;
-
     
     markers.addMarker(new OpenLayers.Marker(newLonLat));
     map.addLayer(markers);
@@ -89,50 +82,7 @@
 
   <strong>Historical Weather</strong><br/>
   <%# sort in order of distance %>
-  <% weather_records = Hash.new %>
-  <% max_temp_data = Array.new %>
-  <% min_temp_data = Array.new %>
-  <% date_labels = Array.new %>
-  <% station_number = 0 %>
-  <% while (max_temp_data.size < 365 || min_temp_data.size < 365) && station_number < @operating_stations.size %>
-    <% puts "station number: " + station_number.to_s %>
-    <% puts "max_temp_size: " + max_temp_data.size.to_s %>
-    <% puts "min_temp_size: " + min_temp_data.size.to_s %>
-    <%= station = @operating_stations[station_number][0]['id'] %>
-    <% @weather_results = @high_level_location.get_weather_for_noaa_station_for_dates(station.to_s, "2010-01-01", "2010-06-30")['results'] %>
-    <% if @weather_results != nil %>
-      <% @weather_results.each_with_index do |r, i| %>
-      <%#= r.inspect %>
-        <% if weather_records.key?(r['date']) %>
-          <% weather_records[r['date']][r['datatype']] = r['value'] %>
-        <% else %>
-          <% weather_records[r['date']] = Hash.new %>
-          <% weather_records[r['date']][r['datatype']] = r['value'] %>
-          <% date_labels << DateTime.parse(r['date']).strftime("%m/%d") %>
-        <% end %>
-        <% if r['datatype'] == "TMAX" %>
-          <% max_temp_data << r['value'] %>
-        <% elsif r['datatype'] == "TMIN" %>
-          <% min_temp_data << r['value'] %>
-        <% end %>
-      <% end %>
-    <% @high_level_location.get_weather_for_noaa_station_for_dates(station, "2010-07-01", "2010-12-31")['results'].each_with_index do |r, i| %>
-      <% if weather_records.key?(r['date']) %>
-        <% weather_records[r['date']][r['datatype']] = r['value'] %>
-      <% else %>
-        <% weather_records[r['date']] = Hash.new %>
-        <% weather_records[r['date']][r['datatype']] = r['value'] %>
-        <% date_labels << DateTime.parse(r['date']).strftime("%m/%d") %>
-      <% end %>
-      <% if r['datatype'] == "TMAX" %>
-        <% max_temp_data << r['value'] %>
-      <% elsif r['datatype'] == "TMIN" %>
-        <% min_temp_data << r['value'] %>
-      <% end %>
-    <% end %>
-    
-  <% end %>
-  <% station_number = station_number + 1 %>
+
 
     
         <canvas id="myChart"></canvas>
@@ -145,18 +95,18 @@
 
               // The data for our dataset
               data: {
-                  labels: <%= raw date_labels.to_s %>,
+                  labels: <%= raw @date_labels.to_s %>,
                   datasets: [{
                       label: 'Max Temperature',
                       borderColor: 'rgba(255, 0, 0, .7)',
                       fill: false,
-                      data: <%= max_temp_data.inspect %>
+                      data: <%= @max_temp_data.inspect %>
                   },
                   {
                       label: 'Min Temperature',
                       borderColor: 'rgba(0, 0, 255, .7)',
                       fill: false,
-                      data: <%= min_temp_data.inspect %>
+                      data: <%= @min_temp_data.inspect %>
                   }]
               },
 
@@ -166,14 +116,14 @@
         </script>
 
     <ul>
-    <% weather_records.each do |wr| %>
+    <% @weather_records.each do |wr| %>
       <li><%= DateTime.parse(wr[0]).strftime("%m/%d/%Y") %> -  <span style="color:blue;"><%= wr[1]['TMIN'] %>° F</span> | 
                           <span style="color:red;"><%= wr[1]['TMAX'] %>° F</span> |
                           <span style="color:cyan;"><%= wr[1]['PRCP'] %>"</span>  
       </li>
     <% end %>
     </ul>
-  <% end %>
+
   <p>
     <% @use_dark_sky = false %>
     <% if @use_dark_sky %>
@@ -222,7 +172,7 @@
     <% @yrs = [0,0,0,0,0] %>
     <% (7..89).each_with_index do |index| %>
       <tr>
-        <td><strong><%= (@today+index).strftime("%m/%d") %></strong></td>
+        <td><strong><%= (@today-index).strftime("%m/%d") %></strong></td>
 
         <% @day = Array.new %>
         <% (0..4).each_with_index do |yindex| %>
