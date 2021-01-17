@@ -7,5 +7,13 @@ class PlantInstance < ApplicationRecord
     records = self.water_records.sort_by &:moment
     return records.reverse
   end
+
+  def start_date
+  	if self.planted_date != nil
+  		return self.planted_date.to_date
+  	else
+  		return self.acquired_date
+  	end
+  end
   
 end

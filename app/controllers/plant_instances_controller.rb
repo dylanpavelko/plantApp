@@ -21,9 +21,9 @@ class PlantInstancesController < ApplicationController
     @growth_observations = GrowthObservation.where(:plant_instance_id => @plant_instance)
 
 
-    if @plant_instance.acquired_date != nil
-      days = Date.today.mjd - @plant_instance.acquired_date.mjd + 1
-      @weather_records = WeatherRecord.where(:high_level_location_id => @plant_instance.location.high_level_location.id, :date => @plant_instance.acquired_date + 1..Date.today)
+    if @plant_instance.start_date != nil
+      days = Date.today - (@plant_instance.start_date + 1.days)
+      @weather_records = WeatherRecord.where(:high_level_location_id => @plant_instance.location.high_level_location.id, :date => @plant_instance.start_date + 1..Date.today)
     else 
       days = 0
     end
@@ -41,8 +41,8 @@ class PlantInstancesController < ApplicationController
     @senes_data = Array.new()
     @min_temp_data = Array.new()
     @max_temp_data = Array.new()
-    days.times do |i| 
-      date = @plant_instance.acquired_date + i
+    days.to_i.times do |i| 
+      date = @plant_instance.start_date + i
       @dates << date.strftime('%m/%d/%Y')
 
       @weather = @weather_records.select { |wr| wr.date == date}
