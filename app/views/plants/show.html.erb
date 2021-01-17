@@ -103,7 +103,7 @@
     <% @plant_instances.each do |p| %>
     <% @plant_link = "" %>
       <% if p.planted_date != nil %>
-        <% @plant_link += "Planted on " + p.acquired_date.strftime("%a, %d %b %Y") + " in "  %>
+        <% @plant_link += "Planted on " + p.planted_date.strftime("%a, %d %b %Y") + " in "  %>
       <% elsif p.acquired_date != nil %>
         <% @plant_link += "Acquired on " + p.acquired_date.strftime("%a, %d %b %Y") + " in "  %>
       <% end %>
