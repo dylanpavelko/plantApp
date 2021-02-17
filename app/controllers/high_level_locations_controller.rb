@@ -88,41 +88,28 @@ class HighLevelLocationsController < ApplicationController
 
 
 
-
+  puts "how many weather records"
 
   if @wrs.size > 0
     #get the latest date recorded
     @latest = @wrs.last
-    #while latest date is not yesterday
-      #if latest date is > yesterday - 6months
-        #get noaa weather for latest + 1 day to yesterday
-      #else
-        #get noaa weather for latest + 1 day to latest + 6 months
-      #end
-      #update latest date
-    #end
+    @latest_date = @latest.date
+    while @latest_date != @yesterday
+      if @latest_date > @yesterday-182
+        get_and_save_noaa(@high_level_location, station, (@latest_date+1), @yesterday)
+        @latest_date = @yesterday
+      else
+        get_and_save_noaa(@high_level_location, station, (@latest_date+1), (@latest_date+182))
+        @latest_date = @latest_date + 182
+      end
+    end
 
     #get the earliest date recorded
     #while earliest > yesterday - 5 years
       #get noaa weather for earliest - 6 months to earliest
       #update earliest date
   else
-    @new_records = Hash.new
-    @high_level_location.get_weather_for_noaa_station_for_dates(station, (@yesterday-182).strftime("%Y-%m-%d"), @yesterday.strftime("%Y-%m-%d"))['results'].each_with_index do |r, i|
-      if @new_records.key?(r['date'])
-        @new_records[r['date']][r['datatype']] = r['value']
-      else
-        @new_records[r['date']] = Hash.new
-        @new_records[r['date']][r['datatype']] = r['value']
-      end
-    end
-    @new_records.each do |r|
-      puts r
-      @nwr = WeatherRecord.new(:high_level_location_id => @high_level_location.id, :date => r[0], :min_temp_f => r[1]['TMIN'], :max_temp_f => r[1]['TMAX'], :precip_in => r[1]['PRCP'])
-      @nwr.save
-
-    end
-
+    get_and_save_noaa(@high_level_location, station, (@yesterday-182), @yesterday)
   end
 
     @years = Array.new
@@ -192,5 +179,25 @@ class HighLevelLocationsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def high_level_location_params
       params.require(:high_level_location).permit(:name, :zip, :long, :lat, :user_id)
+    end
+
+
+    def get_and_save_noaa(high_level_location, station, from_date, to_date)
+      @new_records = Hash.new
+      @results = high_level_location.get_weather_for_noaa_station_for_dates(station, from_date.strftime("%Y-%m-%d"), to_date.strftime("%Y-%m-%d"))['results']
+      if @results != nil
+        @results.each_with_index do |r, i|
+          if @new_records.key?(r['date'])
+            @new_records[r['date']][r['datatype']] = r['value']
+          else
+            @new_records[r['date']] = Hash.new
+            @new_records[r['date']][r['datatype']] = r['value']
+          end
+        end
+        @new_records.each do |r|
+          @nwr = WeatherRecord.new(:high_level_location_id => high_level_location.id, :date => r[0], :min_temp_f => r[1]['TMIN'], :max_temp_f => r[1]['TMAX'], :precip_in => r[1]['PRCP'])
+          @nwr.save
+        end
+      end
     end
 end
