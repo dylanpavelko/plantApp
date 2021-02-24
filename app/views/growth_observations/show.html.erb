@@ -20,5 +20,9 @@
   <%= @growth_observation.percent_at_stage %>
 </p>
 
+
+<%= image_tag url_for(@growth_observation.picture) if @growth_observation.picture.attached? %>
+
+
 <%= link_to 'Edit', edit_growth_observation_path(@growth_observation) %> |
 <%= link_to 'Back', growth_observations_path %>

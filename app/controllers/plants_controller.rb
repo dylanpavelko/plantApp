@@ -65,6 +65,12 @@ class PlantsController < ApplicationController
       end
     end
     
+    #eventually make this all public plant photos not just all photos
+    @photos = Array.new
+    @all_plant_instances =  PlantInstance.where(:plant_id => @plant)
+    @all_plant_instances.each do |instance|
+      @photos += instance.get_photos
+    end
     
 
     @has_open_farm_data = false

@@ -71,6 +71,6 @@ class GrowthObservationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def growth_observation_params
-      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage)
+      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :picture)
     end
 end

@@ -15,5 +15,16 @@ class PlantInstance < ApplicationRecord
   		return self.acquired_date
   	end
   end
+
+  def get_photos
+    photos = Array.new
+    observations = GrowthObservation.where(:plant_instance_id => self.id)
+    observations.each do |obsv|
+      if obsv.picture.attached?
+        photos << obsv
+      end
+    end
+    return photos
+  end
   
 end

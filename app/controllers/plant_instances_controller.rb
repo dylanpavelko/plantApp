@@ -20,7 +20,8 @@ class PlantInstancesController < ApplicationController
     @water_records = WaterRecord.where(:plant_instance_id => @plant_instance.id)
     @growth_observations = GrowthObservation.where(:plant_instance_id => @plant_instance)
 
-
+    @photos = @plant_instance.get_photos
+    
     if @plant_instance.start_date != nil
       days = Date.today - (@plant_instance.start_date + 1.days)
       @weather_records = WeatherRecord.where(:high_level_location_id => @plant_instance.location.high_level_location.id, :date => @plant_instance.start_date + 1..Date.today)

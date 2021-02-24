@@ -1,0 +1,15 @@
+  <div  style="float:left;margin-right:3em;">
+    <img id='display_pic' src="<%= url_for(@photos.first.picture) %>"  width='250'>
+    <br/>
+    <div>
+      <% @photos.each do |obs| %>
+        <img id='display_pic' src="<%= url_for(obs.picture) %>"  width='50' class='pic_preview'>
+      <% end %>
+    </div>
+  </div>
+  <script>
+    $('.pic_preview').click(function(){
+      $new_image = $(this).attr('src');
+      $('#display_pic').attr('src', $new_image);
+    })
+  </script>

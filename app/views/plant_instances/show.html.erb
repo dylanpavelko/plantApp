@@ -1,6 +1,8 @@
 <p id="notice"><%= notice %></p>
 <div id='plant_top'>
-<% if @plant_instance.plant.image_url != '' and @plant_instance.plant.image_url != nil %>
+<% if @photos.count > 0 %>
+  <%= render partial: 'partials/picture_viewer' %>
+<% elsif @plant_instance.plant.image_url != '' and @plant_instance.plant.image_url != nil %>
   <img src='<%= @plant_instance.plant.image_url%>' style="float:left;margin-right:3em;" width='250'/>
 <% end %>
   <h3>
