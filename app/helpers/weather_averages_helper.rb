@@ -1,0 +1,2 @@
+module WeatherAveragesHelper
+end

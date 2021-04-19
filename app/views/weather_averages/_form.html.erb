@@ -1,0 +1,57 @@
+<%= form_with(model: weather_average, local: true) do |form| %>
+  <% if weather_average.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(weather_average.errors.count, "error") %> prohibited this weather_average from being saved:</h2>
+
+      <ul>
+      <% weather_average.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :day %>
+    <%= form.text_field :day %>
+  </div>
+
+  <div class="field">
+    <%= form.label :high_level_location_id %>
+    <%= form.text_field :high_level_location_id %>
+  </div>
+
+  <div class="field">
+    <%= form.label :max_temp_f %>
+    <%= form.text_field :max_temp_f %>
+  </div>
+
+  <div class="field">
+    <%= form.label :min_temp_f %>
+    <%= form.text_field :min_temp_f %>
+  </div>
+
+  <div class="field">
+    <%= form.label :precip_in %>
+    <%= form.text_field :precip_in %>
+  </div>
+
+  <div class="field">
+    <%= form.label :max_t_std_dev %>
+    <%= form.text_field :max_t_std_dev %>
+  </div>
+
+  <div class="field">
+    <%= form.label :min_t_std_dev %>
+    <%= form.text_field :min_t_std_dev %>
+  </div>
+
+  <div class="field">
+    <%= form.label :precip_std_dev %>
+    <%= form.text_field :precip_std_dev %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

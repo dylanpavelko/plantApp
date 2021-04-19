@@ -197,7 +197,44 @@ class HighLevelLocationsController < ApplicationController
         @new_records.each do |r|
           @nwr = WeatherRecord.new(:high_level_location_id => high_level_location.id, :date => r[0], :min_temp_f => r[1]['TMIN'], :max_temp_f => r[1]['TMAX'], :precip_in => r[1]['PRCP'])
           @nwr.save
+          set_average_for_location_on_date(high_level_location, r[0])
         end
+      end
+    end
+
+    def set_average_for_location_on_date(high_level_location, date)
+      @day_of_year = DateTime.parse(date).to_date.yday
+      #@days = WeatherRecord.where("EXTRACT(DOY FROM DATE) is ?", @day_of_year)
+      #@days = WeatherRecord.where("high_level_location_id = ? AND strftime('%j', date) is ?", high_level_location.id, @day_of_year)
+      #need to support this differently for sqlite vs pg see https://stackoverflow.com/questions/9624601/activerecord-find-by-year-day-or-month-on-a-date-field for PG
+      @days = WeatherRecord.where("high_level_location_id = ? AND cast(strftime('%j',date) as int) = ?", high_level_location.id, @day_of_year)
+      puts "number of days for " + @day_of_year.to_s
+      days = @days.count
+      puts days
+      avg_max = @days.average(:max_temp_f)
+      avg_min = @days.average(:min_temp_f)
+      avg_precip = @days.average(:precip_in)
+
+      max_deviation = 0
+      min_deviation = 0
+      precip_deviation = 0
+
+      @days.each do |day|
+        max_deviation += (day.max_temp_f - avg_max)**2
+        min_deviation += (day.min_temp_f - avg_min)**2
+        precip_deviation += (day.precip_in - avg_precip)**2
+      end
+
+      max_std_dev = (max_deviation/days)**(1/2)
+      min_std_dev = (min_deviation/days)**(1/2)
+      precip_std_dev = (precip_deviation/days)**(1/2)
+
+      @average = WeatherAverage.where(:high_level_location => high_level_location, :day => @day_of_year)
+      if @average.count > 0
+        @average.update(:max_temp_f => avg_max, :min_temp_f => avg_min, :avg_precip => avg_precip, :max_t_std_dev => max_deviation, :min_t_std_dev => min_deviation, :precip_std_dev => precip_deviation)
+      else
+        @average = WeatherAverage.new(:high_level_location => high_level_location, :day => @day_of_year, :max_temp_f => avg_max, :min_temp_f => avg_min, :precip_in => avg_precip, :max_t_std_dev => max_deviation, :min_t_std_dev => min_deviation, :precip_std_dev => precip_deviation)
+        @average.save
       end
     end
 end

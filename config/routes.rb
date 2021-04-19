@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :weather_averages
   resources :growth_observations
   resources :bbch_stages
   resources :bbch_profiles

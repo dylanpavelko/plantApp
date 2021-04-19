@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Weather Averages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Day</th>
+      <th>High level location</th>
+      <th>Max temp f</th>
+      <th>Min temp f</th>
+      <th>Precip in</th>
+      <th>Max t std dev</th>
+      <th>Min t std dev</th>
+      <th>Precip std dev</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @weather_averages.each do |weather_average| %>
+      <tr>
+        <td><%= weather_average.day %></td>
+        <td><%= weather_average.high_level_location %></td>
+        <td><%= weather_average.max_temp_f %></td>
+        <td><%= weather_average.min_temp_f %></td>
+        <td><%= weather_average.precip_in %></td>
+        <td><%= weather_average.max_t_std_dev %></td>
+        <td><%= weather_average.min_t_std_dev %></td>
+        <td><%= weather_average.precip_std_dev %></td>
+        <td><%= link_to 'Show', weather_average %></td>
+        <td><%= link_to 'Edit', edit_weather_average_path(weather_average) %></td>
+        <td><%= link_to 'Destroy', weather_average, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Weather Average', new_weather_average_path %>

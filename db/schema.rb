@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_17_051309) do
+ActiveRecord::Schema.define(version: 2021_04_18_212627) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -211,6 +211,20 @@ ActiveRecord::Schema.define(version: 2021_02_17_051309) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["plant_instance_id"], name: "index_water_records_on_plant_instance_id"
+  end
+
+  create_table "weather_averages", force: :cascade do |t|
+    t.integer "day"
+    t.integer "high_level_location_id"
+    t.decimal "max_temp_f"
+    t.decimal "min_temp_f"
+    t.decimal "precip_in"
+    t.decimal "max_t_std_dev"
+    t.decimal "min_t_std_dev"
+    t.decimal "precip_std_dev"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["high_level_location_id"], name: "index_weather_averages_on_high_level_location_id"
   end
 
   create_table "weather_records", force: :cascade do |t|

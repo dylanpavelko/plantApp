@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Day:</strong>
+  <%= @weather_average.day %>
+</p>
+
+<p>
+  <strong>High level location:</strong>
+  <%= @weather_average.high_level_location %>
+</p>
+
+<p>
+  <strong>Max temp f:</strong>
+  <%= @weather_average.max_temp_f %>
+</p>
+
+<p>
+  <strong>Min temp f:</strong>
+  <%= @weather_average.min_temp_f %>
+</p>
+
+<p>
+  <strong>Precip in:</strong>
+  <%= @weather_average.precip_in %>
+</p>
+
+<p>
+  <strong>Max t std dev:</strong>
+  <%= @weather_average.max_t_std_dev %>
+</p>
+
+<p>
+  <strong>Min t std dev:</strong>
+  <%= @weather_average.min_t_std_dev %>
+</p>
+
+<p>
+  <strong>Precip std dev:</strong>
+  <%= @weather_average.precip_std_dev %>
+</p>
+
+<%= link_to 'Edit', edit_weather_average_path(@weather_average) %> |
+<%= link_to 'Back', weather_averages_path %>
