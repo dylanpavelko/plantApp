@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     get '/my_plants', to: 'plant_instances#my_plants'
     post '/add_water_records', to: 'water_records#add_water_records'
     post '/add_to_wishlist', to: 'wishlists#add_to_wishlist'
+    post '/get_new_weather_records', to: 'weather_records#get_new_weather_records'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   
   

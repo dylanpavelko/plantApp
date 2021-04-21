@@ -35,7 +35,7 @@
   <% @operating_stations.each do |r| %>
     <% if DateTime.parse(r[0]['maxdate']) > @yearAgo %>
       <li>
-        <%= r[0]['id'] %> - <%= r[0]['name'] %> (Data From: <%= r[0]['mindate'] %> to <%= r[0]['maxdate'] %>) [long: <%= r[0]['longitude']%>, lat:<%= r[0]['latitude'] %>]
+        <span class='station_id'><%= r[0]['id'] %></span> - <%= r[0]['name'] %> (Data From: <%= r[0]['mindate'] %> to <%= r[0]['maxdate'] %>) [long: <%= r[0]['longitude']%>, lat:<%= r[0]['latitude'] %>]
         <%= r[1]%>
       </li>
     <% end %>
@@ -80,7 +80,7 @@
   </script>
   <br/>
 
-  <strong>Historical Weather</strong><br/>
+  <strong>Average Weather</strong><br/>
   <%# sort in order of distance %>
 
 
@@ -114,12 +114,12 @@
               options: {}
           });
         </script>
-
+      <p><button id="get_more_data" >Collect Additional Weather Data</button>
     <ul>
     <% @weather_records.each do |wr| %>
-      <li><%= DateTime.parse(wr[0]).strftime("%m/%d/%Y") %> -  <span style="color:blue;"><%= wr[1]['TMIN'] %>° F</span> | 
-                          <span style="color:red;"><%= wr[1]['TMAX'] %>° F</span> |
-                          <span style="color:cyan;"><%= wr[1]['PRCP'] %>"</span>  
+      <li><%= wr.date %> -  <span style="color:blue;"><%= wr.min_temp_f %>° F</span> | 
+                          <span style="color:red;"><%= wr.max_temp_f %>° F</span> |
+                          <span style="color:cyan;"><%= wr.precip_in %>"</span>  
       </li>
     <% end %>
     </ul>
@@ -160,57 +160,32 @@
       <% end %>
     <%#= @high_level_location.get_full_forecast %>
   </p>
-  <strong>Historical Weather Information</strong>
-  <table>
-    <th>Date</th>
-    <th><%= (@today - (365 * 1)).strftime("%Y") %></th>
-    <th><%= (@today - (365 * 2)).strftime("%Y") %></th>
-    <th><%= (@today - (365 * 3)).strftime("%Y") %></th>
-    <th><%= (@today - (365 * 4)).strftime("%Y") %></th>
-    <th><%= (@today - (365 * 5)).strftime("%Y") %></th>
-    <th>Average</th>
-    <% @yrs = [0,0,0,0,0] %>
-    <% (7..89).each_with_index do |index| %>
-      <tr>
-        <td><strong><%= (@today-index).strftime("%m/%d") %></strong></td>
-
-        <% @day = Array.new %>
-        <% (0..4).each_with_index do |yindex| %>
-          <td>
-            <% @date = (@today+index - 365 * (yindex + 1)) %>
-            <% if @yrs[yindex] < @years[yindex].size and @date.to_date == @years[yindex][@yrs[yindex]].date %>
-              <span style="color:red;">
-                <%= @years[yindex][@yrs[yindex]].temperatureMax %><%= link_to "°", @years[yindex][@yrs[yindex]] %>
-              </span> | 
-              <span style="color:blue;">
-                  <%= @years[yindex][@yrs[yindex]].temperatureLow %>°
-              </span>
-              <% @day.push(@years[yindex][@yrs[yindex]]) %>
-              <% @yrs[yindex] += 1 %>
-            <% else %>
-              <%= link_to ("Get Data for " + @date.strftime("%m/%d/%Y")), new_weather_record_path(:date => @date.to_i, 
-                                                                                                  :high_level_location_id => @high_level_location.id, 
-                                                                                                  :lat => @high_level_location.lat, 
-                                                                                                  :long => @high_level_location.long) %>
-            <% end %>
-          </td>
-        <% end %>
-        <td>
-          <% if @day.length > 0 %>
-            <% @max_avg = 0 %>
-            <% @low_avg = 0 %>
-            <% @day.each do |d| %>
-              <% @max_avg += d.temperatureMax %>
-              <% @low_avg += d.temperatureLow %>
-            <% end %>
-            <span style="color:red;"><%= (@max_avg/@day.length).round(2) %>°</span> | <span style="color:blue;"><%= (@low_avg/@day.length).round(2) %>°</span>
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </table>
+  
 <% end %>
 
 
 <%= link_to 'Edit', edit_high_level_location_path(@high_level_location) %> |
 <%= link_to 'Back', high_level_locations_path %>
+
+
+<script>
+  $('#get_more_data').click(function(){
+    high_level_location_id = <%= @high_level_location.id %>;
+    station_ids = [];
+    $('.station_id').each(function(){
+      station_ids.push($(this).html());
+    });
+    $.ajax({
+        type: "POST",
+        url: "/get_new_weather_records",
+        data: {high_level_location_id: high_level_location_id, station_list: station_ids},
+        success:function(data){
+          return false;
+        },
+        error: function(data){
+          return false
+        }
+      });
+    //get_new_weather_records(high_level_location_id, station_list)
+  })
+</script>

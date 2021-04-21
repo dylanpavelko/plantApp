@@ -80,6 +80,7 @@ class WaterRecordsController < ApplicationController
     redirect_to my_plants_path
   end
 
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_water_record
@@ -90,4 +91,6 @@ class WaterRecordsController < ApplicationController
     def water_record_params
       params.require(:water_record).permit(:plant_instance_id, :moment, :ounces, :water_moment, :water_array)
     end
+
+    
 end
