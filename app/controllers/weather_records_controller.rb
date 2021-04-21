@@ -159,7 +159,11 @@ class WeatherRecordsController < ApplicationController
       #@days = WeatherRecord.where("EXTRACT(DOY FROM DATE) is ?", @day_of_year)
       #@days = WeatherRecord.where("high_level_location_id = ? AND strftime('%j', date) is ?", high_level_location.id, @day_of_year)
       #need to support this differently for sqlite vs pg see https://stackoverflow.com/questions/9624601/activerecord-find-by-year-day-or-month-on-a-date-field for PG
-      @days = WeatherRecord.where("high_level_location_id = ? AND cast(strftime('%j',date) as int) = ?", high_level_location.id, @day_of_year)
+      if Rails.env.development?
+        @days = WeatherRecord.where("high_level_location_id = ? AND cast(strftime('%j',date) as int) = ?", high_level_location.id, @day_of_year)
+      else
+        @days = WeatherRecord.where("high_level_location_id = ? AND extract(doy from date)) = ?", high_level_location.id, @day_of_year)
+      end
       puts "number of days for " + @day_of_year.to_s
       days = @days.count
       puts days
