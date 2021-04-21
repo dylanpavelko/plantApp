@@ -162,7 +162,7 @@ class WeatherRecordsController < ApplicationController
       if Rails.env.development?
         @days = WeatherRecord.where("high_level_location_id = ? AND cast(strftime('%j',date) as int) = ?", high_level_location.id, @day_of_year)
       else
-        @days = WeatherRecord.where("high_level_location_id = ? AND extract(doy from date)) = ?", high_level_location.id, @day_of_year)
+        @days = WeatherRecord.where("high_level_location_id = ? AND extract(doy from date) = ?", high_level_location.id, @day_of_year)
       end
       puts "number of days for " + @day_of_year.to_s
       days = @days.count
