@@ -91,39 +91,68 @@
           var ctx = document.getElementById('myChart').getContext('2d');
           var chart = new Chart(ctx, {
               // The type of chart we want to create
-              type: 'line',
+              type: 'bar',
 
               // The data for our dataset
               data: {
                   labels: <%= raw @date_labels.to_s %>,
                   datasets: [{
-                      label: 'Avg Max Temperature',
+                      label: 'Avg Max Temperature (F)',
                       borderColor: 'rgba(255, 0, 0, .7)',
+                      backgroundColor: 'rgba(255, 0, 0, .7)',
                       fill: false,
-                      data: <%= @max_temp_data.inspect %>
+                      data: <%= @max_temp_data.inspect %>,
+                      type: 'line'
                   },
                   {
-                      label: 'Avg Min Temperature',
-                      borderColor: 'rgba(55, 242, 245, 1)',
+                      label: 'Avg Min Temperature (F)',
+                      borderColor: 'rgba(0, 0, 255, 1)',
+                      backgroundColor: 'rgba(0, 0, 255, 1)',
                       fill: false,
-                      data: <%= @min_temp_data.inspect %>
+                      data: <%= @min_temp_data.inspect %>,
+                      type: 'line'
                   },
                   {
-                      label: 'Max Likely Temperature',
+                      label: 'Max Likely Temperature (F)',
                       borderColor: 'rgba(255, 0, 0, .3)',
+                      backgroundColor: 'rgba(255, 0, 0, .3)',
                       fill: false,
-                      data: <%= @max_deviation_data.inspect %>
+                      data: <%= @max_deviation_data.inspect %>,
+                      type: 'line'
                   },
                   {
-                      label: 'Min Likely Temperature',
+                      label: 'Min Likely Temperature (F)',
                       borderColor: 'rgba(0, 0, 255, .3)',
+                      backgroundColor: 'rgba(0, 0, 255, .3)',
+                      //borderDash: [5, 5],
                       fill: false,
-                      data: <%= @min_deviation_data.inspect %>
+                      data: <%= @min_deviation_data.inspect %>,
+                      type: 'line'
+                  },
+                  {
+                      label: 'Avg Precip (in)',
+                      borderColor: 'rgba(0, 255, 255, .3)',
+                      backgroundColor: 'rgba(0, 255, 255, 1)',
+                      fill: true,
+                      yAxisID: 'B',
+                      data: <%= @precip_data.inspect %>
                   }]
               },
 
               // Configuration options go here
-              options: {}
+              options: {
+                scales: {
+                  yAxes: [{
+                    id: 'A',
+                    type: 'linear',
+                    position: 'left',
+                  }, {
+                    id: 'B',
+                    type: 'linear',
+                    position: 'right',
+                  }]
+                }
+              }
           });
         </script>
       <p><button id="get_more_data" >Collect Additional Weather Data</button>
