@@ -20,7 +20,7 @@
         <td><%= weather_record.high_level_location %></td>
         <td><%= link_to 'Show', weather_record %></td>
         <td><%= link_to 'Edit', edit_weather_record_path(weather_record) %></td>
-        <td><%= link_to 'Destroy', weather_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'Destroy', weather_record, method: :delete%></td>
       </tr>
     <% end %>
   </tbody>

@@ -41,12 +41,20 @@ class HighLevelLocationsController < ApplicationController
   #   @weather_records = Hash.new
     @max_temp_data = Array.new
     @min_temp_data = Array.new
+    @min_deviation_data = Array.new
+    @max_deviation_data = Array.new
     @date_labels = Array.new
+    @precip_data = Array.new
+
 
     @averages.each do |ad|
       @date_labels << ((Date.new(y=2020, m=12, d=31) + ad.day).strftime("%m/%d"))
       @max_temp_data << ad.max_temp_f
       @min_temp_data << ad.min_temp_f
+      @precip_data << ad.precip_in
+      @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
+      @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
+
     end
 
   #   station_number = 0

@@ -180,15 +180,24 @@ class WeatherRecordsController < ApplicationController
         end
       end
 
-      max_std_dev = (max_deviation/days)**(1/2)
-      min_std_dev = (min_deviation/days)**(1/2)
-      precip_std_dev = (precip_deviation/days)**(1/2)
+      puts "min dev"
+      puts (min_deviation/days)
+
+      max_std_dev = (max_deviation/days)**(0.5)
+      min_std_dev = (min_deviation/days)**(0.5)
+      precip_std_dev = (precip_deviation/days)**(0.5)
+
+      puts "min std dev"
+      puts min_std_dev
 
       @average = WeatherAverage.where(:high_level_location => high_level_location, :day => @day_of_year)
       if @average.count > 0
-        @average.update(:max_temp_f => avg_max, :min_temp_f => avg_min, :precip_in => avg_precip, :max_t_std_dev => max_deviation, :min_t_std_dev => min_deviation, :precip_std_dev => precip_deviation)
+        @average.update(:max_temp_f => avg_max, :min_temp_f => avg_min, :precip_in => avg_precip, 
+                        :max_t_std_dev => max_std_dev, :min_t_std_dev => min_std_dev, :precip_std_dev => precip_std_dev)
       else
-        @average = WeatherAverage.new(:high_level_location => high_level_location, :day => @day_of_year, :max_temp_f => avg_max, :min_temp_f => avg_min, :precip_in => avg_precip, :max_t_std_dev => max_deviation, :min_t_std_dev => min_deviation, :precip_std_dev => precip_deviation)
+        @average = WeatherAverage.new(:high_level_location => high_level_location, :day => @day_of_year, 
+                                      :max_temp_f => avg_max, :min_temp_f => avg_min, :precip_in => avg_precip, 
+                                      :max_t_std_dev => max_std_dev, :min_t_std_dev => min_std_dev, :precip_std_dev => precip_std_dev)
         @average.save
       end
     end
