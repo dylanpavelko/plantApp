@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_18_212627) do
+ActiveRecord::Schema.define(version: 2021_04_21_034810) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -195,6 +195,8 @@ ActiveRecord::Schema.define(version: 2021_04_18_212627) do
     t.boolean "admin", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "high_level_location_id"
+    t.index ["high_level_location_id"], name: "index_users_on_high_level_location_id"
   end
 
   create_table "varieties", force: :cascade do |t|

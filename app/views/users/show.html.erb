@@ -5,10 +5,12 @@
   <%= @user.email %>
 </p>
 
-<p>
-  <strong>Password digest:</strong>
-  <%= @user.password_digest %>
-</p>
+<% if @user.high_level_location != nil %>
+	<p>
+	  <strong>High Level Location Default:</strong>
+	  <%= link_to @user.high_level_location.name, @user.high_level_location %>
+	</p>
+<% end %>
 
 <p>
   <strong>Admin:</strong>
