@@ -80,6 +80,83 @@ class PlantsController < ApplicationController
     end
 
     @potential_matches = get_potential_open_farm_matches(@plant.scientific_name)
+
+
+
+    @averages = WeatherAverage.where(:high_level_location => @current_user.high_level_location).sort_by &:day
+    
+    @max_temp_data = Array.new
+    @min_temp_data = Array.new
+    @min_deviation_data = Array.new
+    @max_deviation_data = Array.new
+    @date_labels = Array.new
+    # @precip_data = Array.new
+    @gdd_data = Array.new
+    @ytd_gdd_data = Array.new
+    @days_to_harvest_data = Array.new
+    @harvest_risk_colors = Array.new
+
+    #gdd data
+    gdd_base = 50
+    gdd_cutoff = nil
+    harvest_gdd = 1300  #example of tomato
+    running_gdd=0
+    damage_min_temp_f=35
+    damage_max_temp_f=97
+
+    @averages.each do |ad|
+      @date_labels << ((Date.new(y=2020, m=12, d=31) + ad.day).strftime("%m/%d"))
+      @max_temp_data << ad.max_temp_f
+      @min_temp_data << ad.min_temp_f
+      # @precip_data << ad.precip_in
+      @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
+      @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
+
+      if ad.min_temp_f > gdd_base
+        gdd = (ad.max_temp_f + ad.min_temp_f)/2 - gdd_base
+      else
+        gdd = (ad.max_temp_f + gdd_base)/2 - gdd_base
+      end
+      @gdd_data << gdd
+      running_gdd += gdd
+      @ytd_gdd_data << running_gdd
+    end
+
+    #build number of gdd from this day and store in @days to harvest
+    @date_labels.each_with_index do |dl, i|
+      agdd = 0
+      days_to_harvest = 0
+      frost_risk = false
+      heat_risk = false
+      while(agdd < harvest_gdd)
+        if((i + days_to_harvest) > 365)
+          doy = i + days_to_harvest - 365
+        else
+          doy = i + days_to_harvest
+        end
+        agdd += @gdd_data[doy]
+        days_to_harvest += 1
+        if (@min_temp_data[doy] ) < damage_min_temp_f
+          frost_risk = true
+        end
+        if @max_temp_data[doy] > damage_max_temp_f
+          heat_risk = true
+        end
+      end
+      @days_to_harvest_data << days_to_harvest
+      if frost_risk && heat_risk
+        @harvest_risk_colors << "#FF00FF"
+      elsif frost_risk
+        @harvest_risk_colors << "#0000FF"
+      elsif heat_risk
+        @harvest_risk_colors << "#FF0000"
+      else
+        @harvest_risk_colors << "#129840"
+      end
+        
+      
+    end
+
   end
 
   # GET /plants/new
