@@ -98,10 +98,10 @@ class PlantsController < ApplicationController
 
     #gdd data
     gdd_base = 50
-    gdd_cutoff = nil
+    gdd_cutoff = 86
     harvest_gdd = 1300  #example of tomato
     running_gdd=0
-    damage_min_temp_f=35
+    damage_min_temp_f=34
     damage_max_temp_f=97
 
     @averages.each do |ad|
@@ -113,10 +113,18 @@ class PlantsController < ApplicationController
       @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
 
       if ad.min_temp_f > gdd_base
-        gdd = (ad.max_temp_f + ad.min_temp_f)/2 - gdd_base
+        low = ad.min_temp_f
       else
-        gdd = (ad.max_temp_f + gdd_base)/2 - gdd_base
+        low = gdd_base
       end
+      if gdd_cutoff == nil || ad.max_temp_f > gdd_cutoff
+        high = gdd_cutoff
+      else
+        high = ad.max_temp_f
+      end
+
+      gdd = (high + low) / 2 - gdd_base
+
       @gdd_data << gdd
       running_gdd += gdd
       @ytd_gdd_data << running_gdd
