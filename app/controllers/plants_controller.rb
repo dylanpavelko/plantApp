@@ -71,6 +71,12 @@ class PlantsController < ApplicationController
     @all_plant_instances.each do |instance|
       @photos += instance.get_photos
     end
+
+    @bbch_profile = @plant.species.bbch_profile
+    if @bbch_profile != nil
+      @bbch_stages = BbchStage.where(:bbch_profile_id => @bbch_profile).sort_by &:code
+      @growth_stages = GrowthStage.where(:species_id => @plant.species.id).sort_by &:bbch_code
+    end
     
 
     @has_open_farm_data = false
@@ -82,9 +88,10 @@ class PlantsController < ApplicationController
     @potential_matches = get_potential_open_farm_matches(@plant.scientific_name)
 
 
+    if @current_user != nil
+      @averages = WeatherAverage.where(:high_level_location => @current_user.high_level_location).sort_by &:day
+    end
 
-    @averages = WeatherAverage.where(:high_level_location => @current_user.high_level_location).sort_by &:day
-    
     @max_temp_data = Array.new
     @min_temp_data = Array.new
     @min_deviation_data = Array.new
@@ -95,6 +102,21 @@ class PlantsController < ApplicationController
     @ytd_gdd_data = Array.new
     @days_to_harvest_data = Array.new
     @harvest_risk_colors = Array.new
+    @temp_colors = ['#990000', '#9b0402', '#9d0704', '#9e0a05', '#a00e07', '#a11108', '#a3140a',
+      '#a4180b', '#a61b0d', '#a81e0f', '#a92110', '#ab2512', '#ac2813', '#ae2b15', '#af2f16', '#b13218',
+      '#b3351a', '#b4381b', '#b63c1d', '#b73f1e', '#b94220', '#ba4621', '#bc4923', '#be4c25', '#bf5026',
+      '#c15328', '#c25629', '#c4592b', '#c55d2c', '#c7602e', '#c96330', '#ca6731', '#cc6a33', '#cd6d34',
+      '#cf7036', '#d07437', '#d27739', '#d47a3b', '#d57e3c', '#d7813e', '#d8843f', '#da8741', '#db8b42',
+      '#dd8e44', '#df9146', '#e09547', '#e29849', '#e39b4a', '#e59f4c', '#e6a24d', '#e8a54f', '#eaa851',
+      '#ebac52', '#edaf54', '#eeb255', '#f0b657', '#f1b958', '#f3bc5a', '#f5bf5c', '#f6c35d', '#f8c65f',
+      '#f9c960', '#fbcd62', '#fcd063', '#fed365', '#ffd666', '#fbd367', '#f7d168', '#f3cf69', '#efcd69',
+      '#eccb6a', '#e8c96b', '#e4c76b', '#e0c56c', '#ddc36d', '#d9c16e', '#d5bf6e', '#d1bd6f', '#cebb70',
+      '#cab970', '#c6b771', '#c2b572', '#bfb373', '#bbb173', '#b7af74', '#b3ad75', '#b0ab75', '#aca976',
+      '#a8a777', '#a4a577', '#a1a378', '#9da179', '#999f7a', '#959d7a', '#929b7b', '#8e997c', '#8a977c',
+      '#86957d', '#83937e', '#7f917f', '#7b8f7f', '#778d80', '#748b81', '#708981', '#6c8782', '#688583',
+      '#658384', '#618184', '#5d7f85', '#597d86', '#567b86', '#527987', '#4e7788', '#4a7588', '#477389',
+      '#43718a', '#3f6f8b', '#3b6d8b', '#386b8c', '#34698d', '#30678d', '#2c658e', '#29638f', '#256190',
+      '#215f90', '#1d5d91', '#1a5b92', '#165992', '#125793', '#0e5594', '#0b5394']
 
     #gdd data
     gdd_base = 50
@@ -104,65 +126,65 @@ class PlantsController < ApplicationController
     damage_min_temp_f=34
     damage_max_temp_f=97
 
-    @averages.each do |ad|
-      @date_labels << ((Date.new(y=2020, m=12, d=31) + ad.day).strftime("%m/%d"))
-      @max_temp_data << ad.max_temp_f
-      @min_temp_data << ad.min_temp_f
-      # @precip_data << ad.precip_in
-      @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
-      @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
+    if @averages != nil
+      @averages.each do |ad|
+        @date_labels << ((Date.new(y=2020, m=12, d=31) + ad.day).strftime("%m/%d"))
+        @max_temp_data << ad.max_temp_f
+        @min_temp_data << ad.min_temp_f
+        # @precip_data << ad.precip_in
+        @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
+        @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
 
-      if ad.min_temp_f > gdd_base
-        low = ad.min_temp_f
-      else
-        low = gdd_base
-      end
-      if gdd_cutoff == nil || ad.max_temp_f > gdd_cutoff
-        high = gdd_cutoff
-      else
-        high = ad.max_temp_f
-      end
-
-      gdd = (high + low) / 2 - gdd_base
-
-      @gdd_data << gdd
-      running_gdd += gdd
-      @ytd_gdd_data << running_gdd
-    end
-
-    #build number of gdd from this day and store in @days to harvest
-    @date_labels.each_with_index do |dl, i|
-      agdd = 0
-      days_to_harvest = 0
-      frost_risk = false
-      heat_risk = false
-      while(agdd < harvest_gdd)
-        if((i + days_to_harvest) > 365)
-          doy = i + days_to_harvest - 365
+        if ad.min_temp_f > gdd_base
+          low = ad.min_temp_f
         else
-          doy = i + days_to_harvest
+          low = gdd_base
         end
-        agdd += @gdd_data[doy]
-        days_to_harvest += 1
-        if (@min_temp_data[doy] ) < damage_min_temp_f
-          frost_risk = true
+        if gdd_cutoff == nil || ad.max_temp_f > gdd_cutoff
+          high = gdd_cutoff
+        else
+          high = ad.max_temp_f
         end
-        if @max_temp_data[doy] > damage_max_temp_f
-          heat_risk = true
+
+        gdd = (high + low) / 2 - gdd_base
+
+        @gdd_data << gdd
+        running_gdd += gdd
+        @ytd_gdd_data << running_gdd
+      end
+
+      #build number of gdd from this day and store in @days to harvest
+      @date_labels.each_with_index do |dl, i|
+        agdd = 0
+        days_to_harvest = 0
+        frost_risk = false
+        heat_risk = false
+        while(agdd < harvest_gdd)
+          if((i + days_to_harvest) > 365)
+            doy = i + days_to_harvest - 365
+          else
+            doy = i + days_to_harvest
+          end
+          agdd += @gdd_data[doy]
+          days_to_harvest += 1
+          if (@min_temp_data[doy] ) < damage_min_temp_f
+            frost_risk = true
+          end
+          if @max_temp_data[doy] > damage_max_temp_f
+            heat_risk = true
+          end
+        end
+        @days_to_harvest_data << days_to_harvest
+        if frost_risk && heat_risk
+          @harvest_risk_colors << "#FF00FF"
+        elsif frost_risk
+          @harvest_risk_colors << "#0000FF"
+        elsif heat_risk
+          @harvest_risk_colors << "#FF0000"
+        else
+          @harvest_risk_colors << "#129840"
         end
       end
-      @days_to_harvest_data << days_to_harvest
-      if frost_risk && heat_risk
-        @harvest_risk_colors << "#FF00FF"
-      elsif frost_risk
-        @harvest_risk_colors << "#0000FF"
-      elsif heat_risk
-        @harvest_risk_colors << "#FF0000"
-      else
-        @harvest_risk_colors << "#129840"
-      end
-        
-      
     end
 
   end

@@ -1,0 +1,77 @@
+<%= form_with(model: growth_stage, local: true) do |form| %>
+  <% if growth_stage.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(growth_stage.errors.count, "error") %> prohibited this growth_stage from being saved:</h2>
+
+      <ul>
+      <% growth_stage.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :species_id %>
+    <%= form.collection_select :species_id, Species.all, :id, :full_species_name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :bbch_code %>
+    <%= form.number_field :bbch_code %>
+  </div>
+
+  <div class="field">
+    <%= form.label :cold_damage_risk %>
+    <%= form.text_field :cold_damage_risk %>
+  </div>
+
+  <div class="field">
+    <%= form.label :required_low %>
+    <%= form.text_field :required_low %>F
+  </div>
+
+  <div class="field">
+    <%= form.label :growth_base %>
+    <%= form.text_field :growth_base %>F
+  </div>
+
+  <div class="field">
+    <%= form.label :required_high %>
+    <%= form.text_field :required_high %>F
+  </div>
+
+  <div class="field">
+    <%= form.label :growth_cutoff %>
+    <%= form.text_field :growth_cutoff %>F
+  </div>
+
+  <div class="field">
+    <%= form.label :heat_damage_risk %>
+    <%= form.text_field :heat_damage_risk %>F
+  </div>
+
+  <div class="field">
+    <%= form.label :min_days %>
+    <%= form.text_field :min_days %>F
+  </div>
+
+  <div class="field">
+    <%= form.label :min_agdd %>
+    <%= form.text_field :min_agdd %>GDD(F)
+  </div>
+
+  <div class="field">
+    <%= form.label :from_bbch_code %>
+    <%= form.number_field :from_bbch_code %>
+  </div>
+
+  <div class="field">
+    <%= form.label :harvestable %>
+    <%= form.check_box :harvestable %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

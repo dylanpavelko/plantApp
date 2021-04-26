@@ -1,0 +1,90 @@
+<% if @bbch_profile != nil %>
+	<div>
+	  <table border='1'>
+	    <tr>
+	      <th>Code</th>
+	      <th>Description</th>
+	      <th>Frost Damage Risk</th>
+	      <th>Required Low</th>
+	      <th>Growth Base</th>
+	      <th>Required High</th>
+	      <th>Growth Cutoff</th>
+	      <th>Heat Damage Risk</th>
+	      <th>Min Days</th>
+	      <th>Min AGDD</th>
+	      <th>From Stage Code</th>
+	      <th>Harvest</th>
+	      <% if @edit_stages %>
+	      	<th>Edit</th>
+	      <% end %>
+	    </tr>
+	    <% @growth_stage_requirements = 0 %>
+	    <% @bbch_stages.each do |stage| %>
+	      <tr>
+	        <td><%= stage.code %></td>
+	        <td><%= stage.description %></td>
+	        <% if @growth_stages.count == 0 %>
+		      	<td></td>
+		     	<td></td>
+		      	<td></td>
+		      	<td></td>
+		      	<td></td>
+		      	<td></td>
+		      	<td></td>
+		     	<td></td>
+		      	<td></td>
+		      	<td></td>
+		      	<% if @edit_stages %>
+			      	<td>
+			      		<%= link_to 'Add', new_growth_stage_path(:species_id => @species.id, :bbch_code => stage.code) %>		
+			      	</td>
+			    <% end %>
+		      <% else %>
+		      	<% @growth_stage = @growth_stages.select{ |gs| gs.bbch_code == stage.code } %>
+	        	<% if @growth_stages.count > @growth_stage_requirements %>
+			      	<td><%= @growth_stages[@growth_stage_requirements].cold_damage_risk %></td>
+			     	<td><%= @growth_stages[@growth_stage_requirements].required_low %></td>
+			      	<td><%= @growth_stages[@growth_stage_requirements].growth_base %></td>
+			      	<td><%= @growth_stages[@growth_stage_requirements].required_high %></td>
+			      	<td><%= @growth_stages[@growth_stage_requirements].growth_cutoff %></td>
+			      	<td><%= @growth_stages[@growth_stage_requirements].heat_damage_risk %></td>
+			    <% else %>
+			    	<td> </td>
+			     	<td> </td>
+			      	<td> </td>
+			      	<td> </td>
+			      	<td> </td>
+			      	<td> </td>
+			    <% end %>
+			    
+			    	<% if @growth_stage.count > 0 %>
+			    		<td><%= @growth_stages[@growth_stage_requirements].min_days %></td>
+			     		<td><%= @growth_stages[@growth_stage_requirements].min_agdd %></td>
+			      		<td><%= @growth_stages[@growth_stage_requirements].from_bbch_code %></td>
+			      		<td>
+			      			<% if @growth_stages[@growth_stage_requirements].harvestable %>
+			      				Harvestable
+			      			<% end %>
+			      		</td>
+	        			<% @growth_stage_requirements += 1 %>
+	        			<% if @edit_stages %>
+		        			<td>
+			        			<%= link_to 'Edit', edit_growth_stage_path(@growth_stage.first) %>
+			        		</td>
+		        		<% end %>
+	        		<% else %>
+	        			<td></td>
+				     	<td></td>
+				      	<td></td>
+				      	<td></td>
+				      	<% if @edit_stages %>
+				      		<td><%= link_to 'Add', new_growth_stage_path(:species_id => @species.id, :bbch_code => stage.code) %></td>		
+				      	<% end %>
+			      	<% end %>
+			    
+		      <% end %>
+	      </tr>
+	    <% end %>
+	  </table>
+	</div>
+<% end %>

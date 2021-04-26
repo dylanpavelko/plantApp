@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_21_034810) do
+ActiveRecord::Schema.define(version: 2021_04_26_165822) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -103,6 +103,24 @@ ActiveRecord::Schema.define(version: 2021_04_21_034810) do
     t.datetime "updated_at", null: false
     t.index ["bbch_stage_id"], name: "index_growth_observations_on_bbch_stage_id"
     t.index ["plant_instance_id"], name: "index_growth_observations_on_plant_instance_id"
+  end
+
+  create_table "growth_stages", force: :cascade do |t|
+    t.integer "species_id"
+    t.integer "bbch_code"
+    t.decimal "cold_damage_risk"
+    t.decimal "required_low"
+    t.decimal "growth_base"
+    t.decimal "required_high"
+    t.decimal "growth_cutoff"
+    t.decimal "heat_damage_risk"
+    t.decimal "min_days"
+    t.decimal "min_agdd"
+    t.integer "from_bbch_code"
+    t.boolean "harvestable"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["species_id"], name: "index_growth_stages_on_species_id"
   end
 
   create_table "high_level_locations", force: :cascade do |t|

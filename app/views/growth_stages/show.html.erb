@@ -1,0 +1,64 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Species:</strong>
+  <%= link_to @growth_stage.species.full_species_name, @growth_stage.species %>
+</p>
+
+<p>
+  <strong>Bbch code:</strong>
+  <%= @growth_stage.bbch_code %>
+</p>
+
+<p>
+  <strong>Cold damage risk:</strong>
+  <%= @growth_stage.cold_damage_risk %>
+</p>
+
+<p>
+  <strong>Required low:</strong>
+  <%= @growth_stage.required_low %>
+</p>
+
+<p>
+  <strong>Growth base:</strong>
+  <%= @growth_stage.growth_base %>
+</p>
+
+<p>
+  <strong>Required high:</strong>
+  <%= @growth_stage.required_high %>
+</p>
+
+<p>
+  <strong>Growth cutoff:</strong>
+  <%= @growth_stage.growth_cutoff %>
+</p>
+
+<p>
+  <strong>Heat damage risk:</strong>
+  <%= @growth_stage.heat_damage_risk %>
+</p>
+
+<p>
+  <strong>Min days:</strong>
+  <%= @growth_stage.min_days %>
+</p>
+
+<p>
+  <strong>Min agdd:</strong>
+  <%= @growth_stage.min_agdd %>
+</p>
+
+<p>
+  <strong>From bbch code:</strong>
+  <%= @growth_stage.from_bbch_code %>
+</p>
+
+<p>
+  <strong>Harvestable:</strong>
+  <%= @growth_stage.harvestable %>
+</p>
+
+<%= link_to 'Edit', edit_growth_stage_path(@growth_stage) %> |
+<%= link_to 'Back', growth_stages_path %>

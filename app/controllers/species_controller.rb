@@ -12,6 +12,11 @@ class SpeciesController < ApplicationController
   # GET /species/1.json
   def show
     @plants = Plant.where(:species_id => @species.id)
+    @bbch_profile = @species.bbch_profile
+    if @bbch_profile != nil
+      @bbch_stages = BbchStage.where(:bbch_profile_id => @bbch_profile.id)
+      @growth_stages = GrowthStage.where(:species_id => @species.id).sort_by &:bbch_code
+    end
   end
 
   # GET /species/new

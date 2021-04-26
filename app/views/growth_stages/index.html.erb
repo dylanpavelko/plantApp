@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Growth Stages</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Species</th>
+      <th>Bbch code</th>
+      <th>Cold damage risk</th>
+      <th>Required low</th>
+      <th>Growth base</th>
+      <th>Required high</th>
+      <th>Growth cutoff</th>
+      <th>Heat damage risk</th>
+      <th>Min days</th>
+      <th>Min agdd</th>
+      <th>From bbch code</th>
+      <th>Harvestable</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @growth_stages.each do |growth_stage| %>
+      <tr>
+        <td><%= growth_stage.species %></td>
+        <td><%= growth_stage.bbch_code %></td>
+        <td><%= growth_stage.cold_damage_risk %></td>
+        <td><%= growth_stage.required_low %></td>
+        <td><%= growth_stage.growth_base %></td>
+        <td><%= growth_stage.required_high %></td>
+        <td><%= growth_stage.growth_cutoff %></td>
+        <td><%= growth_stage.heat_damage_risk %></td>
+        <td><%= growth_stage.min_days %></td>
+        <td><%= growth_stage.min_agdd %></td>
+        <td><%= growth_stage.from_bbch_code %></td>
+        <td><%= growth_stage.harvestable %></td>
+        <td><%= link_to 'Show', growth_stage %></td>
+        <td><%= link_to 'Edit', edit_growth_stage_path(growth_stage) %></td>
+        <td><%= link_to 'Destroy', growth_stage, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Growth Stage', new_growth_stage_path %>

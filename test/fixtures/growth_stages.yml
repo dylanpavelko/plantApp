@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  species: one
+  bbch_code: 1
+  cold_damage_risk: 9.99
+  required_low: 9.99
+  growth_base: 9.99
+  required_high: 9.99
+  growth_cutoff: 9.99
+  heat_damage_risk: 9.99
+  min_days: 9.99
+  min_agdd: 9.99
+  from_bbch_code: 1
+  harvestable: false
+
+two:
+  species: two
+  bbch_code: 1
+  cold_damage_risk: 9.99
+  required_low: 9.99
+  growth_base: 9.99
+  required_high: 9.99
+  growth_cutoff: 9.99
+  heat_damage_risk: 9.99
+  min_days: 9.99
+  min_agdd: 9.99
+  from_bbch_code: 1
+  harvestable: false

@@ -40,7 +40,7 @@
   <%= @species.description %>
 </p>
 
-<strong>Species:</strong>
+<strong>Plants:</strong>
 <ul>
   <% @plants.each do |p| %>
     <li><%= link_to p.scientific_name_with_common_names.html_safe, p %></li>
@@ -52,6 +52,9 @@
     BBCH Stages: <%= link_to @species.bbch_profile.name, @species.bbch_profile %>
   <% end %>
 </p>
+<h4>Growth Stages</h4>
+<% @edit_stages = true %>
+<%= render partial: 'partials/growth_stage_requirements' %>
 
 <p>
   <%= link_to 'Edit', edit_species_path(@species) %> |
