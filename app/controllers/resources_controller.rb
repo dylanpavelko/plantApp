@@ -14,7 +14,7 @@ class ResourcesController < ApplicationController
 
   # GET /resources/new
   def new
-    @resource = Resource.new(:plant_id => params[:plant_id])
+    @resource = Resource.new(:plant_id => params[:plant_id], :species_id => params[:species_id])
   end
 
   # GET /resources/1/edit

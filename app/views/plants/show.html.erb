@@ -136,7 +136,7 @@
     <% @resources.each do |r| %>
       <li><%= link_to r.name, r.link, target: :_blank %></li>
     <% end %>
-    <li><%= link_to 'Add Resource', new_resource_path(:plant_id => @plant.id) %>
+    <li><%= link_to 'Add Resource', new_resource_path(:plant_id => @plant.id, :species_id => @plant.species.id) %>
   </ul>
 </div>
 
