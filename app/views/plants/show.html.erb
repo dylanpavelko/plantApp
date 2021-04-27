@@ -130,7 +130,15 @@
   <%= render partial: 'partials/growth_stage_requirements' %>
 <% end %>
 
-
+<div>
+  <h4>Resources:</h4>
+  <ul>
+    <% @resources.each do |r| %>
+      <li><%= link_to r.name, r.link, target: :_blank %></li>
+    <% end %>
+    <li><%= link_to 'Add Resource', new_resource_path(:plant_id => @plant.id) %>
+  </ul>
+</div>
 
 <%= link_to 'Edit', edit_plant_path(@plant) %> |
 <%= link_to 'Back', plants_path %>

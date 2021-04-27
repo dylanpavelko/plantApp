@@ -1,0 +1,37 @@
+<%= form_with(model: resource, local: true) do |form| %>
+  <% if resource.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(resource.errors.count, "error") %> prohibited this resource from being saved:</h2>
+
+      <ul>
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :species_id %>
+    <%= form.collection_select :species_id, Species.all, :id, :full_species_name, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :plant_id %>
+    <%= form.collection_select :plant_id, Plant.all, :id, :scientific_name_with_common_names, :include_blank => true %>
+  </div>
+
+  <div class="field">
+    <%= form.label :link %>
+    <%= form.text_field :link %>
+  </div>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

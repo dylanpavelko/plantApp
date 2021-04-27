@@ -39,6 +39,7 @@ class PlantsController < ApplicationController
   # GET /plants/1
   # GET /plants/1.json
   def show
+    @resources = Resource.where(:plant_id => @plant)
     @common_names = CommonName.where(:plant_id => @plant.id)
     if @current_user != nil 
       @wishlist = Wishlist.where(:plant_id => @plant.id, :user_id => @current_user.id)
@@ -118,75 +119,84 @@ class PlantsController < ApplicationController
       '#43718a', '#3f6f8b', '#3b6d8b', '#386b8c', '#34698d', '#30678d', '#2c658e', '#29638f', '#256190',
       '#215f90', '#1d5d91', '#1a5b92', '#165992', '#125793', '#0e5594', '#0b5394']
 
-    #gdd data
-    gdd_base = 50
-    gdd_cutoff = 86
-    harvest_gdd = 1300  #example of tomato
-    running_gdd=0
-    damage_min_temp_f=34
-    damage_max_temp_f=97
+    #get gdd data
+    #v1 just get the first harvestable data and use that for the entire life cycle (go back and use each stage)
+    @growth_stage_data = GrowthStage.where(:species => @plant.species, :harvestable => true).sort_by(&:bbch_code)
+    if @growth_stage_data.count > 0
+      @growing_conditions = @growth_stage_data.first
+      puts "how many growth stages"
+      puts @growth_stage_data.count
+      puts " did we get here:"
+      @growing_conditions = @growth_stage_data.first
+      damage_min_temp_f = @growing_conditions.cold_damage_risk
+      damage_max_temp_f = @growing_conditions.heat_damage_risk
+      gdd_base = @growing_conditions.growth_base
+      gdd_cutoff = @growing_conditions.growth_cutoff
+      harvest_gdd = @growing_conditions.min_agdd
+    
+      running_gdd=0
 
-    if @averages != nil
-      @averages.each do |ad|
-        @date_labels << ((Date.new(y=2020, m=12, d=31) + ad.day).strftime("%m/%d"))
-        @max_temp_data << ad.max_temp_f
-        @min_temp_data << ad.min_temp_f
-        # @precip_data << ad.precip_in
-        @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
-        @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
+      if @averages != nil
+        @averages.each do |ad|
+          @date_labels << ((Date.new(y=2020, m=12, d=31) + ad.day).strftime("%m/%d"))
+          @max_temp_data << ad.max_temp_f
+          @min_temp_data << ad.min_temp_f
+          # @precip_data << ad.precip_in
+          @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
+          @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
 
-        if ad.min_temp_f > gdd_base
-          low = ad.min_temp_f
-        else
-          low = gdd_base
-        end
-        if gdd_cutoff == nil || ad.max_temp_f > gdd_cutoff
-          high = gdd_cutoff
-        else
-          high = ad.max_temp_f
-        end
-
-        gdd = (high + low) / 2 - gdd_base
-
-        @gdd_data << gdd
-        running_gdd += gdd
-        @ytd_gdd_data << running_gdd
-      end
-
-      #build number of gdd from this day and store in @days to harvest
-      @date_labels.each_with_index do |dl, i|
-        agdd = 0
-        days_to_harvest = 0
-        frost_risk = false
-        heat_risk = false
-        while(agdd < harvest_gdd)
-          if((i + days_to_harvest) > 365)
-            doy = i + days_to_harvest - 365
+          if ad.min_temp_f > gdd_base
+            low = ad.min_temp_f
           else
-            doy = i + days_to_harvest
+            low = gdd_base
           end
-          agdd += @gdd_data[doy]
-          days_to_harvest += 1
-          if (@min_temp_data[doy] ) < damage_min_temp_f
-            frost_risk = true
+          if gdd_cutoff != nil && ad.max_temp_f > gdd_cutoff
+            high = gdd_cutoff
+          else
+            high = ad.max_temp_f
           end
-          if @max_temp_data[doy] > damage_max_temp_f
-            heat_risk = true
-          end
+
+          gdd = (high + low) / 2 - gdd_base
+
+          @gdd_data << gdd
+          running_gdd += gdd
+          @ytd_gdd_data << running_gdd
         end
-        @days_to_harvest_data << days_to_harvest
-        if frost_risk && heat_risk
-          @harvest_risk_colors << "#FF00FF"
-        elsif frost_risk
-          @harvest_risk_colors << "#0000FF"
-        elsif heat_risk
-          @harvest_risk_colors << "#FF0000"
-        else
-          @harvest_risk_colors << "#129840"
+
+        #build number of gdd from this day and store in @days to harvest
+        @date_labels.each_with_index do |dl, i|
+          agdd = 0
+          days_to_harvest = 0
+          frost_risk = false
+          heat_risk = false
+          while(agdd < harvest_gdd)
+            if((i + days_to_harvest) > 365)
+              doy = i + days_to_harvest - 365
+            else
+              doy = i + days_to_harvest
+            end
+            agdd += @gdd_data[doy]
+            days_to_harvest += 1
+            if (@min_temp_data[doy] ) < damage_min_temp_f
+              frost_risk = true
+            end
+            if @max_temp_data[doy] > damage_max_temp_f
+              heat_risk = true
+            end
+          end
+          @days_to_harvest_data << days_to_harvest
+          if frost_risk && heat_risk
+            @harvest_risk_colors << "#FF00FF"
+          elsif frost_risk
+            @harvest_risk_colors << "#0000FF"
+          elsif heat_risk
+            @harvest_risk_colors << "#FF0000"
+          else
+            @harvest_risk_colors << "#129840"
+          end
         end
       end
     end
-
   end
 
   # GET /plants/new
