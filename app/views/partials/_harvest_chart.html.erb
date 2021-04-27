@@ -3,9 +3,19 @@
 	<ul>
 		<% @start_planting_dates.each_with_index do |start, i| %>
 			<li><%= Date.ordinal(2021, start+1).strftime('%b-%d') %> to 
-				<%= Date.ordinal(2021, @stop_planting_dates[i]+1).strftime('%b-%d') %> for harvest from 
-				<%= Date.ordinal(2021, start+1 + @days_to_harvest_data[start]).strftime('%b-%d') %> to 
-				<%= Date.ordinal(2021, @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]]).strftime('%b-%d') %></li>
+				<%= Date.ordinal(2021, @stop_planting_dates[i]+1).strftime('%b-%d') %> for harvest from
+				<% if start+1 + @days_to_harvest_data[start] > 365 %>
+					<% harvest_start = start+1 + @days_to_harvest_data[start] - 365 %>
+				<% else %>
+					<% harvest_start = start+1 + @days_to_harvest_data[start] %>
+				<% end %>
+				<%= Date.ordinal(2021, harvest_start).strftime('%b-%d') %> to 
+				<% if @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]] > 365 %>
+					<% harvest_end = @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]] - 365 %>
+				<% else %>
+					<% harvest_end = @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]] %>
+				<% end %>
+				<%= Date.ordinal(2021, harvest_end).strftime('%b-%d') %></li>
 		<% end %>
 	</ul>
 </div>
