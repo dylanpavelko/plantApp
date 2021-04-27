@@ -98,6 +98,8 @@ class PlantsController < ApplicationController
     @min_deviation_data = Array.new
     @max_deviation_data = Array.new
     @date_labels = Array.new
+    @start_planting_dates = Array.new
+    @stop_planting_dates = Array.new
     # @precip_data = Array.new
     @gdd_data = Array.new
     @ytd_gdd_data = Array.new
@@ -175,31 +177,42 @@ class PlantsController < ApplicationController
             else
               doy = i + days_to_harvest
             end
-            print "doy"
-            print doy
-            print @gdd_data[doy]
-            puts "test"
             agdd += @gdd_data[doy]
             days_to_harvest += 1
-            if (@min_temp_data[doy] ) < damage_min_temp_f
+            if (damage_min_temp_f != nil && @min_temp_data[doy]  < damage_min_temp_f)
               frost_risk = true
             end
-            if @max_temp_data[doy] > damage_max_temp_f
+            if damage_max_temp_f != nil && @max_temp_data[doy] > damage_max_temp_f
               heat_risk = true
             end
           end
           @days_to_harvest_data << days_to_harvest
           if frost_risk && heat_risk
+            if @harvest_risk_colors.last == "#129840"
+              @stop_planting_dates << i
+            end
             @harvest_risk_colors << "#FF00FF"
           elsif frost_risk
+            if @harvest_risk_colors.last == "#129840"
+              @stop_planting_dates << i
+            end
             @harvest_risk_colors << "#0000FF"
           elsif heat_risk
+            if @harvest_risk_colors.last == "#129840"
+              @stop_planting_dates << i
+            end
             @harvest_risk_colors << "#FF0000"
           else
+            if @harvest_risk_colors.last != "#129840" && i != 0
+              @start_planting_dates << i
+            end
             @harvest_risk_colors << "#129840"
           end
         end
       end
+    end
+    if @harvest_risk_colors[0] == "#129840"
+      @stop_planting_dates = @stop_planting_dates.rotate(1)
     end
   end
 

@@ -2,12 +2,16 @@
 
 <p>
   <strong>Species:</strong>
-  <%= @resource.species %>
+  <% if @resource.species != nil %>
+  	<%= link_to @resource.species.full_species_name, @resource.species %>
+  <% end %>
 </p>
 
 <p>
   <strong>Plant:</strong>
-  <%= @resource.plant %>
+  <% if @resource.plant != nil %>
+  	<%= link_to @resource.plant.scientific_name_with_common_names, @resource.plant %>
+  <% end %>
 </p>
 
 <p>
