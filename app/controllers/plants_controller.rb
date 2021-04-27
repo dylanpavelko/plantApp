@@ -170,7 +170,7 @@ class PlantsController < ApplicationController
           frost_risk = false
           heat_risk = false
           while(agdd < harvest_gdd)
-            if((i + days_to_harvest) > 365)
+            if((i + days_to_harvest) >= 365)
               doy = i + days_to_harvest - 365
             else
               doy = i + days_to_harvest
@@ -178,6 +178,7 @@ class PlantsController < ApplicationController
             print "doy"
             print doy
             print @gdd_data[doy]
+            puts "test"
             agdd += @gdd_data[doy]
             days_to_harvest += 1
             if (@min_temp_data[doy] ) < damage_min_temp_f
