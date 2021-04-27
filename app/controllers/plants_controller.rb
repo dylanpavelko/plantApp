@@ -175,7 +175,9 @@ class PlantsController < ApplicationController
             else
               doy = i + days_to_harvest
             end
-            agdd += @gdd_data[doy]
+            if @gdd_data[doy] != nil
+              agdd += @gdd_data[doy]
+            end
             days_to_harvest += 1
             if (@min_temp_data[doy] ) < damage_min_temp_f
               frost_risk = true
