@@ -27,6 +27,8 @@ class GrowthObservationsController < ApplicationController
   # POST /growth_observations.json
   def create
     @growth_observation = GrowthObservation.new(growth_observation_params)
+    @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
+
 
     respond_to do |format|
       if @growth_observation.save

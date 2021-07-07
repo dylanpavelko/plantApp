@@ -73,3 +73,5 @@ gem 'figaro'
 gem 'rack-cors', :require => 'rack/cors'
 #gem 'webpack'
 
+gem "aws-sdk-s3", require: false
+
