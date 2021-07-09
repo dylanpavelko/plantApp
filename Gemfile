@@ -75,3 +75,5 @@ gem 'rack-cors', :require => 'rack/cors'
 
 gem "aws-sdk-s3", require: false
 
+gem 'jwt'
+

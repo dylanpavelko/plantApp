@@ -1,6 +1,7 @@
 class PlantInstancesController < ApplicationController
-  before_action :authenticate_user_admin  #make this not be admin only
+  #before_action :authenticate_user_admin  #make this not be admin only
   before_action :set_plant_instance, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_request!, only: :index
 
   # GET /plant_instances
   # GET /plant_instances.json
@@ -13,6 +14,26 @@ class PlantInstancesController < ApplicationController
     @local_moment = DateTime.now.in_time_zone('Pacific Time (US & Canada)')
     @wishlist_plants = Wishlist.where(:user_id => @current_user.id)
   end
+
+  def my_plants_api
+  @hlf = HighLevelLocation.where(:user_id => 1)#@current_user.id)
+  @locations = Array.new()
+  @plants = Array.new()
+  @hlf.each do |hlf|
+    @ls = Location.where(:high_level_location_id => hlf.id)
+    @ls.each do |l|
+      @locations << l
+      @ps = PlantInstance.where(:location_id => l.id)
+      @ps.each do |p|
+        @plants << p
+      end
+    end
+  end
+  respond_to do |format|
+    msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
+    format.json  { render :json => @plants } # don't do msg.to_json
+  end
+end
 
   # GET /plant_instances/1
   # GET /plant_instances/1.json

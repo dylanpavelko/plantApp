@@ -2,6 +2,20 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user_admin, only: [:edit, :update, :index, :destroy]
   before_action :authenticate_user, only: [:show]
+  before_action :authenticate_request!, only: :index
+  skip_before_action :verify_authenticity_token, only: :applogin
+
+  def applogin
+    user = User.find_by(email: user_params[:email].to_s.downcase)
+    if user&.authenticate(user_params[:password])
+      puts("authenticated")
+      auth_token = JsonWebToken.encode(user_id: user.id)
+      render json: { auth_token: auth_token }, status: :ok
+    else
+      puts("failed authenticatoin")
+      render json: { error: 'Invalid username/password' }, status: :unauthorized
+    end
+  end
   
   # GET /users
   # GET /users.json
