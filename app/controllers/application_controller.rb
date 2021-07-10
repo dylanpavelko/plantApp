@@ -11,14 +11,14 @@ class ApplicationController < ActionController::Base
     end
 
     def authenticate_user()
-        if current_user == nil
+        if @current_user == nil
             redirect_to root_url
         end
 
     end
 
     def set_user()
-        current_user
+        @current_user
     end
     
     def authenticate_user_admin()

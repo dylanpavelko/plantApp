@@ -1,7 +1,7 @@
 class PlantInstancesController < ApplicationController
   #before_action :authenticate_user_admin  #make this not be admin only
   before_action :set_plant_instance, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_request!, only: :index
+  before_action :authenticate_request!, only: [:index, :my_plants_api]
 
   # GET /plant_instances
   # GET /plant_instances.json
@@ -16,7 +16,7 @@ class PlantInstancesController < ApplicationController
   end
 
   def my_plants_api
-  @hlf = HighLevelLocation.where(:user_id => 1)#@current_user.id)
+  @hlf = HighLevelLocation.where(:user_id => @current_user.id)
   @locations = Array.new()
   @plants = []
   @hlf.each do |hlf|
