@@ -1,7 +1,7 @@
 class PlantInstancesController < ApplicationController
-  #before_action :authenticate_user_admin  #make this not be admin only
+  before_action :authenticate_user_admin, except: [:my_plants_api]
   before_action :set_plant_instance, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_request!, only: [:index, :my_plants_api]
+  before_action :authenticate_request!, only: [:my_plants_api]
 
   # GET /plant_instances
   # GET /plant_instances.json
