@@ -18,7 +18,7 @@ class PlantInstancesController < ApplicationController
   def my_plants_api
   @hlf = HighLevelLocation.where(:user_id => 1)#@current_user.id)
   @locations = Array.new()
-  @plants = Array.new()
+  @plants = []
   @hlf.each do |hlf|
     @ls = Location.where(:high_level_location_id => hlf.id)
     @ls.each do |l|
@@ -29,9 +29,14 @@ class PlantInstancesController < ApplicationController
       end
     end
   end
+  puts @plants.to_json
+  @myplants = @plants.map do |p|
+    { :id => p.id, :plant_id => p.plant.id, :location => p.location.name, :plant_name => p.plant.scientific_name_with_common_names}
+  end
+  puts @myplants.to_json
   respond_to do |format|
     msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
-    format.json  { render :json => @plants } # don't do msg.to_json
+    format.json  { render :json => @myplants.to_json } # don't do msg.to_json
   end
 end
 
