@@ -5,29 +5,43 @@ class UsersController < ApplicationController
   before_action :authenticate_request!, only: :index
   skip_before_action :verify_authenticity_token, only: :applogin
 
+  # def applogin
+  #   user = User.find_by(email: user_params[:email].to_s.downcase)
+  #   if user&.authenticate(user_params[:password])
+  #     puts("authenticated")
+  #     auth_token = JsonWebToken.encode(user.id, Figaro.env.jwt_secret_key, 'HS256')
+  #     render json: { auth_token: auth_token }, status: :ok
+  #   else
+  #     puts("failed authenticatoin")
+  #     render json: { error: 'Invalid username/password' }, status: :unauthorized
+  #   end
+  # end
+
   def applogin
-    user = User.find_by(email: user_params[:email].to_s.downcase)
-    if user&.authenticate(user_params[:password])
-      puts("authenticated")
-      auth_token = JsonWebToken.encode(user_id: user.id)
-      render json: { auth_token: auth_token }, status: :ok
+    auth_object = Authentication.new(login_params)
+    if auth_object.authenticate
+      token = auth_object.generate_token
+      puts("authentication success, token: " + token)
+      puts render json: {
+        message: "Login successful!", token: token }, status: :ok
     else
-      puts("failed authenticatoin")
-      render json: { error: 'Invalid username/password' }, status: :unauthorized
+      puts "authentication failure"
+      render json: {
+        message: "Incorrect username/password combination"}, status: :unauthorized
     end
   end
 
-  def currentuser
-    user = User.find_by(email: user_params[:email].to_s.downcase)
-    if user&.authenticate(user_params[:password])
-      puts("authenticated")
-      auth_token = JsonWebToken.encode(user_id: user.id)
-      render json: { auth_token: auth_token }, status: :ok
-    else
-      puts("failed authenticatoin")
-      render json: { error: 'Invalid username/password' }, status: :unauthorized
-    end
-  end
+  # def currentuser
+  #   user = User.find_by(email: user_params[:email].to_s.downcase)
+  #   if user&.authenticate(user_params[:password])
+  #     puts("authenticated")
+  #     auth_token = JsonWebToken.encode(user.id, Figaro.env.jwt_secret_key, 'HS256')
+  #     render json: { auth_token: auth_token }, status: :ok
+  #   else
+  #     puts("failed authenticatoin")
+  #     render json: { error: 'Invalid username/password' }, status: :unauthorized
+  #   end
+  # end
   
   # GET /users
   # GET /users.json
@@ -101,5 +115,9 @@ class UsersController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
       params.require(:user).permit(:email, :password, :admin, :password_confirmation, :high_level_location_id)
+    end
+
+    def login_params
+      params.require(:user).permit(:email, :password)
     end
 end

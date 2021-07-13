@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+    include ExceptionHandler
     require 'json_web_token'
     helper_method :current_user
     
