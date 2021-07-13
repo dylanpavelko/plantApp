@@ -33,7 +33,7 @@ class JsonWebToken
 
   # Validates if the token is expired by exp parameter
   def self.expired(payload)
-    Time.at(payload['exp']) < Time.now
+    Time.at(payload['exp'].to_i) < Time.now
   end
 end 
 
