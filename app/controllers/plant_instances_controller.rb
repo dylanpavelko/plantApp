@@ -1,7 +1,7 @@
 class PlantInstancesController < ApplicationController
   before_action :authenticate_user_admin, except: [:my_plants_api]
   before_action :set_plant_instance, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_request!, only: [:my_plants_api]
+  #before_action :authenticate_request!, only: [:my_plants_api]
 
   # GET /plant_instances
   # GET /plant_instances.json
@@ -16,7 +16,15 @@ class PlantInstancesController < ApplicationController
   end
 
   def my_plants_api
-  @hlf = HighLevelLocation.where(:user_id => @current_user.id)
+  puts "request my plants api"
+  authorization_object = Authorization.new(request)
+  puts "current user " + authorization_object.current_user.to_s + " id"
+  if authorization_object.current_user == nil
+    render json: {
+        message: "Incorrect username/password combination"}, status: :unauthorized
+  else 
+  @current_user = authorization_object.current_user
+  @hlf = HighLevelLocation.where(:user_id => @current_user)
   @locations = Array.new()
   @plants = []
   @hlf.each do |hlf|
@@ -29,14 +37,16 @@ class PlantInstancesController < ApplicationController
       end
     end
   end
-  puts @plants.to_json
+
   @myplants = @plants.map do |p|
     { :id => p.id, :plant_id => p.plant.id, :location => p.location.name, :plant_name => p.plant.scientific_name_with_common_names}
   end
   puts @myplants.to_json
+  puts 'return plants'
   respond_to do |format|
     msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
     format.json  { render :json => @myplants.to_json } # don't do msg.to_json
+  end
   end
 end
 
