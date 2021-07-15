@@ -192,7 +192,7 @@ end
           end
         end
         if frmao == false
-          if @fmat_data.last != nil && @fmat_data.last != 0
+          if @fmat_data.last != nil && @fmat_data.last != 0 && @senes_data.last != nil
             @fmat_data << 100 - @senes_data.last
           else
             @fmat_data << nil
@@ -216,6 +216,13 @@ end
       end
     end
     @growth_chart_data = @dates
+
+    respond_to do |format|
+      format.html  {render :show}
+      format.json  { render :json => {:plant_instance => @plant_instance,
+                                      :location => @plant_instance.location,
+                                      :high_level_location => @plant_instance.location.high_level_location }}
+    end
   end
 
   # GET /plant_instances/new

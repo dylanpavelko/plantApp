@@ -53,6 +53,7 @@ class PlantsController < ApplicationController
     @locations = Array.new
     @plant_instances = Array.new
     @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user)
+
     @user_high_level_locations.each do |hlf|
       @user_locations = Location.where(:high_level_location_id => hlf.id)
       @user_locations.each do |l|
@@ -215,6 +216,15 @@ class PlantsController < ApplicationController
       @stop_planting_dates = @stop_planting_dates.rotate(1)
     end
 
+    if @photos.count > 0
+      @image_url = url_for(@photos.first.picture)
+    else
+      @image_url = ""
+    end 
+
+    puts "resources " + @resources.count.to_s
+    puts "plant instances " + @plant_instances.count.to_s + " for users "
+
     respond_to do |format|
       format.html  {render :show}
       format.json  { render :json => {:plant => @plant,
@@ -227,9 +237,10 @@ class PlantsController < ApplicationController
                                       :plant_class => @plant.plant_class,
                                       :division => @plant.division,
                                       :kingdom => @plant.kingdom,
-                                      :image_url => @plant.image_url,
+                                      :image_url => @image_url,
                                       :common_names => @common_names, 
-                                      :resources => @resources }}
+                                      :resources => @resources,
+                                      :plant_instances => @plant_instances }}
     end
   end
 

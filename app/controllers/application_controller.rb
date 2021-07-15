@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
     def current_user
         if session[:user_id]
             @current_user ||=User.find(session[:user_id])
+        elsif Authorization.new(request).current_user != nil
+            @current_user = User.find(Authorization.new(request).current_user)
         else
             @current_user = nil
         end
@@ -19,7 +21,7 @@ class ApplicationController < ActionController::Base
     end
 
     def set_user()
-        @current_user
+        current_user
     end
     
     def authenticate_user_admin()
