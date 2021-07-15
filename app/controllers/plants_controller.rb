@@ -214,6 +214,23 @@ class PlantsController < ApplicationController
     if @harvest_risk_colors[0] == "#129840"
       @stop_planting_dates = @stop_planting_dates.rotate(1)
     end
+
+    respond_to do |format|
+      format.html  {render :show}
+      format.json  { render :json => {:plant => @plant,
+                                      :cultivator => @plant.cultivator,
+                                      :variety => @plant.variety,
+                                      :species => @plant.species,
+                                      :genus => @plant.genus,
+                                      :family => @plant.family,
+                                      :order => @plant.order,
+                                      :plant_class => @plant.plant_class,
+                                      :division => @plant.division,
+                                      :kingdom => @plant.kingdom,
+                                      :image_url => @plant.image_url,
+                                      :common_names => @common_names, 
+                                      :resources => @resources }}
+    end
   end
 
   # GET /plants/new

@@ -12,3 +12,9 @@ json.(@plant,
 	:plant_class,
 	:division,
 	:kingdom)
+
+json.array! @resources do |r|
+	json.id r.id
+	json.name r.name
+	json.link r.link
+end
