@@ -57,6 +57,11 @@ end
     @growth_observations = GrowthObservation.where(:plant_instance_id => @plant_instance)
 
     @photos = @plant_instance.get_photos
+
+    @image_urls = Array.new
+    @photos.each do |p|
+      @image_urls << [p.id, url_for(p.picture)]
+    end 
     
     if @plant_instance.start_date != nil
       days = Date.today - (@plant_instance.start_date + 1.days)
@@ -226,7 +231,7 @@ end
                                       :location => @plant_instance.location,
                                       :high_level_location => @plant_instance.location.high_level_location,
                                       :observations => @growth_observations,
-                                      :pictures => @photos,
+                                      :pictures => @image_urls.reverse,
                                       :stages => @growth_stages }}
     end
   end
