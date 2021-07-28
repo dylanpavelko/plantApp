@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
     helper_method :current_user
     
     def current_user
+        puts 'wait what'
         if session[:user_id]
             @current_user ||=User.find(session[:user_id])
         elsif Authorization.new(request).current_user != nil
@@ -13,8 +14,20 @@ class ApplicationController < ActionController::Base
         end
     end
 
+    def api_auth
+        puts "request my plants api"
+          authorization_object = Authorization.new(request)
+          puts "current user " + authorization_object.current_user.to_s + " id"
+          if authorization_object.current_user == nil
+            render json: {
+                message: "Incorrect username/password combination"}, status: :unauthorized
+          else 
+          @current_user = authorization_object.current_user
+        end
+    end
+
     def authenticate_user()
-        if @current_user == nil
+        if current_user == nil
             redirect_to root_url
         end
 

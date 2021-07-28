@@ -1,3 +1,6 @@
+require 'open-uri'
+
+
 class GrowthObservation < ApplicationRecord
   belongs_to :plant_instance
   belongs_to :bbch_stage
@@ -7,6 +10,16 @@ class GrowthObservation < ApplicationRecord
 
   validates :observation_date, :presence => true
   validate :image_type
+
+  def grab_image(uri)
+    puts Dir.pwd
+    puts uri
+    #downloaded_image = File.open(uri)
+    file_contents = URI.open(uri) { |f| f.read }
+    @uri_name_parts = uri.split('/')
+    @filename = @uri_name_parts[@uri_name_parts.size - 1]
+    self.picture.attach(io: downloaded_image  , filename: @filename)
+  end
 
   private
 

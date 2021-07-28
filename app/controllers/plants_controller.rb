@@ -222,8 +222,25 @@ class PlantsController < ApplicationController
       @image_url = ""
     end 
 
-    puts "resources " + @resources.count.to_s
-    puts "plant instances " + @plant_instances.count.to_s + " for users "
+    @growing_recommendations = Array.new()
+    @start_planting_dates.each_with_index do |start, i|
+      @plant_start_date = Date.ordinal(2021, start+1).strftime('%b-%d')
+      @plant_end_date = Date.ordinal(2021, @stop_planting_dates[i]+1).strftime('%b-%d')
+
+      if start+1 + @days_to_harvest_data[start] > 365
+        harvest_start = start+1 + @days_to_harvest_data[start] - 365
+      else
+        harvest_start = start+1 + @days_to_harvest_data[start]
+      end
+      @harvest_start_date = Date.ordinal(2021, harvest_start).strftime('%b-%d')
+      if @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]] > 365
+        harvest_end = @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]] - 365
+      else
+        harvest_end = @stop_planting_dates[i]+1 + @days_to_harvest_data[@stop_planting_dates[i]]
+      end
+      @harvest_end_date = Date.ordinal(2021, harvest_end).strftime('%b-%d')
+      @growing_recommendations << [@plant_start_date, @plant_end_date, @harvest_start_date, @harvest_end_date]
+    end
 
     respond_to do |format|
       format.html  {render :show}
@@ -240,7 +257,8 @@ class PlantsController < ApplicationController
                                       :image_url => @image_url,
                                       :common_names => @common_names, 
                                       :resources => @resources,
-                                      :plant_instances => @plant_instances }}
+                                      :plant_instances => @plant_instances,
+                                      :growing_recommendations => @growing_recommendations }}
     end
   end
 

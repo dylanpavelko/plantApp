@@ -179,7 +179,7 @@ end
         end
         if flowo == false
           if @flower_data.last != nil && @flower_data.last != 0
-            @flower_data << 100 - @fdev_data.last
+            @flower_data << 100 - @flower_data.last
           else
             @flower_data << nil
           end
@@ -217,11 +217,17 @@ end
     end
     @growth_chart_data = @dates
 
+    @growth_stages = BbchStage.where(:bbch_profile_id => @plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
+
+
     respond_to do |format|
       format.html  {render :show}
       format.json  { render :json => {:plant_instance => @plant_instance,
                                       :location => @plant_instance.location,
-                                      :high_level_location => @plant_instance.location.high_level_location }}
+                                      :high_level_location => @plant_instance.location.high_level_location,
+                                      :observations => @growth_observations,
+                                      :pictures => @photos,
+                                      :stages => @growth_stages }}
     end
   end
 

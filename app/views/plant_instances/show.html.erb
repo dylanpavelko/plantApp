@@ -31,7 +31,7 @@
   <uh><strong>Growing Notes</strong></uh>
   <li><%= link_to 'Add Water Record', new_water_record_path(:plant_instance_id => @plant_instance) %> | <%= link_to 'Add Growth Observation', new_growth_observation_path(:plant_instance_id => @plant_instance) %></li>
   <% @growth_observations.each do |go| %>
-    <li><%= link_to (go.bbch_stage.stage_name + " on " + go.observation_date.strftime('%m/%d/%y')), go  %></li>
+    <li><%= link_to (go.bbch_stage.stage_name + " on " + go.observation_date.strftime('%m/%d/%y %Z')), go  %></li>
   <% end %>
   <% @plant_instance.descending_water_records.each do |wr| %>
     <li>
