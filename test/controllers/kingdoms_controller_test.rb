@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class KingdomsControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @kingdom = kingdoms(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class KingdomsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create kingdom" do
     assert_difference('Kingdom.count') do
-      post kingdoms_url, params: { kingdom: { description: @kingdom.description, name: @kingdom.name } }
+      post kingdoms_url, params: { kingdom: { description: @kingdom.description, name: @kingdom.name }}, headers: { Authorization: ActionController::HttpAuthentication::Basic.encode_credentials('dhh', 'secret')} 
     end
 
     assert_redirected_to kingdom_url(Kingdom.last)
@@ -45,4 +51,5 @@ class KingdomsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to kingdoms_url
   end
+
 end

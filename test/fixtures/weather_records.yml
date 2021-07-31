@@ -2,10 +2,10 @@
 
 one:
   date: 2019-10-04
-  report.text: MyString
+  report: MyString
   high_level_location: one
 
 two:
   date: 2019-10-04
-  report.text: MyString
+  report: MyString
   high_level_location: two

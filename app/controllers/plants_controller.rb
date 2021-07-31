@@ -217,7 +217,7 @@ class PlantsController < ApplicationController
     end
 
     if @photos.count > 0
-      @image_url = url_for(@photos.first.picture)
+      @image_url = url_for(@photos.last.picture)
     else
       @image_url = ""
     end 
@@ -257,7 +257,7 @@ class PlantsController < ApplicationController
                                       :image_url => @image_url,
                                       :common_names => @common_names, 
                                       :resources => @resources,
-                                      :plant_instances => @plant_instances,
+                                      :plant_instances => @plant_instances.to_json(:include => :location),
                                       :growing_recommendations => @growing_recommendations }}
     end
   end

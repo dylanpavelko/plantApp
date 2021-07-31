@@ -7,8 +7,10 @@ class Plant < ApplicationRecord
   #belongs_to :genus, :class_name => "Genu", :foreign_key => "genus_id"
   belongs_to :variety, :class_name => "Variety", :foreign_key => "variety_id", optional: true
   belongs_to :cultivator, :class_name => "Cultivator", :foreign_key => "cultivator_id", optional: true
-  belongs_to :species
+  belongs_to :species, :class_name => "Species", :foreign_key => "species_id"
   has_many :common_names, :class_name => "CommonName", :foreign_key => "plant_id"
+
+  validates :species, :presence => true
   
   def scientific_name
     sci_name = "<em>" + self.genus.name.titleize + " " + self.species.name.downcase + "</em>"

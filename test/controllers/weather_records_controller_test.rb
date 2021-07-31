@@ -17,7 +17,7 @@ class WeatherRecordsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create weather_record" do
     assert_difference('WeatherRecord.count') do
-      post weather_records_url, params: { weather_record: { date: @weather_record.date, high_level_location_id: @weather_record.high_level_location_id, report.text: @weather_record.report.text } }
+      post weather_records_url, params: { weather_record: { date: @weather_record.date, high_level_location_id: @weather_record.high_level_location_id, report: @weather_record.report } }
     end
 
     assert_redirected_to weather_record_url(WeatherRecord.last)
@@ -34,7 +34,7 @@ class WeatherRecordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update weather_record" do
-    patch weather_record_url(@weather_record), params: { weather_record: { date: @weather_record.date, high_level_location_id: @weather_record.high_level_location_id, report.text: @weather_record.report.text } }
+    patch weather_record_url(@weather_record), params: { weather_record: { date: @weather_record.date, high_level_location_id: @weather_record.high_level_location_id, report: @weather_record.report } }
     assert_redirected_to weather_record_url(@weather_record)
   end
 

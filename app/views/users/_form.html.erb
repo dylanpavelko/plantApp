@@ -21,10 +21,10 @@
     <%= form.collection_select :high_level_location_id, HighLevelLocation.all, :id, :name, :include_blank => true %>
   </div>
 
-<!--   <div class="field">
-    <%#= form.label :password %>
-    <%#= form.password_field :password %>
-  </div> -->
+<div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password %>
+  </div> 
 
   <div class="actions">
     <%= form.submit %>

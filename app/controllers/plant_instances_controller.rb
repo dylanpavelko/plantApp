@@ -191,7 +191,7 @@ end
         end
         if frdeo == false
           if @fdev_data.last != nil && @fdev_data.last != 0
-            @fdev_data << 100 - @fmat_data.last
+            @fdev_data << 100 - @fdev_data.last
           else
             @fdev_data << nil
           end
@@ -231,7 +231,7 @@ end
                                       :location => @plant_instance.location,
                                       :high_level_location => @plant_instance.location.high_level_location,
                                       :observations => @growth_observations,
-                                      :pictures => @image_urls.reverse,
+                                      :pictures => @image_urls.reverse[0..15],
                                       :stages => @growth_stages }}
     end
   end

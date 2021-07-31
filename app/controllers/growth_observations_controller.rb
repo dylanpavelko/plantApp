@@ -36,7 +36,10 @@ class GrowthObservationsController < ApplicationController
       puts "attempting to attach image"
       decoded_image = StringIO.new(Base64.decode64(params[:picture][:picture][:base64]))
       @growth_observation.picture.attach(io: decoded_image, filename: params[:picture][:name])
-      #@growth_observation.grab_image(params[:picture][:picture])
+
+      puts "now update plant image url"
+      #update library photo of plant (probably should do this in a smarter way)
+      @growth_observation.plant_instance.plant.update(:image_url => url_for(@growth_observation.picture))
     end
     respond_to do |format|
       if @growth_observation.save
