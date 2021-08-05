@@ -3,7 +3,9 @@
 one:
   name: MyString
   zip: MyString
+  user: one
 
 two:
   name: MyString
   zip: MyString
+  user: one

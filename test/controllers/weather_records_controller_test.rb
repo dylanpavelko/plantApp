@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class WeatherRecordsControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @weather_record = weather_records(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -11,7 +17,7 @@ class WeatherRecordsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_weather_record_url
+    get new_weather_record_url(high_level_location_id: @weather_record.high_level_location_id)
     assert_response :success
   end
 

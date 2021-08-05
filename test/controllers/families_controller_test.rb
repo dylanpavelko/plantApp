@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class FamiliesControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @family = families(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class FamiliesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create family" do
     assert_difference('Family.count') do
-      post families_url, params: { family: { description: @family.description, name: @family.name } }
+      post families_url, params: { family: { description: @family.description, name: @family.name, order_id: new_order.id } }
     end
 
     assert_redirected_to family_url(Family.last)

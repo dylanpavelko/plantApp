@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class GrowthObservationsControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @growth_observation = growth_observations(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -11,7 +17,7 @@ class GrowthObservationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_growth_observation_url
+    get new_growth_observation_url(plant_instance_id: @growth_observation.plant_instance_id)
     assert_response :success
   end
 
@@ -20,7 +26,7 @@ class GrowthObservationsControllerTest < ActionDispatch::IntegrationTest
       post growth_observations_url, params: { growth_observation: { bbch_stage_id: @growth_observation.bbch_stage_id, observation_date: @growth_observation.observation_date, percent_at_stage: @growth_observation.percent_at_stage, plant_instance_id: @growth_observation.plant_instance_id } }
     end
 
-    assert_redirected_to growth_observation_url(GrowthObservation.last)
+    assert_redirected_to plant_instance_url(@growth_observation.plant_instance)
   end
 
   test "should show growth_observation" do
@@ -35,7 +41,7 @@ class GrowthObservationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should update growth_observation" do
     patch growth_observation_url(@growth_observation), params: { growth_observation: { bbch_stage_id: @growth_observation.bbch_stage_id, observation_date: @growth_observation.observation_date, percent_at_stage: @growth_observation.percent_at_stage, plant_instance_id: @growth_observation.plant_instance_id } }
-    assert_redirected_to growth_observation_url(@growth_observation)
+    assert_redirected_to plant_instance_url(@growth_observation.plant_instance)
   end
 
   test "should destroy growth_observation" do

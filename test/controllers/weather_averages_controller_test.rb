@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class WeatherAveragesControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @weather_average = weather_averages(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do

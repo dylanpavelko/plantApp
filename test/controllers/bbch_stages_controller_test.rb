@@ -20,7 +20,7 @@ class BbchStagesControllerTest < ActionDispatch::IntegrationTest
       post bbch_stages_url, params: { bbch_stage: { bbch_profile_id: @bbch_stage.bbch_profile_id, code: @bbch_stage.code, description: @bbch_stage.description, note: @bbch_stage.note } }
     end
 
-    assert_redirected_to bbch_stage_url(BbchStage.last)
+    assert_redirected_to bbch_profile_url(@bbch_stage.bbch_profile)
   end
 
   test "should show bbch_stage" do

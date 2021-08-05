@@ -23,7 +23,11 @@ class HighLevelLocationsController < ApplicationController
 
     #get weather stations
     @operating_stations = Array.new
-    @stations = @high_level_location.get_noaa_ncdc_data['results']
+    if @high_level_location.long != nil || @high_level_location.lat != nil
+      @stations = @high_level_location.get_noaa_ncdc_data['results']
+    else
+      @stations = Array.new
+    end
     @stations.each do |r| 
       if DateTime.parse(r['maxdate']) > @yearAgo
         distance = ((r['longitude'] - @high_level_location.long)**2 + (r['latitude'] - @high_level_location.lat)**2)
@@ -54,7 +58,6 @@ class HighLevelLocationsController < ApplicationController
       @precip_data << ad.precip_in
       @max_deviation_data << ad.max_temp_f + ad.max_t_std_dev
       @min_deviation_data << ad.min_temp_f - ad.min_t_std_dev
-
     end
 
   #   station_number = 0
@@ -114,7 +117,6 @@ class HighLevelLocationsController < ApplicationController
   # POST /high_level_locations.json
   def create
     @high_level_location = HighLevelLocation.new(high_level_location_params)
-
     respond_to do |format|
       if @high_level_location.save
         format.html { redirect_to @high_level_location, notice: 'High level location was successfully created.' }

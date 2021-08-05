@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class PlantsControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @plant = plants(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class PlantsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create plant" do
     assert_difference('Plant.count') do
-      post plants_url, params: { plant: { division_id: @plant.division_id, family_id: @plant.family_id, genus_id: @plant.genus_id, kingdom_id: @plant.kingdom_id, order_id: @plant.order_id, plant_class_id: @plant.plant_class_id, species_id: @plant.species_id, variety_id: @plant.variety_id } }
+      post plants_url, params: { plant: { species_id: @plant.species_id, variety_id: @plant.variety_id } }
     end
 
     assert_redirected_to plant_url(Plant.last)
@@ -34,7 +40,7 @@ class PlantsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update plant" do
-    patch plant_url(@plant), params: { plant: { division_id: @plant.division_id, family_id: @plant.family_id, genus_id: @plant.genus_id, kingdom_id: @plant.kingdom_id, order_id: @plant.order_id, plant_class_id: @plant.plant_class_id, species_id: @plant.species_id, variety_id: @plant.variety_id } }
+    patch plant_url(@plant), params: { plant: { species_id: @plant.species_id, variety_id: @plant.variety_id } }
     assert_redirected_to plant_url(@plant)
   end
 

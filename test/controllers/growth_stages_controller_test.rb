@@ -11,7 +11,7 @@ class GrowthStagesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_growth_stage_url
+    get new_growth_stage_url(:species_id => @growth_stage.species_id)
     assert_response :success
   end
 

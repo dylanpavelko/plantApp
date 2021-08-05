@@ -33,6 +33,7 @@ class WeatherRecordsController < ApplicationController
 
   # GET /weather_records/1/edit
   def edit
+    @date = @weather_record.date
   end
 
   # POST /weather_records

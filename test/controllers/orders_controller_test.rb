@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class OrdersControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @order = orders(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class OrdersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create order" do
     assert_difference('Order.count') do
-      post orders_url, params: { order: { description: @order.description, name: @order.name } }
+      post orders_url, params: { order: { description: @order.description, name: @order.name, plant_class_id: new_plant_class.id } }
     end
 
     assert_redirected_to order_url(Order.last)

@@ -1,7 +1,7 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  day: 
+  day: 1
   high_level_location: one
   max_temp_f: 9.99
   min_temp_f: 9.99
@@ -11,7 +11,7 @@ one:
   precip_std_dev: 9.99
 
 two:
-  day: 
+  day: 1
   high_level_location: two
   max_temp_f: 9.99
   min_temp_f: 9.99

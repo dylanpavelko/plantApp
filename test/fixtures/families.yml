@@ -3,7 +3,9 @@
 one:
   name: MyString
   description: MyText
+  order: one
 
 two:
   name: MyString
   description: MyText
+  order: one

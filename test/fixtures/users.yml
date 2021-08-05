@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  email: admin
+  email: admin@domain.com
   password_digest: adminpassword
   admin: true
 
 two:
-  email: MyString
+  email: user@domain.com
   password_digest: MyString
   admin: false

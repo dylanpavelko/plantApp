@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class GenusControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @genu = genus(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class GenusControllerTest < ActionDispatch::IntegrationTest
 
   test "should create genu" do
     assert_difference('Genu.count') do
-      post genus_url, params: { genu: { description: @genu.description, name: @genu.name } }
+      post genus_url, params: { genu: { description: @genu.description, name: @genu.name, family_id: new_family.id } }
     end
 
     assert_redirected_to genu_url(Genu.last)

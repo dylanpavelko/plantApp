@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class CommonNamesControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @common_name = common_names(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -11,7 +17,7 @@ class CommonNamesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should get new" do
-    get new_common_name_url
+    get new_common_name_url(plant_id: @common_name.plant)
     assert_response :success
   end
 

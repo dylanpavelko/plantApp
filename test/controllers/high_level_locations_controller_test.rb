@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class HighLevelLocationsControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @high_level_location = high_level_locations(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -16,8 +22,9 @@ class HighLevelLocationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create high_level_location" do
+    @user = User.all.first
     assert_difference('HighLevelLocation.count') do
-      post high_level_locations_url, params: { high_level_location: { name: @high_level_location.name, zip: @high_level_location.zip } }
+      post high_level_locations_url, params: { high_level_location: { name: @high_level_location.name, zip: @high_level_location.zip, user_id: @user.id } }
     end
 
     assert_redirected_to high_level_location_url(HighLevelLocation.last)

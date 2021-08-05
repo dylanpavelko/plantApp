@@ -21,6 +21,7 @@ class CommonNamesController < ApplicationController
 
   # GET /common_names/1/edit
   def edit
+    @plant = @common_name.plant
   end
 
   # POST /common_names

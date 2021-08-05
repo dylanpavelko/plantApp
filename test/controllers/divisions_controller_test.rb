@@ -23,8 +23,9 @@ class DivisionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create division" do
+    @kingdom = new_kingdom
     assert_difference('Division.count') do
-      post divisions_url, params: { division: { description: @division.description, name: @division.name } }
+      post divisions_url, params: { division: { description: @division.description, name: @division.name, kingdom_id: @kingdom.id } }
     end
 
     assert_redirected_to division_url(Division.last)

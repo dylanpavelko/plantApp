@@ -1,5 +1,6 @@
 class WeatherAveragesController < ApplicationController
   before_action :set_weather_average, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_admin
 
   # GET /weather_averages
   # GET /weather_averages.json

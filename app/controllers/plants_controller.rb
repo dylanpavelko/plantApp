@@ -320,7 +320,6 @@ class PlantsController < ApplicationController
 
   def get_potential_open_farm_matches(name)
     response = Excon.get('https://openfarm.cc/api/v1/crops/?filter='+name)
-    puts "THIS NAME WAS USED" + name
     return nil if response.status != 200
 
     JSON.parse(response.body)

@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user_admin, only: [:edit, :update, :index, :destroy]
   before_action :authenticate_user, only: [:show]
-  before_action :authenticate_request!, only: :index
+  #before_action :authenticate_request!, only: :index
   skip_before_action :verify_authenticity_token, only: :applogin
 
   # def applogin
@@ -22,7 +22,7 @@ class UsersController < ApplicationController
     if auth_object.authenticate
       token = auth_object.generate_token
       puts("authentication success, token: " + token)
-      puts render json: {
+      render json: {
         message: "Login successful!", token: token }, status: :ok
     else
       puts "authentication failure"
@@ -70,7 +70,6 @@ class UsersController < ApplicationController
     if User.all.size <1
       @user.admin = true
     end
-
     respond_to do |format|
       if @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }

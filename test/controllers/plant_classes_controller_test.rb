@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class PlantClassesControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @plant_class = plant_classes(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class PlantClassesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create plant_class" do
     assert_difference('PlantClass.count') do
-      post plant_classes_url, params: { plant_class: { description: @plant_class.description, name: @plant_class.name } }
+      post plant_classes_url, params: { plant_class: { description: @plant_class.description, name: @plant_class.name, division_id: new_division.id } }
     end
 
     assert_redirected_to plant_class_url(PlantClass.last)

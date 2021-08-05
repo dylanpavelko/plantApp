@@ -1,8 +1,14 @@
 require 'test_helper'
+require_relative '../helpers/authorization_helper'
 
 class SpeciesControllerTest < ActionDispatch::IntegrationTest
+  include AuthorizationHelper
+
   setup do
     @species = species(:one)
+    test_user = { email: 'userone@test.com', password: 'password', admin: true }
+    sign_up(test_user)
+    @auth_tokens = auth_tokens_for_user(test_user)
   end
 
   test "should get index" do
@@ -17,7 +23,7 @@ class SpeciesControllerTest < ActionDispatch::IntegrationTest
 
   test "should create species" do
     assert_difference('Species.count') do
-      post species_index_url, params: { species: { description: @species.description, name: @species.name } }
+      post species_index_url, params: { species: { description: @species.description, name: @species.name, genus_id: new_genus.id } }
     end
 
     assert_redirected_to species_url(Species.last)
