@@ -1,5 +1,6 @@
 class GrowthStagesController < ApplicationController
   before_action :set_growth_stage, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_admin
 
   # GET /growth_stages
   # GET /growth_stages.json

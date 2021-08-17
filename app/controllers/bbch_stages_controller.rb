@@ -1,5 +1,6 @@
 class BbchStagesController < ApplicationController
   before_action :set_bbch_stage, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_admin
 
   # GET /bbch_stages
   # GET /bbch_stages.json

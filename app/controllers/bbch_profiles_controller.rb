@@ -1,5 +1,6 @@
 class BbchProfilesController < ApplicationController
   before_action :set_bbch_profile, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_admin
 
   # GET /bbch_profiles
   # GET /bbch_profiles.json

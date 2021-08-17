@@ -16,6 +16,18 @@ class PlantsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
+  test "should get index json" do
+    get plants_url, params: {:format => :json}
+    assert_response :success
+    @r = ActiveSupport::JSON.decode @response.body
+    
+    #tests two plants returned
+    assert_equal(@r['plants'].size, 2)
+
+    #tests image path available
+    assert_equal(@r['plants'][1]['image_url'], 'test_image_path')
+  end
+
   test "should get new" do
     get new_plant_url
     assert_response :success

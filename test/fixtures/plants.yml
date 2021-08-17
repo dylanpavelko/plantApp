@@ -3,7 +3,9 @@
 one:
   species: one
   variety: one
+  image_url: test_image_path
 
 two:
   species: two
   variety: two
+  
