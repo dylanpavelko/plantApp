@@ -17,7 +17,7 @@ class GrowthObservationsController < ApplicationController
 
   # GET /growth_observations/new
   def new
-    @growth_observation = GrowthObservation.new(:plant_instance_id => params[:plant_instance_id])
+    @growth_observation = GrowthObservation.new(:plant_instance_id => params[:plant_instance_id], :user_id => @current_user.id)
     @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
   end
 
@@ -30,8 +30,9 @@ class GrowthObservationsController < ApplicationController
   def add_growth_observation_from_api
     puts "creating new observation"
     puts "plant instance id " + params[:plant_instance_id].to_s
-    puts "picture " + params[:picture][:name].to_s
+    #puts "picture " + params[:picture][:name].to_s
     @growth_observation = GrowthObservation.new(growth_observation_params)
+    @growth_observation.user_id = @current_user.id
     if params[:picture] != nil
       puts "attempting to attach image"
       decoded_image = StringIO.new(Base64.decode64(params[:picture][:picture][:base64]))
@@ -103,11 +104,11 @@ class GrowthObservationsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def growth_observation_params
-      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :picture)
+      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :picture, :user_id)
     end
 
         # Only allow a list of trusted parameters through.
     def growth_observation_api_params
-      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :picture)
+      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :picture, :user_id)
     end
 end

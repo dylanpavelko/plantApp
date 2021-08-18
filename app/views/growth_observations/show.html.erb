@@ -2,7 +2,7 @@
 
 <p>
   <strong>Plant instance:</strong>
-  <%= @growth_observation.plant_instance %>
+  <%= link_to @growth_observation.plant_instance.plant.scientific_name_with_common_names, @growth_observation.plant_instance %>
 </p>
 
 <p>
@@ -12,7 +12,7 @@
 
 <p>
   <strong>Bbch stage:</strong>
-  <%= @growth_observation.bbch_stage %>
+  <%= @growth_observation.bbch_stage.code.to_s + " - " + @growth_observation.bbch_stage.description %>
 </p>
 
 <p>
@@ -20,6 +20,12 @@
   <%= @growth_observation.percent_at_stage %>
 </p>
 
+<p>
+  <strong>Added by :</strong>
+  <% if @growth_observation != nil %>
+   <%= link_to @growth_observation.user.email, @growth_observation.user %>
+  <% end %>
+</p>
 
 <%= image_tag url_for(@growth_observation.picture) if @growth_observation.picture.attached? %>
 

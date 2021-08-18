@@ -7,6 +7,7 @@ class GrowthObservation < ApplicationRecord
   has_one_attached :picture do |attachable|
     attachable.variant :thumb, resize: "100x100"
   end
+  belongs_to :user, :class_name => "User", :foreign_key => "user_id"
 
   validates :observation_date, :presence => true
   validate :image_type

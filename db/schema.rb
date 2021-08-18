@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_30_210454) do
+ActiveRecord::Schema.define(version: 2021_08_17_193249) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -101,8 +101,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_210454) do
     t.integer "percent_at_stage"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "user_id"
     t.index ["bbch_stage_id"], name: "index_growth_observations_on_bbch_stage_id"
     t.index ["plant_instance_id"], name: "index_growth_observations_on_plant_instance_id"
+    t.index ["user_id"], name: "index_growth_observations_on_user_id"
   end
 
   create_table "growth_stages", force: :cascade do |t|
@@ -203,8 +205,10 @@ ActiveRecord::Schema.define(version: 2021_07_30_210454) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.integer "user_id"
     t.index ["plant_id"], name: "index_resources_on_plant_id"
     t.index ["species_id"], name: "index_resources_on_species_id"
+    t.index ["user_id"], name: "index_resources_on_user_id"
   end
 
   create_table "species", force: :cascade do |t|

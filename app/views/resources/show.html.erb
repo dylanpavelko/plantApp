@@ -19,5 +19,10 @@
   <%= @resource.link %>
 </p>
 
+<p>
+  <strong>Added by:</strong>
+  <%= link_to @resource.user_id, @resource.user %>
+</p>
+
 <%= link_to 'Edit', edit_resource_path(@resource) %> |
 <%= link_to 'Back', resources_path %>
