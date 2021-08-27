@@ -14,6 +14,12 @@ class LocationsController < ApplicationController
     @plant_instances = PlantInstance.where(:location_id => @location.id)
   end
 
+  def get_locations_for_user
+    @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user.id)
+    @locations = Array.new
+    
+  end
+
   # GET /locations/new
   def new
     @location = Location.new
