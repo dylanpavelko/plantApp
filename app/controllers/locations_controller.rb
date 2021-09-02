@@ -1,6 +1,6 @@
 class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy]
+  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy, :get_locations_for_user]
   
   # GET /locations
   # GET /locations.json
@@ -17,7 +17,17 @@ class LocationsController < ApplicationController
   def get_locations_for_user
     @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user.id)
     @locations = Array.new
-    
+    @user_high_level_locations.each do |hll|
+      @hl_locations = Location.where(:high_level_location_id => hll.id)
+      @hl_locations.each do |loc|
+        @locations << loc
+      end
+    end
+    respond_to do |format|
+      #format.html { redirect_to @location, notice: 'Location was successfully created.' }
+      format.json { render json: @locations}
+    end
+
   end
 
   # GET /locations/new
