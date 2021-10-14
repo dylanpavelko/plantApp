@@ -25,7 +25,7 @@ class LocationsController < ApplicationController
     end
     respond_to do |format|
       #format.html { redirect_to @location, notice: 'Location was successfully created.' }
-      format.json { render json: @locations}
+      format.json { render :json => {locations: @locations, high_level_locations: @user_high_level_locations}}
     end
 
   end

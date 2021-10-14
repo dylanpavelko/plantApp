@@ -1,5 +1,8 @@
 class PlantInstancesController < ApplicationController
-  before_action :authenticate_user_admin, except: [:my_plants_api]
+  before_action :authenticate_user_admin, except: [:my_plants_api, :add_plant_instance]
+  skip_before_action :verify_authenticity_token, only: [:add_plant_instance]
+  before_action :authenticate_user
+
   before_action :set_plant_instance, only: [:show, :edit, :update, :destroy]
   #before_action :authenticate_request!, only: [:my_plants_api]
 
@@ -259,6 +262,47 @@ end
         format.json { render json: @plant_instance.errors, status: :unprocessable_entity }
       end
     end
+  end
+
+
+  def add_plant_instance
+    if params[:location_id] == "new"
+      @new_location = Location.new(:name => params[:new_location_name], 
+        :indoors => params[:new_location_indoors], 
+        :high_level_location_id => params[:new_location_high_level_location])
+      @new_location.save
+      @location = @new_location
+    else 
+      @location = Location.find(params[:location_id])
+    end
+
+    if params[:propagation_type] == 1 #seed
+      @plant_instance = PlantInstance.new(:plant_id => params[:plant_id], 
+        :location_id => @location.id, 
+        :planted_date => params[:planted_date], 
+        :propagation_type => params[:propagation_type])
+    elsif params[:propagation_type] == 2 #cutting
+      @plant_instance = PlantInstance.new(:plant_id => params[:plant_id], 
+        :location_id => @location.id, 
+        :planted_date => params[:planted_date], 
+        :propagation_type => params[:propagation_type])
+    else
+      @plant_instance = PlantInstance.new(:plant_id => params[:plant_id], 
+        :location_id => @location.id, 
+        :acquired_date => params[:planted_date])
+    end
+    
+    respond_to do |format|
+      if @plant_instance.save
+        
+        format.html { redirect_to @plant_instance, notice: 'Plant Instance was successfully created.' }
+        format.json { render :show, status: :created, location: @plant_instance }
+      else
+        format.html { render :new }
+        format.json { render json: @plant_instance.errors, status: :unprocessable_entity }
+      end
+    end
+
   end
 
   # PATCH/PUT /plant_instances/1

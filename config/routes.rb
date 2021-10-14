@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     post '/add_to_wishlist', to: 'wishlists#add_to_wishlist'
     post '/get_new_weather_records', to: 'weather_records#get_new_weather_records'
     post '/add_growth_observation_from_api', to: 'growth_observations#add_growth_observation_from_api'
+    post '/add_plant_instance', to: 'plant_instances#add_plant_instance'
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
     get '/get_locations_for_user', to: 'locations#get_locations_for_user'
   post 'applogin', to: 'users#applogin'
