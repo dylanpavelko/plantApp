@@ -12,6 +12,10 @@ class DivisionsController < ApplicationController
   # GET /divisions/1.json
   def show
     @classes = PlantClass.where(:division_id => @division.id)
+    @bbch_profile = @division.bbch_profile
+    if @bbch_profile != nil
+      @bbch_stages = BbchStage.where(:bbch_profile_id => @bbch_profile.id)
+    end
   end
 
   # GET /divisions/new
@@ -71,6 +75,6 @@ class DivisionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def division_params
-      params.require(:division).permit(:name, :description, :common_name, :kingdom_id)
+      params.require(:division).permit(:name, :description, :common_name, :kingdom_id, :bbch_profile_id)
     end
 end

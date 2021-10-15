@@ -71,24 +71,7 @@
 <% if @has_open_farm_data %>
   <p>
     <strong>Description:</strong><br/>
-    <%= @open_farm_data['data']['attributes']['description'] %>
-  </p>
-<% end %>
-
-<% if @plant.OpenFarmID != nil and @plant.OpenFarmID != "" %>
-  <p>
-    <% if @current_user != nil && @current_user.admin %>
-      <strong>OpenFarm ID</strong>
-      <%= @plant.OpenFarmID %>
-      https://openfarm.cc/api/v1/crops/?filter=<%= @plant.scientific_name %>
-    <% end %>
-    <%= link_to 'Data from Open Farm' , ('https://openfarm.cc' + @open_farm_data['data']['links']['self']['website']), target: :_blank  %>
-    <% if @current_user != nil && @current_user.admin %>
-      <% if @open_farm_data['data']['attributes']['svg_icon'] != nil %>
-        <%= @open_farm_data['data']['attributes']['svg_icon'].html_safe %>
-      <% end %>
-      <%= @open_farm_data.inspect %>
-    <% end %>
+ 
   </p>
 <% end %>
 

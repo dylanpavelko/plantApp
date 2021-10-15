@@ -27,5 +27,15 @@
   <% end %>
 </ul>
 
+
+<p>
+  <% if @division.bbch_profile_id != nil %>
+    BBCH Stages: <%= link_to @division.bbch_profile.name, @division.bbch_profile %>
+  <% end %>
+</p>
+<h4>Growth Stages</h4>
+<% @edit_stages = true %>
+<%= render partial: 'partials/growth_stage_requirements' %>
+
 <%= link_to 'Edit', edit_division_path(@division) %> |
 <%= link_to 'Back', divisions_path %>

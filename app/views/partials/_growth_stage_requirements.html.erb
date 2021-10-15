@@ -4,17 +4,19 @@
 	    <tr>
 	      <th>Code</th>
 	      <th>Description</th>
-	      <th>Frost Damage Risk</th>
-	      <th>Required Low</th>
-	      <th>Growth Base</th>
-	      <th>Required High</th>
-	      <th>Growth Cutoff</th>
-	      <th>Heat Damage Risk</th>
-	      <th>Min Days</th>
-	      <th>Min AGDD</th>
-	      <th>From Stage Code</th>
-	      <th>Harvest</th>
-	      <% if @edit_stages %>
+	      <% if @growth_stages %>
+		      <th>Frost Damage Risk</th>
+		      <th>Required Low</th>
+		      <th>Growth Base</th>
+		      <th>Required High</th>
+		      <th>Growth Cutoff</th>
+		      <th>Heat Damage Risk</th>
+		      <th>Min Days</th>
+		      <th>Min AGDD</th>
+		      <th>From Stage Code</th>
+		      <th>Harvest</th>
+		  <% end %>
+	      <% if @growth_stages && @edit_stages %>
 	      	<th>Edit</th>
 	      <% end %>
 	    </tr>
@@ -23,7 +25,7 @@
 	      <tr>
 	        <td><%= stage.code %></td>
 	        <td><%= stage.description %></td>
-	        <% if @growth_stages.count == 0 %>
+	        <% if @growth_stages && @growth_stages.count == 0 %>
 		      	<td></td>
 		     	<td></td>
 		      	<td></td>
@@ -39,7 +41,7 @@
 			      		<%= link_to 'Add', new_growth_stage_path(:species_id => @species.id, :bbch_code => stage.code) %>		
 			      	</td>
 			    <% end %>
-		      <% else %>
+		      <% elsif @growth_stages %>
 		      	<% @growth_stage = @growth_stages.select{ |gs| gs.bbch_code == stage.code } %>
 	        	<% if @growth_stages.count > @growth_stage_requirements %>
 			      	<td><%= @growth_stages[@growth_stage_requirements].cold_damage_risk %></td>
