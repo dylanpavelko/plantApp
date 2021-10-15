@@ -66,8 +66,10 @@ class Plant < ApplicationRecord
   def get_bbch_profile_id
     if self.species.bbch_profile
       return self.species.bbch_profile.id
-    else
+    elsif self.division.bbch_profile
       return self.division.bbch_profile.id
+    else
+      return nil
     end
   end
 
