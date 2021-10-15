@@ -71,10 +71,12 @@ class PlantsController < ApplicationController
      
     #eventually make this all public plant photos not just all photos
     @photos = Array.new
-    @all_plant_instances =  PlantInstance.where(:plant_id => @plant)
+    @all_plant_instances =  PlantInstance.where(:plant_id => @plant).order(created_at: :desc)
     @all_plant_instances.each do |instance|
       @photos += instance.get_photos
     end
+    puts "PHOTOS"
+
 
     @bbch_profile = @plant.species.bbch_profile
     if @bbch_profile != nil

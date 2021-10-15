@@ -27,8 +27,10 @@
   <% end %>
 </p>
 
-<%= image_tag url_for(@growth_observation.picture) if @growth_observation.picture.attached? %>
-
+<% if @growth_observation.picture.attached? %>
+  <%=  @growth_observation.picture.service.send(:object_for, @growth_observation.picture.key).public_url %>
+  <%= image_tag url_for(@growth_observation.picture)  %>
+<% end %>
 
 <%= link_to 'Edit', edit_growth_observation_path(@growth_observation) %> |
 <%= link_to 'Back', growth_observations_path %>

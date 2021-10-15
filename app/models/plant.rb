@@ -63,4 +63,12 @@ class Plant < ApplicationRecord
     return self.division.kingdom
   end
 
+  def get_bbch_profile
+    if self.species.bbch_profile
+      return self.species.bbch_profile
+    else
+      return self.division.bbch_profile
+    end
+  end
+
 end

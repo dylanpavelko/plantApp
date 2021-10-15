@@ -18,7 +18,7 @@ class GrowthObservationsController < ApplicationController
   # GET /growth_observations/new
   def new
     @growth_observation = GrowthObservation.new(:plant_instance_id => params[:plant_instance_id], :user_id => @current_user.id)
-    @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
+    @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.get_bbch_profile.id).sort_by{|e| e[:code]}
   end
 
   # GET /growth_observations/1/edit
@@ -31,19 +31,23 @@ class GrowthObservationsController < ApplicationController
     puts "creating new observation"
     puts "plant instance id " + params[:plant_instance_id].to_s
     #puts "picture " + params[:picture][:name].to_s
-    @growth_observation = GrowthObservation.new(growth_observation_params)
+    @growth_observation = GrowthObservation.new(growth_observation_api_params)
     @growth_observation.user_id = @current_user.id
-    if params[:picture] != nil
-      puts "attempting to attach image"
-      decoded_image = StringIO.new(Base64.decode64(params[:picture][:picture][:base64]))
-      @growth_observation.picture.attach(io: decoded_image, filename: params[:picture][:name])
 
-      puts "now update plant image url"
-      #update library photo of plant (probably should do this in a smarter way)
-      @growth_observation.plant_instance.plant.update(:image_url => url_for(@growth_observation.picture))
-    end
     respond_to do |format|
       if @growth_observation.save
+
+        if params[:picture] != nil
+          puts "attempting to attach image"
+          decoded_image = StringIO.new(Base64.decode64(params[:picture][:picture][:base64]))
+          @growth_observation.picture.attach(io: decoded_image, filename: params[:picture][:name])
+          
+          @growth_observation.save
+          puts url_for @growth_observation.picture
+         # puts "now update plant image url"
+         # #update library photo of plant (probably should do this in a smarter way)
+         @growth_observation.plant_instance.plant.update(:image_url => url_for(@growth_observation.picture))
+        end
         
         format.html { redirect_to @growth_observation.plant_instance, notice: 'Growth observation was successfully created.' }
         format.json { render :show, status: :created, location: @growth_observation }
@@ -109,6 +113,6 @@ class GrowthObservationsController < ApplicationController
 
         # Only allow a list of trusted parameters through.
     def growth_observation_api_params
-      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :picture, :user_id)
+      params.require(:growth_observation).permit(:plant_instance_id, :observation_date, :bbch_stage_id, :percent_at_stage, :user_id)
     end
 end
