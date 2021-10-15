@@ -52,21 +52,23 @@ class PlantsController < ApplicationController
 
     @locations = Array.new
     @plant_instances = Array.new
-    @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user)
+    if @current_user != nil
+      @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user)
 
-    @user_high_level_locations.each do |hlf|
-      @user_locations = Location.where(:high_level_location_id => hlf.id)
-      @user_locations.each do |l|
-        @locations << l
+      @user_high_level_locations.each do |hlf|
+        @user_locations = Location.where(:high_level_location_id => hlf.id)
+        @user_locations.each do |l|
+          @locations << l
+        end
+      end
+      @locations.each do |l|
+        @user_plants = PlantInstance.where(:plant_id => @plant, :location_id => l.id)
+        @user_plants.each do |p|
+          @plant_instances << p
+        end
       end
     end
-    @locations.each do |l|
-      @user_plants = PlantInstance.where(:plant_id => @plant, :location_id => l.id)
-      @user_plants.each do |p|
-        @plant_instances << p
-      end
-    end
-    
+     
     #eventually make this all public plant photos not just all photos
     @photos = Array.new
     @all_plant_instances =  PlantInstance.where(:plant_id => @plant)
@@ -83,15 +85,17 @@ class PlantsController < ApplicationController
 
     @has_open_farm_data = false
     if @plant.OpenFarmID != nil and @plant.OpenFarmID != ""
-      @open_farm_data = get_open_farm_data(@plant.OpenFarmID)
+      #@open_farm_data = get_open_farm_data(@plant.OpenFarmID)
       @has_open_farm_data = true
     end
 
-    @potential_matches = get_potential_open_farm_matches(@plant.scientific_name)
+    #@potential_matches = get_potential_open_farm_matches(@plant.scientific_name)
 
 
     if @current_user != nil
       @averages = WeatherAverage.where(:high_level_location => @current_user.high_level_location).sort_by &:day
+    else
+      @averages = nil
     end
 
     @max_temp_data = Array.new
@@ -258,7 +262,8 @@ class PlantsController < ApplicationController
                                       :common_names => @common_names, 
                                       :resources => @resources,
                                       :plant_instances => @plant_instances.to_json(:include => :location),
-                                      :growing_recommendations => @growing_recommendations }}
+                                      :growing_recommendations => @growing_recommendations,
+                                      :user_id => @current_user }}
     end
   end
 

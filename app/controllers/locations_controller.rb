@@ -1,6 +1,7 @@
 class LocationsController < ApplicationController
   before_action :set_location, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy, :get_locations_for_user]
+  before_action :authenticate_user, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_user, only: [:get_locations_for_user]
   
   # GET /locations
   # GET /locations.json
@@ -15,7 +16,11 @@ class LocationsController < ApplicationController
   end
 
   def get_locations_for_user
-    @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user.id)
+    if @current_user != nil
+      @user_high_level_locations = HighLevelLocation.where(:user_id => @current_user.id)
+    else
+      @user_high_level_locations = Array.new
+    end
     @locations = Array.new
     @user_high_level_locations.each do |hll|
       @hl_locations = Location.where(:high_level_location_id => hll.id)
