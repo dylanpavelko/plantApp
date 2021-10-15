@@ -222,11 +222,8 @@ class PlantsController < ApplicationController
       @stop_planting_dates = @stop_planting_dates.rotate(1)
     end
 
-    if @photos.count > 0
-      @image_url = url_for(@photos.last.picture)
-    else
-      @image_url = ""
-    end 
+    
+    @image_url = url_for(@plant.image_url) 
 
     @growing_recommendations = Array.new()
     @start_planting_dates.each_with_index do |start, i|
