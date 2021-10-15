@@ -18,7 +18,7 @@ class GrowthObservationsController < ApplicationController
   # GET /growth_observations/new
   def new
     @growth_observation = GrowthObservation.new(:plant_instance_id => params[:plant_instance_id], :user_id => @current_user.id)
-    @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.get_bbch_profile.id).sort_by{|e| e[:code]}
+    @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.get_bbch_profile_id).sort_by{|e| e[:code]}
   end
 
   # GET /growth_observations/1/edit
@@ -41,7 +41,7 @@ class GrowthObservationsController < ApplicationController
           puts "attempting to attach image"
           decoded_image = StringIO.new(Base64.decode64(params[:picture][:picture][:base64]))
           @growth_observation.picture.attach(io: decoded_image, filename: params[:picture][:name])
-          
+
           @growth_observation.save
           puts url_for @growth_observation.picture
          # puts "now update plant image url"

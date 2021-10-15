@@ -63,11 +63,11 @@ class Plant < ApplicationRecord
     return self.division.kingdom
   end
 
-  def get_bbch_profile
+  def get_bbch_profile_id
     if self.species.bbch_profile
-      return self.species.bbch_profile
+      return self.species.bbch_profile.id
     else
-      return self.division.bbch_profile
+      return self.division.bbch_profile.id
     end
   end
 

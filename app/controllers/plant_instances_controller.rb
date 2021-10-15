@@ -225,7 +225,8 @@ end
     end
     @growth_chart_data = @dates
 
-    @growth_stages = BbchStage.where(:bbch_profile_id => @plant_instance.plant.get_bbch_profile.id).sort_by{|e| e[:code]}
+
+    @growth_stages = BbchStage.where(:bbch_profile_id => @plant_instance.plant.get_bbch_profile_id).sort_by{|e| e[:code]}
 
 
     respond_to do |format|
