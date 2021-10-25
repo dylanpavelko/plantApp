@@ -38,7 +38,7 @@ class SearchController < ApplicationController
     #@plants = Plant.where('id IN (?)', @plants.uniq!)
     
     puts @plants.inspect
-    @first_plant = Plant.find(@plants.first.id)
+    #@first_plant = Plant.find(@plants.first.id)
     
     respond_to do |format|
         #format.html { render plant_url @first_plant }
