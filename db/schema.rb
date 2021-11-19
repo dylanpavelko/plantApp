@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_15_164240) do
+ActiveRecord::Schema.define(version: 2021_11_19_043045) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -183,6 +183,7 @@ ActiveRecord::Schema.define(version: 2021_10_15_164240) do
     t.integer "propagation_type"
     t.date "sprout_date"
     t.string "reference_name"
+    t.integer "quantity"
     t.index ["location_id"], name: "index_plant_instances_on_location_id"
     t.index ["plant_id"], name: "index_plant_instances_on_plant_id"
   end
