@@ -23,7 +23,7 @@
 
   <div class="field">
     <%= form.label :genus_id %>
-    <%= form.collection_select :genus_id, Genu.all, :id, :name, :include_blank => true %>
+    <%= form.collection_select :genus_id, Genu.all.order('name'), :id, :name, :include_blank => true %>
   </div>
   
   <div class="field">

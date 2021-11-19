@@ -23,7 +23,7 @@
 
   <div class="field">
     <%= form.label :species_id %>
-    <%= form.collection_select :species_id, Species.all, :id, :name, :include_blank => true %>
+    <%= form.collection_select :species_id, Species.all, :id, :full_species_name, :include_blank => true %>
   </div>
 
   <div class="actions">

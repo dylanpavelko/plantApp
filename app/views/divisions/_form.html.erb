@@ -28,7 +28,7 @@
   
   <div class="field">
     <%= form.label :kingdom_id %>
-    <%= form.collection_select :kingdom_id, Kingdom.all, :id, :name %>
+    <%= form.collection_select :kingdom_id, Kingdom.all.order('name'), :id, :name %>
   </div>
 
   <div class="field">
