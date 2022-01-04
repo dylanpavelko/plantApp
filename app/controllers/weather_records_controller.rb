@@ -176,21 +176,24 @@ class WeatherRecordsController < ApplicationController
       min_deviation = 0
       precip_deviation = 0
 
+      skips = 0
       @days.each do |day|
         puts day.inspect
-        if day != nil
+        if day != nil && day.max_temp_f != nil && day.min_temp_f != nil && day.precip_in != nil
           max_deviation += (day.max_temp_f - avg_max)**2
           min_deviation += (day.min_temp_f - avg_min)**2
           precip_deviation += (day.precip_in - avg_precip)**2
+        else
+          skips += 1
         end
       end
 
       puts "min dev"
       puts (min_deviation/days)
 
-      max_std_dev = (max_deviation/days)**(0.5)
-      min_std_dev = (min_deviation/days)**(0.5)
-      precip_std_dev = (precip_deviation/days)**(0.5)
+      max_std_dev = (max_deviation/(days - skips))**(0.5)
+      min_std_dev = (min_deviation/(days - skips))**(0.5)
+      precip_std_dev = (precip_deviation/(days - skips))**(0.5)
 
       puts "min std dev"
       puts min_std_dev
