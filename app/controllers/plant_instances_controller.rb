@@ -34,7 +34,7 @@ class PlantInstancesController < ApplicationController
     @ls = Location.where(:high_level_location_id => hlf.id)
     @ls.each do |l|
       @locations << l
-      @ps = PlantInstance.where(:location_id => l.id)
+      @ps = PlantInstance.where(:location_id => l.id).where(inactive: false)
       @ps.each do |p|
         @plants << p
       end
@@ -338,6 +338,6 @@ end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def plant_instance_params
-      params.require(:plant_instance).permit(:plant_id, :location_id, :planted_date, :acquired_date, :propagation_type, :sprout_date, :reference_name, :quantity)
+      params.require(:plant_instance).permit(:plant_id, :location_id, :planted_date, :acquired_date, :propagation_type, :sprout_date, :reference_name, :quantity, :inactive)
     end
 end
