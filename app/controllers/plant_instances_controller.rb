@@ -44,11 +44,12 @@ class PlantInstancesController < ApplicationController
   @myplants = @plants.map do |p|
     { :id => p.id, :plant_id => p.plant.id, :location => p.location.name, :plant_name => p.plant.scientific_name_with_common_names}
   end
-  puts @myplants.to_json
+  @location_groups = @myplants.group_by { |i| i[:location]}
+  puts @location_groups.to_json
   puts 'return plants'
   respond_to do |format|
     msg = { :status => "ok", :message => "Success!", :html => "<b>...</b>" }
-    format.json  { render :json => @myplants.to_json } # don't do msg.to_json
+    format.json  { render :json => @location_groups.to_json } # don't do msg.to_json
   end
   end
 end
