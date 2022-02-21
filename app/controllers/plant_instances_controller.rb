@@ -242,7 +242,9 @@ end
                                       :high_level_location => @plant_instance.location.high_level_location,
                                       :observations => @growth_observations,
                                       :pictures => @image_urls.reverse[0..15],
-                                      :stages => @growth_stages }}
+                                      :stages => @growth_stages,
+                                      :planted_date => @plant_instance.planted_date,
+                                      :acquired_date => @plant_instance.acquired_date }}
     end
   end
 

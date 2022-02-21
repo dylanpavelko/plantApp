@@ -24,6 +24,9 @@ class GrowthObservationsController < ApplicationController
   # GET /growth_observations/1/edit
   def edit
     @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
+    if @growth_observation.user == nil
+      @growth_observation.update(:user => @current_user)
+    end
   end
 
 
@@ -79,6 +82,7 @@ class GrowthObservationsController < ApplicationController
   # PATCH/PUT /growth_observations/1
   # PATCH/PUT /growth_observations/1.json
   def update
+    @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
     respond_to do |format|
       if @growth_observation.update(growth_observation_params)
         format.html { redirect_to @growth_observation.plant_instance, notice: 'Growth observation was successfully updated.' }

@@ -22,7 +22,7 @@
 
 <p>
   <strong>Added by :</strong>
-  <% if @growth_observation != nil %>
+  <% if @growth_observation.user != nil %>
    <%= link_to @growth_observation.user.email, @growth_observation.user %>
   <% end %>
 </p>
