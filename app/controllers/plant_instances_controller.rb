@@ -41,8 +41,13 @@ class PlantInstancesController < ApplicationController
     end
   end
 
+  @plants = @plants.sort_by { |p| p.plant.scientific_name_with_common_names }
   @myplants = @plants.map do |p|
-    { :id => p.id, :plant_id => p.plant.id, :location => p.location.name, :plant_name => p.plant.scientific_name_with_common_names}
+    { :id => p.id, 
+      :plant_id => p.plant.id, 
+      :location => p.location.name, 
+      :plant_name => p.plant.scientific_name_with_common_names,
+      :image_url => url_for(p.plant.image_url) }
   end
   @location_groups = @myplants.group_by { |i| i[:location]}
   puts @location_groups.to_json
