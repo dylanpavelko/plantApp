@@ -65,6 +65,14 @@
   <br/>
     <strong>Cultivator:</strong>
     <%= link_to @plant.cultivator.name, @plant.cultivator %>
+<% else %>
+  <br/><br/>
+  <strong>Cultivators</strong>
+  <ul>
+    <%# if @current_user != nil && @current_user.admin %>
+      <li><%= link_to 'Add New Cultivator', new_cultivator_path(:species_id => @plant.species.id) %></li>
+    <%# end %>
+  </ul>
 <% end %>
 </p>
 

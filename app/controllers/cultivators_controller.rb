@@ -15,7 +15,7 @@ class CultivatorsController < ApplicationController
 
   # GET /cultivators/new
   def new
-    @cultivator = Cultivator.new
+    @cultivator = Cultivator.new(:species_id => params[:species_id])
   end
 
   # GET /cultivators/1/edit
@@ -26,10 +26,11 @@ class CultivatorsController < ApplicationController
   # POST /cultivators.json
   def create
     @cultivator = Cultivator.new(cultivator_params)
-
     respond_to do |format|
       if @cultivator.save
-        format.html { redirect_to @cultivator, notice: 'Cultivator was successfully created.' }
+        @plant = Plant.new(:species_id => @cultivator.species_id, :cultivator_id => @cultivator.id)
+        @plant.save
+        format.html { redirect_to @plant, notice: 'Cultivator was successfully created.' }
         format.json { render :show, status: :created, location: @cultivator }
       else
         format.html { render :new }
