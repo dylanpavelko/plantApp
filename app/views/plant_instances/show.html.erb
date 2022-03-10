@@ -61,6 +61,14 @@
 <% if @plant_instance.sprout_date != nil %>
   <div>Sprouted on <%= @plant_instance.sprout_date.strftime('%m/%d/%y') %></div>
 <% end %>
+<p>
+  <strong>Days from planting until early plant development:</strong> <%= @observed_days_until_early_plant_development %><br/>
+  <strong>Days from planting until main plant development:</strong> <%= @observed_days_until_main_plant_development %><br/>
+  <strong>Days from planting until flowering:</strong> <%= @observed_days_until_flowering %><br/>
+  <strong>Days from planting until fruit/seed development:</strong> <%= @observed_days_until_fruit_development %><br/>
+  <strong>Days from planting until fruit/seed maturity:</strong> <%= @observed_days_until_fruit_maturity %><br/>
+  <strong>Days from planting until Senescence/dormancy:</strong> <%= @observed_days_until_dormancy %><br/>
+</p>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
