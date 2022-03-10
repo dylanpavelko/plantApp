@@ -105,6 +105,12 @@ end
         @max_temp_data << nil
       end
 
+      if @plant_instance.planted_date == nil
+        @start_date = Date.new(2021,1,1)
+      else
+        @start_date = @plant_instance.planted_date.to_date
+      end
+
       @observations = @growth_observations.select { |go| go.observation_date == date}
       if @observations.size > 0
         germo = false
@@ -122,7 +128,7 @@ end
             if @early_data.last == nil
               @early_data.pop()
               @early_data << 0
-              @observed_days_until_early_plant_development = (observation.observation_date - @plant_instance.planted_date.to_date).to_i
+              @observed_days_until_early_plant_development = (observation.observation_date - @start_date).to_i
             end
             if observation.percent_at_stage != nil
               @early_data << observation.percent_at_stage
@@ -134,7 +140,7 @@ end
             if @main_data.last == nil
               @main_data.pop()
               @main_data << 0
-              @observed_days_until_main_plant_development = (observation.observation_date - @plant_instance.planted_date.to_date).to_i
+              @observed_days_until_main_plant_development = (observation.observation_date - @start_date).to_i
             end
             if observation.percent_at_stage != nil
               @main_data << observation.percent_at_stage
@@ -146,7 +152,7 @@ end
             if @flower_data.last == nil
               @flower_data.pop()
               @flower_data << 0
-              @observed_days_until_flowering = (observation.observation_date - @plant_instance.planted_date.to_date).to_i
+              @observed_days_until_flowering = (observation.observation_date - @start_date).to_i
             end  
             flowo = true
             @flower_data << 100 
@@ -154,7 +160,7 @@ end
             if @fdev_data.last == nil
               @fdev_data.pop()
               @fdev_data << 0
-              @observed_days_until_fruit_development = (observation.observation_date - @plant_instance.planted_date.to_date).to_i
+              @observed_days_until_fruit_development = (observation.observation_date - @start_date).to_i
             end
             frdeo = true
             @fdev_data << 100
@@ -162,7 +168,7 @@ end
             if @fmat_data.last == nil
               @fmat_data.pop()
               @fmat_data << 0
-              @observed_days_until_fruit_maturity = (observation.observation_date - @plant_instance.planted_date.to_date).to_i
+              @observed_days_until_fruit_maturity = (observation.observation_date - @start_date).to_i
             end
             frmao = true
             @fmat_data << 100  
@@ -170,7 +176,7 @@ end
             if @senes_data.last == nil
               @senes_data.pop()
               @senes_data << 0
-              @observed_days_until_dormancy = (observation.observation_date - @plant_instance.planted_date.to_date).to_i
+              @observed_days_until_dormancy = (observation.observation_date - @start_date).to_i
             end
             seneo = true
             @senes_data << 100    
