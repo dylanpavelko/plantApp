@@ -79,7 +79,12 @@
 
   </script>
   <br/>
-
+  <p> Daylight <%= @high_level_location.get_sunlight_hours_for_day(75) %><br/>
+    (not accounting for DST)<br/>
+    Today's Sunrise <%= @high_level_location.get_sunrise_time_for_date(Date.today.to_datetime).strftime("%l:%M %p") %><br/>
+    Today's Sunset <%= @high_level_location.get_sunset_time_for_date(Date.today.to_datetime).strftime("%l:%M %p") %><br/>
+  </p>
+  <br/>
   <strong>Average Weather</strong><br/>
   <%# sort in order of distance %>
 

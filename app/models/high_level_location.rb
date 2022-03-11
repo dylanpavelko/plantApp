@@ -34,6 +34,41 @@ class HighLevelLocation < ApplicationRecord
     def get_simple_date(time)
         return Time.at(time).in_time_zone(@forecast["timezone"]).strftime("%a %-m/%d")
     end
+
+    def get_sunlight_hours_for_day(day_of_year)
+        sun_angle = get_sunlight_angle_for_day(day_of_year)
+        daylight_hours = sun_angle * 2/15
+        return daylight_hours
+    end
+
+    def get_sunrise_hour_for_day(day_of_year)
+        return 12-get_sunlight_angle_for_day(day_of_year)/15
+    end
+
+    def get_sunset_hour_for_day(day_of_year)
+        return 12+get_sunlight_angle_for_day(day_of_year)/15
+    end
+
+    def get_sunrise_time_for_date(date)
+        return date + get_sunrise_hour_for_day(date.yday()).hours
+    end
+
+    def get_sunset_time_for_date(date)
+        return date + get_sunset_hour_for_day(date.yday()).hours
+    end
+
+    def get_sunlight_angle_for_day(day_of_year)
+        sun_declination = 23.45 * Math.sin(to_rad(284 + day_of_year) * 360/365) #sun_declination is the angle of the earth relative to the sun which varies based on the day of the year
+
+        elevation=0 #elevation in feet
+        atmospheric_refraction = to_deg(Math.sin(to_rad(-0.83 - 1.15*Math.sqrt(elevation)/60)))
+
+        sin_part = to_deg(Math.sin(to_rad(self.lat))*Math.sin(to_rad(sun_declination)))
+        cos_part = to_deg(Math.cos(to_rad(self.lat))*Math.cos(to_rad(sun_declination)))
+
+        sun_angle = to_deg(Math.acos((atmospheric_refraction-sin_part)/cos_part))
+        return sun_angle
+    end
     
     def get_weather_icon(icon)
         image_path = ""
@@ -44,8 +79,7 @@ class HighLevelLocation < ApplicationRecord
         elsif icon == "rain"
             image_path = "https://icon-library.net/images/rain-icon/rain-icon-27.jpg"
         end
-        return image_path
-            
+        return image_path  
     end
 
     def get_noaa_ncdc_data
@@ -75,5 +109,13 @@ class HighLevelLocation < ApplicationRecord
         @data_types = "&datatypeid=PRCP,TMAX,TMIN"
         @data = URI.open(base_url + "data?datasetid=GHCND" + @station + @date_range + @data_types + "&units=standard&limit=1000" ,"token"=>Figaro.env.noaa_ncdc_token).read
         return ActiveSupport::JSON.decode(@data)
+    end
+
+    def to_rad(angle)
+        return angle * Math::PI / 180 
+    end
+
+    def to_deg(rad)
+        return rad * 180 / Math::PI
     end
 end
