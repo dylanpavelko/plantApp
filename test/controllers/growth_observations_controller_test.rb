@@ -23,7 +23,7 @@ class GrowthObservationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create growth_observation" do
     assert_difference('GrowthObservation.count') do
-      post growth_observations_url, params: { growth_observation: { bbch_stage_id: @growth_observation.bbch_stage_id, observation_date: @growth_observation.observation_date, percent_at_stage: @growth_observation.percent_at_stage, plant_instance_id: @growth_observation.plant_instance_id } }
+      post growth_observations_url, params: { growth_observation: { bbch_stage_id: @growth_observation.bbch_stage_id, observation_date: @growth_observation.observation_date, percent_at_stage: @growth_observation.percent_at_stage, plant_instance_id: @growth_observation.plant_instance_id, user_id: @growth_observation.user_id } }
     end
 
     assert_redirected_to plant_instance_url(@growth_observation.plant_instance)
@@ -40,7 +40,12 @@ class GrowthObservationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update growth_observation" do
-    patch growth_observation_url(@growth_observation), params: { growth_observation: { bbch_stage_id: @growth_observation.bbch_stage_id, observation_date: @growth_observation.observation_date, percent_at_stage: @growth_observation.percent_at_stage, plant_instance_id: @growth_observation.plant_instance_id } }
+    patch growth_observation_url(@growth_observation), params: { growth_observation: { bbch_stage_id: @growth_observation.bbch_stage_id, 
+                                                                                       observation_date: @growth_observation.observation_date, 
+                                                                                       percent_at_stage: @growth_observation.percent_at_stage, 
+                                                                                       plant_instance_id: @growth_observation.plant_instance_id, 
+                                                                                       user_id: @growth_observation.user_id } }
+    print(plant_instance_url(@growth_observation.plant_instance))
     assert_redirected_to plant_instance_url(@growth_observation.plant_instance)
   end
 

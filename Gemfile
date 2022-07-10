@@ -78,4 +78,4 @@ gem "aws-sdk-s3", require: false
 gem 'jwt'
 
 gem 'open-uri'
-
+gem 'rails-controller-testing'

@@ -85,8 +85,13 @@ class GrowthObservationsController < ApplicationController
     @growth_stages = BbchStage.where(:bbch_profile_id => @growth_observation.plant_instance.plant.species.bbch_profile_id).sort_by{|e| e[:code]}
     respond_to do |format|
       if @growth_observation.update(growth_observation_params)
+        # print("update success")
+        # print(@growth_observation)
+        # print(@growth_observation.plant_instance)
         format.html { redirect_to @growth_observation.plant_instance, notice: 'Growth observation was successfully updated.' }
+        # print("html")
         format.json { render :show, status: :ok, location: @growth_observation }
+        # print("json")
       else
         format.html { render :edit }
         format.json { render json: @growth_observation.errors, status: :unprocessable_entity }

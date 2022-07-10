@@ -26,7 +26,7 @@ class CultivatorsControllerTest < ActionDispatch::IntegrationTest
       post cultivators_url, params: { cultivator: { description: @cultivator.description, name: @cultivator.name, species_id: @cultivator.species_id } }
     end
 
-    assert_redirected_to cultivator_url(Cultivator.last)
+    assert_redirected_to plant_url(Plant.last)
   end
 
   test "should show cultivator" do
