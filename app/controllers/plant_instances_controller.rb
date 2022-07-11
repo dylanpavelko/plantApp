@@ -199,7 +199,12 @@ end
         end
         if maino == false
           if @main_data.last != nil && @main_data.last != 0
-            @main_data << 100 - @flower_data.last
+            if @flower_data.last == nil 
+              fd = 0
+            else
+              fd = @flower_data.last
+            end
+            @main_data << 100 - fd
           else
             @main_data << nil
           end
