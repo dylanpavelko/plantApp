@@ -121,7 +121,7 @@ end
         frmao = false
         seneo = false
         @observations.each do |observation|
-          @plant_instance.add_observation_to_season(observation)
+          # @plant_instance.add_observation_to_season(observation)
           if observation.bbch_stage.code < 10
             @germaination_data << 100
             germo = true
