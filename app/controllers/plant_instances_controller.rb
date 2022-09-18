@@ -367,3 +367,4 @@ end
       params.require(:plant_instance).permit(:plant_id, :location_id, :planted_date, :acquired_date, :propagation_type, :sprout_date, :reference_name, :quantity, :inactive)
     end
 end
+
